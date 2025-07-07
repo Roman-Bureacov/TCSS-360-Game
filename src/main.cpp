@@ -2,10 +2,15 @@
 // Created by iwant on 7/7/2025.
 //
 
-#include <SDL3/SDL.h>
+//#include <SDL3/SDL.h>
 #include <iostream>
 
 int main(int argc, char* argv[]) {
+
+    std::cout << "Hello World!\n";
+    return 1;
+
+    /*
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "SDL_Init failed: " << SDL_GetError() << '\n';
         return 1;
@@ -24,4 +29,5 @@ int main(int argc, char* argv[]) {
     SDL_Quit();
 
     return 0;
+    */
 }
