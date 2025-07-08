@@ -13,7 +13,8 @@ include_directories("${SDL3_ROOT}/include")
 link_directories("${SDL3_ROOT}/lib/x64")
 
 # Add source file
-add_executable(TCSS-360-Game src/main.cpp)
+add_executable(TCSS-360-Game src/main.cpp
+)
 
 # Link against SDL3
 target_link_libraries(TCSS-360-Game SDL3)
