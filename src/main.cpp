@@ -2,7 +2,7 @@
 // Created by iwant on 7/7/2025.
 //
 
-//#include <SDL3/SDL.h>
+#include <SDL3/SDL.h>
 #include <iostream>
 
 int main(int argc, char* argv[]) {
