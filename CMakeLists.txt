@@ -13,8 +13,13 @@ include_directories("${SDL3_ROOT}/include")
 link_directories("${SDL3_ROOT}/lib/x64")
 
 # Add source file
-add_executable(TCSS-360-Game src/main.cpp
-)
+add_executable(TCSS-360-Game src/main.cpp)
 
 # Link against SDL3
 target_link_libraries(TCSS-360-Game SDL3)
+
+# Copy SDL3.dll to the executable output directory
+add_custom_command(TARGET TCSS-360-Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${SDL3_ROOT}/lib/x64/SDL3.dll"
+        $<TARGET_FILE_DIR:TCSS-360-Game>)

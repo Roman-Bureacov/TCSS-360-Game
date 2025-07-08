@@ -7,13 +7,19 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <iostream>
 
 int main(int argc, char* argv[]) {
+    std::cout << "Starting..." << std::endl;
 
     SDL_Window *window;                    // Declare a pointer
     bool done = false;
 
+    std::cout << "Getting a window..." << std::endl;
+
     SDL_Init(SDL_INIT_VIDEO);              // Initialize SDL3
+
+    std::cout << "Creating window..." << std::endl;
 
     // Create an application window with the following settings:
     window = SDL_CreateWindow(
@@ -23,10 +29,13 @@ int main(int argc, char* argv[]) {
         SDL_WINDOW_OPENGL                  // flags - see below
     );
 
+    std::cout << "Does this window exist?" << std::endl;
+
     // Check that the window was successfully created
     if (window == NULL) {
         // In the case that the window could not be made...
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not create window: %s\n", SDL_GetError());
+        std::cout << "did not create window" << std::endl;
         return 1;
     }
 
