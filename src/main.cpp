@@ -5,6 +5,7 @@
 // Example program:
 // Using SDL3 to create an application window
 
+import std;
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <iostream>
