@@ -1,7 +1,7 @@
 //
 // Created by Riley on 7/22/25.
 //
-#include "ObserverPattern.h"
+#include "../../include/ObserverPattern.h"
 
 
 Observer::Observer() = default;
