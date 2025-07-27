@@ -20,6 +20,12 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/view/view.cpp
         src/eng/Clock.h
         src/eng/Clock.cpp
+        src/include/AbstractCharacter.h
+        src/include/Hitbox.h
+        src/app/model/Characters/AbstractCharacter.cpp
+        src/eng/eng.h
+        src/eng/eng.cpp
+        src/eng/Event.h
 )
 
 # Link against SDL3
