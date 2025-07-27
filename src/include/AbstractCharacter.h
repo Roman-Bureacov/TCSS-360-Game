@@ -24,13 +24,13 @@ public:
      * Retrieve the unique ID for this character.
      * @return the unique ID attributed to this character
      */
-    std::string getID();
+    const std::string& getID() const;
 
     /**
      * Asks if this character is alive (might need to call the reaper).
      * @return if the character is alive
      */
-    bool isAlive();
+    bool isAlive() const;
 
     /**
      * Set the max health for this character.
@@ -43,7 +43,7 @@ public:
      * Asks what the maximum health of this character is.
      * @return the maximum health this character can have
      */
-    int getMaxHealth();
+    int getMaxHealth() const;
 
     /**
      * Sets the health for this charcter.
@@ -55,7 +55,7 @@ public:
      * Asks what this character's health is.
      * @return the current health of this character.
      */
-    int getHealth();
+    int getHealth() const;
 
     /**
      * Convenience behaviour to reduce this character's health by some amount,
@@ -75,9 +75,6 @@ public:
      * Sends out an attack event to the engine using this character's equipped weapon.
      */
     void attack();
-
-
-
 
 };
 
