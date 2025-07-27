@@ -9,6 +9,7 @@ class Clock {
 private:
     bool isEnabled = false;
     long tickRate = 200;
+    long tickCount = 0;
 
     void tick();
 public:
@@ -17,6 +18,12 @@ public:
      * @return time since epoch in milliseconds
      */
     long getTimestamp();
+
+    /**
+     * Gets the current tick count.
+     * @return the current tick count
+     */
+    long getCurrentTick();
 
     /**
      * Queries if the clock is running.

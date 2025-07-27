@@ -6,8 +6,14 @@
 #include <chrono>;
 
 long Clock::getTimestamp() {
-
+    // TODO: what here???
+    return 0;
 }
+
+long Clock::getCurrentTick() {
+    return tickCount;
+}
+
 
 bool Clock::isActive() {
     return isEnabled;
