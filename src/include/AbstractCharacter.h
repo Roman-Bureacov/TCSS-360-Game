@@ -15,7 +15,7 @@
  */
 class AbstractCharacter {
 private:
-    std::string id;
+    const std::string id;
     int myHealth = 0;
     int myMaxHealth = 0;
     float myMovementSpeed = 0;
