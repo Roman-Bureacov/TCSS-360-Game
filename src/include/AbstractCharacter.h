@@ -7,6 +7,12 @@
 #include <string>
 
 
+/**
+ * Represents the basic character.
+ * @author Riley Hopper
+ * @author Roman Bureacov
+ * @version 2025 July
+ */
 class AbstractCharacter {
 private:
     std::string id;
