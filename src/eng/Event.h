@@ -33,8 +33,9 @@ struct Event {
     explicit Event(const long theEventTickCount,
                     const std::function<void()>& theEventAction,
                     const AbstractCharacter& theEventOrigin)
-        : eventAction(theEventAction), eventOriginCharacter(theEventOrigin) {
+                    : eventAction(theEventAction), eventOriginCharacter(theEventOrigin) {
         if (theEventTickCount < 1) throw std::logic_error("Events cannot have a negative tick count");
+        eventTickCount = theEventTickCount;
     }
 };
 
