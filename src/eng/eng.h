@@ -5,9 +5,14 @@
 #ifndef ENG_H
 #define ENG_H
 
-
+#include <vector>
 
 class eng {
+private:
+    std::vector<Character*> entities;
+
+public:
+
 
 };
 
