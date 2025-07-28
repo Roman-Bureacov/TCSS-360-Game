@@ -25,7 +25,7 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/model/Characters/Weapons/Hitbox.cpp
         src/include/Hitbox.h
         src/db/sqlite_test.cpp
-        ${SQLITE_ROOT}/lib/sqlite3.c
+        "${SQLITE_ROOT}/lib/sqlite3.c"
 )
 
 # Link against SDL3 & SQLite
