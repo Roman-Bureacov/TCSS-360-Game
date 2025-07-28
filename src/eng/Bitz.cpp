@@ -4,15 +4,19 @@
 
 #include "Bitz.h"
 
+#include <iostream>
+
 std::list<AbstractCharacter*> entities;
 std::list<AbstractCharacter*> persistentEventQueueEntities;
 std::list<Event*> Bitz::eventQueue;
 std::list<Event*> Bitz::singleEventQueue;
 std::list<Event*> Bitz::persistentEventQueue;
-
+std::mutex Bitz::eventQueueMutex;
 
 void Bitz::processEvents() {
-    for (auto iter = eventQueue.begin(); iter != eventQueue.end(); ) {
+    std::lock_guard lock(eventQueueMutex);
+
+    for (auto iter = eventQueue.begin(); iter != eventQueue.end() && !eventQueue.empty(); ) {
         // persistent events are ones with a tick count greater than 1
         if (Event* event = *iter; event->eventTickCount > 1) { // if-init-statement
             // throw it into the persistent event queue
@@ -42,6 +46,9 @@ void Bitz::enqueuePersistentEvent(Event* theEvent) {
 }
 
 void Bitz::enqueueEvent(Event* theEvent) {
+    // std::lock_guard lock(eventQueueMutex);
+
+    std::cout << "Putting in event..." << std::endl;
     // get reference of pointer, that way the pointer can be reassigned
     for (Event*& event : eventQueue) {
         if (event->eventOriginCharacter.getID() == theEvent->eventOriginCharacter.getID()) {

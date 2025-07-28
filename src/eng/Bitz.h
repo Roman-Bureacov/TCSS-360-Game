@@ -29,6 +29,7 @@ private:
     static std::list<Event*> eventQueue;
     static std::list<Event*> singleEventQueue;
     static std::list<Event*> persistentEventQueue;
+    static std::mutex eventQueueMutex;
 
     /**
      * Processes the enqueued events, and adds them to the persistent events as necessary.

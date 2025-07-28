@@ -5,6 +5,7 @@
 #include "Clock.h"
 #include "Bitz.h"
 #include <chrono>
+#include <iostream>
 
 long Clock::getTimestamp() {
     // TODO: what here???
@@ -21,6 +22,7 @@ void Clock::tick() {
 
 void Clock::runClock() {
     while (isActive()) {
+        std::cout << "tick..." << std::endl;
 
         Bitz::processEvents();
         tickCount++;
@@ -36,10 +38,8 @@ bool Clock::isActive() {
 
 void Clock::setActive(const bool theState) {
     isEnabled = theState;
-    runClock();
 }
 
 void Clock::toggleActive() {
     isEnabled = !isEnabled;
-    runClock();
 }

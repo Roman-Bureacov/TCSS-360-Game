@@ -10,10 +10,12 @@
 #include <iostream>
 #include <thread>
 
+#include "eng/Bitz.h"
 #include "eng/Clock.h"
 
 int runGame();
 int showWindow();
+void userPolling();
 
 int main(int argc, char* argv[]) {
 
@@ -21,8 +23,51 @@ int main(int argc, char* argv[]) {
 }
 
 int runGame() {
+    std::cout << "Running clock..." << std::endl;
+    Clock::setActive(true);
+    std::thread clockThread([] {
+        std::cout << "Clock starting..." << std::endl;
+        Clock::runClock();
+        std::cout << "Clock stopping..." << std::endl;
+    });
+
+
+    std::cout << "Running input thread..." << std::endl;
+    std::thread inputThread([] {
+        std::cout << "Polling starting..." << std::endl;
+        userPolling();
+        std::cout << "Polling stopping..." << std::endl;
+    });
+
+    std::cout << "Awaiting further instructions..." << std::endl;
+    inputThread.join();
+    Clock::setActive(false);
+    clockThread.join();
     return 69;
 }
+
+void userPolling() {
+    std::string cmd;
+    while (true) {
+        char ch;
+        std::cin.get(ch);
+
+        if (ch == '\n') continue;
+        if (ch == 'q') break;
+
+        // Construct an Event and enqueue it
+        Event* ev = new Event(
+            1,
+            [ch]() -> void {
+                std::cout << "Character event: " << ch << std::endl;
+            },
+            AbstractCharacter()
+        );
+
+        Bitz::enqueueEvent(ev);
+    }
+}
+
 
 /**
  * SDL example to show that it's running
