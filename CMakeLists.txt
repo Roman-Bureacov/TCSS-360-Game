@@ -23,8 +23,8 @@ add_executable(TCSS-360-Game src/main.cpp
         src/include/AbstractCharacter.h
         src/include/Hitbox.h
         src/app/model/Characters/AbstractCharacter.cpp
-        src/eng/eng.h
-        src/eng/eng.cpp
+        src/eng/Bitz.h
+        src/eng/Bitz.cpp
         src/eng/Event.h
 )
 
