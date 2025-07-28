@@ -5,12 +5,23 @@
 // Example program:
 // Using SDL3 to create an application window
 
+#include <iostream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include <iostream>
+
+#include "sqlite3.h"
+#include "db/sqlite_test.h"
+
 
 int main(int argc, char* argv[]) {
     std::cout << "Starting..." << std::endl;
+
+    std::cout << "Testing SQLite" << std::endl;
+
+    SQLite_test();
+
+    std::cout << "Test over. Now opening SLD3..." << std::endl;
+
 
     SDL_Window *window;                    // Declare a pointer
     bool done = false;
