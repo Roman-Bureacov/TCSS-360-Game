@@ -11,7 +11,7 @@ void SQLite_test() {
     char* errMsg = nullptr;
 
     // 1. Open database (it will be created if it doesn't exist)
-    int rc = sqlite3_open("test.db", &db);
+    int rc = sqlite3_open("../src/db/test.db", &db);
     if (rc) {
         std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
         return;
