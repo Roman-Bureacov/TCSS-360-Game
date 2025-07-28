@@ -5,42 +5,51 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
+/**
+ * Static class that handles timekeeping and ticks the engine at specific intervals
+ * to process events.
+ * @author Roman Bureacov
+ * @version 2025 July
+ */
 class Clock {
 private:
-    bool isEnabled = false;
-    long tickRate = 200;
-    long tickCount = 0;
+    inline static bool isEnabled = false;
+    inline static long tickRate = 200;
+    inline static long tickCount = 0;
 
-    void tick();
+    static void tick();
+    static void runClock();
+
+    Clock() = delete;
 public:
     /**
      * Get a timestamp for time comparisons
      * @return time since epoch in milliseconds
      */
-    long getTimestamp();
+    static long getTimestamp();
 
     /**
      * Gets the current tick count.
      * @return the current tick count
      */
-    long getCurrentTick();
+    static long getCurrentTick();
 
     /**
      * Queries if the clock is running.
      * @return if the clock is actively ticking
      */
-    bool isActive();
+    static bool isActive();
 
     /**
      * Sets the clock state.
      * @param theState the new state of the clock
      */
-    void setActive(bool theState);
+    static void setActive(bool theState);
 
     /**
      * Toggles the clock state.
      */
-    void toggleActive();
+    static void toggleActive();
 };
 
 #endif //CLOCK_H
