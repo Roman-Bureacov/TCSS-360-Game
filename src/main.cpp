@@ -14,12 +14,39 @@
 #include "eng/Clock.h"
 
 int runGame();
+int runTest();
 int showWindow();
 void userPolling();
 
 int main(int argc, char* argv[]) {
 
-    return std::max(runGame(), 0);
+    runGame();
+    //runTest();
+
+    return 0;
+}
+
+int runTest() {
+    const AbstractCharacter me = AbstractCharacter("test", 1, 1);
+    // Construct an Event and enqueue it
+    Bitz::enqueueEvent( new Event(
+        1,
+        []() -> void {
+            std::cout << "Character event: A" << std::endl;
+        },
+        me
+    ));
+    Bitz::enqueueEvent( new Event(
+        1,
+        []() -> void {
+            std::cout << "Character event: B" << std::endl;
+        },
+        me
+    ));
+    Clock::setActive(true);
+    Clock::runClock();
+
+    return 0;
 }
 
 int runGame() {
@@ -47,7 +74,8 @@ int runGame() {
 }
 
 void userPolling() {
-    std::string cmd;
+    const AbstractCharacter me = AbstractCharacter("test", 1, 1);
+    std::cout << "I am " << me.getID() << std::endl;
     while (true) {
         char ch;
         std::cin.get(ch);
@@ -61,7 +89,7 @@ void userPolling() {
             [ch]() -> void {
                 std::cout << "Character event: " << ch << std::endl;
             },
-            AbstractCharacter()
+            me
         );
 
         Bitz::enqueueEvent(ev);

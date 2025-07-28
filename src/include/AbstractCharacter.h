@@ -21,6 +21,14 @@ private:
     float myMovementSpeed = 0;
 public:
     /**
+     * Constructs a character with the stats specified.
+     * @param theName the name this character should use
+     * @param theMaxHealth the maximum health this character should have
+     * @param theMovementSpeed the movement speed this character should have
+     */
+    AbstractCharacter(const std::string theName, const int theMaxHealth, const float theMovementSpeed);
+
+    /**
      * Retrieve the unique ID for this character.
      * @return the unique ID attributed to this character
      */

@@ -16,7 +16,7 @@
  * @version 2025 July
  */
 struct Event {
-    long eventTickCount = 1;
+    mutable long eventTickCount = 1;
     const std::function<void()> eventAction;
     const AbstractCharacter& eventOriginCharacter;
 
