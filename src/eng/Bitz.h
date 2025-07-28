@@ -6,6 +6,7 @@
 #define ENG_H
 
 #include <functional>
+#include <mutex>
 #include <vector>
 
 #include "Event.h"
@@ -26,6 +27,7 @@ private:
     static std::list<AbstractCharacter*> entities;
     static std::list<AbstractCharacter*> persistentEventQueueEntities;
     static std::list<Event*> eventQueue;
+    static std::list<Event*> singleEventQueue;
     static std::list<Event*> persistentEventQueue;
 
     /**

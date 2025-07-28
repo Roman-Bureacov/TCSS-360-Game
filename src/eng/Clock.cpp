@@ -21,9 +21,12 @@ void Clock::tick() {
 
 void Clock::runClock() {
     while (isActive()) {
+
         Bitz::processEvents();
         tickCount++;
+
         std::this_thread::sleep_for(std::chrono::milliseconds(tickRate));
+
     }
 }
 

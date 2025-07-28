@@ -8,8 +8,26 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <iostream>
+#include <thread>
+
+#include "eng/Clock.h"
+
+int runGame();
+int showWindow();
 
 int main(int argc, char* argv[]) {
+
+    return std::max(runGame(), 0);
+}
+
+int runGame() {
+    return 69;
+}
+
+/**
+ * SDL example to show that it's running
+ */
+int showWindow() {
     std::cout << "Starting..." << std::endl;
 
     SDL_Window *window;                    // Declare a pointer

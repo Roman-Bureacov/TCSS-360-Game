@@ -4,19 +4,28 @@
 
 #include "Bitz.h"
 
+std::list<AbstractCharacter*> entities;
+std::list<AbstractCharacter*> persistentEventQueueEntities;
+std::list<Event*> Bitz::eventQueue;
+std::list<Event*> Bitz::singleEventQueue;
+std::list<Event*> Bitz::persistentEventQueue;
+
+
 void Bitz::processEvents() {
-    // throw in persistent events, if any, from the event queue
-    // into the persistent event queue
     for (auto iter = eventQueue.begin(); iter != eventQueue.end(); ) {
         // persistent events are ones with a tick count greater than 1
         if (Event* event = *iter; event->eventTickCount > 1) { // if-init-statement
+            // throw it into the persistent event queue
             persistentEventQueue.push_back(event);
-            iter = eventQueue.erase(iter);
-        } else ++iter;
+        } else {
+            // throw it into the single event queue
+            singleEventQueue.push_back(event);
+        }
+        iter = eventQueue.erase(iter);
     }
 
     // process the non-persistent events first
-    for (const Event* event : eventQueue) event->eventAction();
+    for (const Event* event : singleEventQueue) event->eventAction();
 
     // then process the persistent events
     for (const Event* event : persistentEventQueue) event->eventAction();

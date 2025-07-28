@@ -18,7 +18,6 @@ private:
     inline static long tickCount = 0;
 
     static void tick();
-    static void runClock();
 
     Clock() = delete;
 public:
@@ -27,6 +26,8 @@ public:
      * @return time since epoch in milliseconds
      */
     static long getTimestamp();
+
+    static void runClock();
 
     /**
      * Gets the current tick count.
