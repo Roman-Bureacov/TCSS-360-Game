@@ -9,52 +9,31 @@
 std::list<AbstractCharacter*> entities;
 std::list<AbstractCharacter*> persistentEventQueueEntities;
 std::list<Event*> Bitz::eventQueue;
-std::list<Event*> Bitz::singleEventQueue;
-std::list<Event*> Bitz::persistentEventQueue;
+std::list<Event*> Bitz::eventProcessQueue;
 std::mutex Bitz::eventQueueMutex;
 
 void Bitz::processEvents() {
     std::lock_guard lock(eventQueueMutex);
 
+    // put all the events into the queue for processing
     for (auto iter = eventQueue.begin(); iter != eventQueue.end(); ) {
-        // persistent events are ones with a tick count greater than 1
-        if (Event* event = *iter; event->eventTickCount > 1) { // if-init-statement
-            // throw it into the persistent event queue
-            persistentEventQueue.push_back(event);
-        } else {
-            // throw it into the single event queue
-            singleEventQueue.push_back(event);
-        }
+        // put all the events into the queue
+        eventProcessQueue.push_back(*iter);
         iter = eventQueue.erase(iter);
     }
 
-    // process the non-persistent events first
-    for (auto iter = singleEventQueue.begin();
-            iter != singleEventQueue.end() && !singleEventQueue.empty(); ) {
-        const Event* e = *iter;
-        e->eventAction();
-        iter = singleEventQueue.erase(iter);
-    }
-
-    // then process the persistent events
-    for (auto iter = persistentEventQueue.begin();
-            iter != persistentEventQueue.end() && !persistentEventQueue.empty(); ) {
+    // process the events
+    for (auto iter = eventProcessQueue.begin();
+            iter != eventProcessQueue.end() && !eventProcessQueue.empty(); ) {
         const Event* e = *iter;
         e->eventTickCount--;
         e->eventAction();
-        if (e->eventTickCount == 0) iter = persistentEventQueue.erase(iter);
+        if (e->eventTickCount == 0) {
+            iter = eventProcessQueue.erase(iter);
+            delete e;
+        } else ++iter;
     }
-    std::cout << "A" << std::endl;
-}
 
-void Bitz::enqueuePersistentEvent(Event* theEvent) {
-    for (Event*& event : persistentEventQueue) {
-        if (event->eventOriginCharacter.getID() == theEvent->eventOriginCharacter.getID()) {
-            event = theEvent;
-            return;
-        }
-    }
-    eventQueue.push_back(theEvent);
 }
 
 void Bitz::enqueueEvent(Event* theEvent) {

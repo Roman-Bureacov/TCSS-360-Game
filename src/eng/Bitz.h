@@ -7,6 +7,7 @@
 
 #include <functional>
 #include <mutex>
+#include <unordered_set>
 #include <vector>
 
 #include "Event.h"
@@ -24,11 +25,14 @@ class Bitz {
 
     Bitz() = delete;
 private:
-    static std::list<AbstractCharacter*> entities;
-    static std::list<AbstractCharacter*> persistentEventQueueEntities;
+    /** The list of characters active. */
+    static std::unordered_set<AbstractCharacter*> entities;
+    /** The characters who have an event in queue. */
+    static std::list<AbstractCharacter*> lockedEventCharacters;
+    /** The queue representing the events to be put into the process queue. */
     static std::list<Event*> eventQueue;
-    static std::list<Event*> singleEventQueue;
-    static std::list<Event*> persistentEventQueue;
+    /** The queue representing the events currently being processed. */
+    static std::list<Event*> eventProcessQueue;
     static std::mutex eventQueueMutex;
 
     /**
@@ -37,11 +41,6 @@ private:
      */
     static void processEvents();
 
-    /**
-     * enqueues persistent events, events that lock characters into an event until its completion.
-     * @param theEvent the persistent event to enqueue
-     */
-    static void enqueuePersistentEvent(Event* theEvent);
 public:
     /**
      * Enqueues an event to occur in the next engine tick.

@@ -83,14 +83,27 @@ void userPolling() {
         if (ch == '\n') continue;
         if (ch == 'q') break;
 
-        // Construct an Event and enqueue it
-        Event* ev = new Event(
-            1,
-            [ch]() -> void {
-                std::cout << "Character event: " << ch << std::endl;
-            },
-            me
-        );
+
+        Event* ev;
+        if (ch == '2') {
+            // Construct an Event and enqueue it
+            ev = new Event(
+                2,
+                [ch]() -> void {
+                    std::cout << "Persistent event: " << ch << std::endl;
+                },
+                me
+            );
+        } else {
+            // Construct an Event and enqueue it
+            ev = new Event(
+                1,
+                [ch]() -> void {
+                    std::cout << "Character event: " << ch << std::endl;
+                },
+                me
+            );
+        }
 
         Bitz::enqueueEvent(ev);
     }
