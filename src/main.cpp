@@ -75,7 +75,7 @@ int runGame() {
 
 void userPolling() {
     const AbstractCharacter me = AbstractCharacter("test", 1, 1);
-    std::cout << "I am " << me.getID() << std::endl;
+    std::cout << "I am " << me.getName() << std::endl;
     while (true) {
         char ch;
         std::cin.get(ch);

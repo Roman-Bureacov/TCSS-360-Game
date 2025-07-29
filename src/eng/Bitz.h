@@ -26,13 +26,11 @@ class Bitz {
     Bitz() = delete;
 private:
     /** The list of characters active. */
-    static std::unordered_set<AbstractCharacter*> entities;
-    /** The characters who have an event in queue. */
-    static std::list<AbstractCharacter*> lockedEventCharacters;
+    static std::unordered_set<const AbstractCharacter*> entities;
     /** The queue representing the events to be put into the process queue. */
-    static std::list<Event*> eventQueue;
+    static std::unordered_map<const AbstractCharacter*, Event*> eventQueue;
     /** The queue representing the events currently being processed. */
-    static std::list<Event*> eventProcessQueue;
+    static std::unordered_map<const AbstractCharacter*, Event*> eventProcessQueue;
     static std::mutex eventQueueMutex;
 
     /**

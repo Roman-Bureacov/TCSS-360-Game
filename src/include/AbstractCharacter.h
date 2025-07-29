@@ -15,7 +15,8 @@
  */
 class AbstractCharacter {
 private:
-    const std::string id;
+    const std::string myName;
+    const unsigned int myID;
     int myHealth = 0;
     int myMaxHealth = 0;
     float myMovementSpeed = 0;
@@ -26,13 +27,19 @@ public:
      * @param theMaxHealth the maximum health this character should have
      * @param theMovementSpeed the movement speed this character should have
      */
-    AbstractCharacter(const std::string theName, const int theMaxHealth, const float theMovementSpeed);
+    AbstractCharacter(std::string theName, int theMaxHealth, float theMovementSpeed);
+
+    /**
+     * Returns the unique ID that represents this character.
+     * @return the unique ID that represents this character
+     */
+    unsigned int getID() const;
 
     /**
      * Retrieve the unique ID for this character.
      * @return the unique ID attributed to this character
      */
-    const std::string& getID() const;
+    const std::string& getName() const;
 
     /**
      * Asks if this character is alive (might need to call the reaper).

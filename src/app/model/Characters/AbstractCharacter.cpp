@@ -7,12 +7,19 @@
 #include <iostream>
 
 AbstractCharacter::AbstractCharacter(const std::string theName, const int theMaxHealth, const float theMovementSpeed)
-    : id(theName), myMaxHealth(theMaxHealth), myMovementSpeed(theMovementSpeed) {
+        : myName(theName), myID(2), myMaxHealth(theMaxHealth),
+        myMovementSpeed(theMovementSpeed) {
     myHealth = myMaxHealth;
 }
 
-const std::string& AbstractCharacter::getID() const {
-    return id;
+
+
+const std::string& AbstractCharacter::getName() const {
+    return myName;
+}
+
+unsigned int AbstractCharacter::getID() const {
+    return myID;
 }
 
 bool AbstractCharacter::isAlive() const {
