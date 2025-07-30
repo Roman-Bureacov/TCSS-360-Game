@@ -29,6 +29,21 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/model/Characters/Dummy.h
 )
 
+# static libraries, primarily for testing purposes
+add_library(engine STATIC
+        src/eng/Bitz.cpp
+        src/eng/Clock.cpp
+)
+
+add_library(model STATIC
+        src/app/model/Characters/AbstractCharacter.cpp
+        src/app/model/Characters/Dummy.h
+)
+
+target_include_directories(engine PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
 # Link against SDL3
 target_link_libraries(TCSS-360-Game SDL3)
 
@@ -37,3 +52,5 @@ add_custom_command(TARGET TCSS-360-Game POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${SDL3_ROOT}/lib/x64/SDL3.dll"
         $<TARGET_FILE_DIR:TCSS-360-Game>)
+
+add_subdirectory(Google_tests)

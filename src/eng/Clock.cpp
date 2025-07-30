@@ -22,7 +22,6 @@ void Clock::tick() {
 
 void Clock::runClock() {
     while (isActive()) {
-        std::cout << "tick..." << std::endl;
 
         Bitz::processEvents();
         tickCount++;
