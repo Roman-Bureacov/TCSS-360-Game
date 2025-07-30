@@ -26,6 +26,10 @@ add_executable(TCSS-360-Game src/main.cpp
         src/include/Hitbox.h
         src/db/sqlite_test.cpp
         "${SQLITE_ROOT}/lib/sqlite3.c"
+        src/app/model/Enviroment/Dungeon.cpp
+        src/include/Dungeon.h
+        src/app/model/Enviroment/Room.cpp
+        src/include/Room.h
 )
 
 # Link against SDL3 & SQLite
