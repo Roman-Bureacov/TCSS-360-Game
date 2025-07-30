@@ -10,8 +10,9 @@
 #include <iostream>
 #include <thread>
 
-#include "eng/Bitz.h"
-#include "eng/Clock.h"
+#include "app/model/Characters/Dummy.h"
+#include "include/Bitz.h"
+#include "include/Clock.h"
 
 int runGame();
 int runTest();
@@ -22,29 +23,6 @@ int main(int argc, char* argv[]) {
 
     runGame();
     //runTest();
-
-    return 0;
-}
-
-int runTest() {
-    const AbstractCharacter me = AbstractCharacter("test", 1, 1);
-    // Construct an Event and enqueue it
-    Bitz::enqueueEvent( new Event(
-        1,
-        []() -> void {
-            std::cout << "Character event: A" << std::endl;
-        },
-        me
-    ));
-    Bitz::enqueueEvent( new Event(
-        1,
-        []() -> void {
-            std::cout << "Character event: B" << std::endl;
-        },
-        me
-    ));
-    Clock::setActive(true);
-    Clock::runClock();
 
     return 0;
 }
@@ -74,8 +52,8 @@ int runGame() {
 }
 
 void userPolling() {
-    const AbstractCharacter me = AbstractCharacter("test", 1, 1);
-    std::cout << "I am " << me.getName() << std::endl;
+    Dummy d = Dummy();
+    std::cout << "I am " << d.getName() << std::endl;
     while (true) {
         char ch;
         std::cin.get(ch);
@@ -83,29 +61,33 @@ void userPolling() {
         if (ch == '\n') continue;
         if (ch == 'q') break;
 
-
-        Event* ev;
-        if (ch == '2') {
-            // Construct an Event and enqueue it
-            ev = new Event(
-                2,
-                [ch]() -> void {
-                    std::cout << "Persistent event: " << ch << std::endl;
-                },
-                me
-            );
+        if (ch == 'c') {
+            d.attack();
         } else {
-            // Construct an Event and enqueue it
-            ev = new Event(
-                1,
-                [ch]() -> void {
-                    std::cout << "Character event: " << ch << std::endl;
-                },
-                me
-            );
+            Event* ev;
+            if (ch == '2') {
+                // Construct an Event and enqueue it
+                ev = new Event(
+                    2,
+                    [ch]() -> void {
+                        std::cout << "Persistent event: " << ch << std::endl;
+                    },
+                    d
+                );
+            } else {
+                // Construct an Event and enqueue it
+                ev = new Event(
+                    1,
+                    [ch]() -> void {
+                        std::cout << "Character event: " << ch << std::endl;
+                    },
+                    d
+                );
+            }
+
+            Bitz::enqueueEvent(ev);
         }
 
-        Bitz::enqueueEvent(ev);
     }
 }
 

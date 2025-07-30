@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "Event.h"
-#include "../include/AbstractCharacter.h"
+#include "AbstractCharacter.h"
 
 
 /**

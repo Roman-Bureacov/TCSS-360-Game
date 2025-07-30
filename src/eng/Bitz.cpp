@@ -2,9 +2,7 @@
 // Created by iwant on 7/1/2025.
 //
 
-#include "Bitz.h"
-
-#include <iostream>
+#include "../include/Bitz.h"
 
 std::unordered_set<const AbstractCharacter*> Bitz::entities;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventQueue;

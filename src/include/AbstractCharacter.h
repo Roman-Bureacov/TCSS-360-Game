@@ -21,6 +21,8 @@ private:
     int myMaxHealth = 0;
     float myMovementSpeed = 0;
 public:
+    virtual ~AbstractCharacter() = default;
+
     /**
      * Constructs a character with the stats specified.
      * @param theName the name this character should use
@@ -36,8 +38,8 @@ public:
     unsigned int getID() const;
 
     /**
-     * Retrieve the unique ID for this character.
-     * @return the unique ID attributed to this character
+     * Retrieve the name for this character.
+     * @return the name attributed to this character
      */
     const std::string& getName() const;
 
@@ -89,7 +91,7 @@ public:
     /**
      * Sends out an attack event to the engine using this character's equipped weapon.
      */
-    void attack();
+    virtual void attack() = 0;
 
 };
 

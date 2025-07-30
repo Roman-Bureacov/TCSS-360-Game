@@ -7,7 +7,7 @@
 #include <functional>
 #include <stdexcept>
 
-#include "../include/AbstractCharacter.h"
+#include "AbstractCharacter.h"
 
 /**
  * An event struct. Houses a tick count for how long the event

@@ -2,8 +2,8 @@
 // Created by iwant on 7/26/2025.
 //
 
-#include "Clock.h"
-#include "Bitz.h"
+#include "../include/Clock.h"
+#include "../include/Bitz.h"
 #include <chrono>
 #include <iostream>
 
