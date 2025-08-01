@@ -17,18 +17,12 @@
  * This uses the singleton pattern, there really should only be one
  * Dungeon in memory at a time, we should be grabbing different dungeons.
  */
-class Dungeon;
 
-class DungeonLogger : public Observer {
-public:
-    void Update(Subject* subject) override;
-};
 
-class Dungeon : public Subject {
+class Dungeon final : public Subject {
 public:
 
     static Dungeon* DungeonInstance();
-    Observer* logger = new DungeonLogger();
 
     /*
      * I'm thinking that room ids will start in the 100's

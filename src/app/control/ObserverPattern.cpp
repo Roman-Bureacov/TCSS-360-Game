@@ -12,16 +12,16 @@ Subject::~Subject() = default;
 
 
 void Subject::attach(Observer* theObserver) {
-    _observers.push_back(theObserver);
+    _observers->push_back(theObserver);
 }
 void Subject::detach(Observer* theObserver) {
-    _observers.remove(theObserver);
+    _observers->remove(theObserver);
 }
 void Subject::notify() {
 
     //Uses an interator to go through the list of observers.
-    for (auto it = _observers.begin()
-        ; it != _observers.end(); ++it) {
+    for (auto it = _observers->begin()
+        ; it != _observers->end(); ++it) {
         (*it)->Update(this);
     }
 }

@@ -4,6 +4,7 @@
 #pragma once
 
 #include <list>
+#include <memory>
 
 class Subject;
 
@@ -27,6 +28,10 @@ public:
 protected:
     Subject();
 private:
-    std::list<Observer*> _observers;
+    /* Professor GPT doesn't like this approach, book does though.
+     * Should ask tom if std::list<Observer*> *_observers;
+     * is better than std::list<Observer*> _observers;
+     */
+    std::list<Observer *> *_observers;
 };
 

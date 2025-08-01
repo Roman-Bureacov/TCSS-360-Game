@@ -4,7 +4,50 @@
 
 #include "../../../include/Room.h"
 
-std::vector<std::vector<std::string>> Room::generateRoom() {
+//Monster function? I call that quality code.
+void Room::generateRoom() {
+
+    //(row, column) -> (i,j)
+    for (int i = 0; i < roomSize; i++) {
+        std::vector<DunText::DungeonTile> row;
+        DunText::DungeonTile roomTile;
+
+        for (int j = 0; j < roomSize; j++) {
+
+            //Praying to god my schizophrenic mental conception, works.
+            //I'm too goated to unit test. Toms face reading this comment : (
+            roomTile = DunText::DungeonTile::Floor;
+
+            if (i == 0 || i == roomSize - 1) roomTile
+                = DunText::DungeonTile::HorizontalWall;
+            if (j == 0 || j == roomSize - 1) roomTile
+                =  DunText::DungeonTile::VerticalWall;
+
+            if (i == 0) {
+                if (j == 0) roomTile
+                    = DunText::DungeonTile::NorthWestCorner;
+                else if (j == roomSize - 1) roomTile
+                    = DunText::DungeonTile::NorthEastCorner;
+            } if (i == roomSize - 1) {
+                if (j == 0) roomTile
+                    = DunText::DungeonTile::SouthWestCorner;
+                else if (j == roomSize - 1) roomTile
+                    = DunText::DungeonTile::SouthEastCorner;
+            }
+
+            if (i == 0  && j == doorLocation && this->roomNorth) roomTile
+                = DunText::DungeonTile::HorizontalDoor;
+            if (i == roomSize - 1 && j == doorLocation && this->roomSouth) roomTile
+                = DunText::DungeonTile::HorizontalDoor;
+            if (j == 0  && i == doorLocation && this->roomWest) roomTile
+                = DunText::DungeonTile::VerticalDoor;
+            if (j == roomSize - 1 && i == doorLocation && this->roomEast) roomTile
+                = DunText::DungeonTile::VerticalDoor;
+
+            row.push_back(roomTile);
+        }
+        roomMap.push_back(row);
+    }
 }
 
 std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
@@ -19,8 +62,7 @@ int Room::getRoomID() const {
 }
 
 Room::Room() {
-
-
+    this->generateRoom();
 }
 
 ConcreteRoomBuilder::ConcreteRoomBuilder() = default;

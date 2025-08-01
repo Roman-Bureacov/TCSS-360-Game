@@ -10,13 +10,14 @@
 #include <vector>
 
 #include "AbstractCharacter.h"
+#include "DungeonTextures.h"
 
 
 
-class Room {
+class Room final {
 
 public:
-    std::vector<std::vector<std::string>> generateRoom();
+    generateRoom();
 
     std::vector<std::shared_ptr<AbstractCharacter>> getCharacters() const;
 
@@ -45,8 +46,12 @@ public:
     ~Room() = default;
 private:
 
-    std::vector<std::vector<std::shared_ptr<std::string>>> roomMap;
+    std::vector<std::vector<DunText::DungeonTile>> roomMap;
     std::vector<std::shared_ptr<AbstractCharacter>> characters;
+    //2 blocks for the border, and 13 for the interior.
+    //The reason it's an odd number is for the door to be centered.
+    const int roomSize = 15;
+    const int doorLocation = (roomSize - 1) / 2;
 
 
 
