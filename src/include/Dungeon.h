@@ -20,7 +20,7 @@ public:
 
     static Dungeon DungeonInstance();
 
-    std::vector<std::vector<Room*>> generateDungeon();
+    std::vector<std::vector<std::shared_ptr<Room>>> generateDungeon();
     std::vector<std::vector<int>> getMap();
 
     Room setCharacterRoom(int roomID);

@@ -16,17 +16,18 @@
 class Room {
 
 public:
-    int getRoomID();
-
     std::vector<std::vector<std::string>> generateRoom();
-    std::vector<AbstractCharacter> getCharacters();
 
-    void setCharacters(std::vector<AbstractCharacter> characters);
+    std::vector<std::shared_ptr<AbstractCharacter>> getCharacters() const;
 
-    Room(const int roomID);
-    ~Room();
+    void setCharacters(std::vector<std::shared_ptr<AbstractCharacter>> characters);
 
-    //When a room is being generated it will check these to see if it needs doors in that direction.
+    int getRoomID() const;
+
+    Room(int roomID);
+    ~Room() = default;
+
+    //Door flags
     bool roomNorth;
     bool roomEast;
     bool roomWest;
@@ -40,9 +41,10 @@ public:
 private:
 
     std::vector<std::vector<std::string>> roomMap;
-    std::vector<AbstractCharacter> characters;
 
-    const int roomID; //Might not want it to be constant.
+    std::vector<std::shared_ptr<AbstractCharacter>> characters;
+
+    int roomID;
 
 
 };
@@ -50,22 +52,31 @@ private:
 class RoomBuilder {
 
 public:
-    virtual void setRoomNorth(const bool roomNorth);
-    virtual void setRoomEast(const bool roomEast);
-    virtual void setRoomWest(const bool roomWest);
-    virtual void setRoomSouth(const bool roomSouth);
+    virtual void setRoomNorth(bool north) = 0;
+    virtual void setRoomEast(bool east) = 0;
+    virtual void setRoomWest(bool west) = 0;
+    virtual void setRoomSouth(bool south) = 0;
 
-    virtual std::shared_ptr<Room> build();
+    virtual std::shared_ptr<Room> build() = 0;
 
 };
+
 class ConcreteRoomBuilder : public RoomBuilder {
 public:
     ConcreteRoomBuilder();
-    void setRoomNorth(const bool roomNorth) override;
-    void setRoomEast(const bool roomEast) override;
-    void setRoomWest(const bool roomWest) override;
-    void setRoomSouth(const bool roomSouth) override;
+    void setRoomNorth(bool north) override;
+    void setRoomEast(bool east) override;
+    void setRoomWest(bool west) override;
+    void setRoomSouth(bool south) override;
     std::shared_ptr<Room> build() override;
+
+private:
+    bool roomNorth = false;
+    bool roomEast = false;
+    bool roomWest = false;
+    bool roomSouth = false;
+
+    int roomID;
 
 
 };
