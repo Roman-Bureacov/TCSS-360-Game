@@ -35,17 +35,34 @@ std::vector<std::vector<std::shared_ptr<Room>>> Dungeon::generateDungeon() {
         dungeon.push_back(row);
     }
 
+    //Its 100, just so you don't have to look.
+    setCharacterRoom(startingRoomId);
 
 
     return dungeon;
 }
 
-Room Dungeon::setCharacterRoom(int roomID) {}
+
+
+Room Dungeon::setCharacterRoom(int roomID) {
+    //Gonna need to learn SQL for this bugger right here.
+    //This is going to load the rooms data from the database.
+
+    notify();
+}
 
 std::vector<std::vector<int>> Dungeon::getMap() {}
+
+std::shared_ptr<Room> Dungeon::getCurrentRoom() {
+    return currentRoom;
+}
 
 
 Dungeon::Dungeon() {
     this->generateDungeon();
 
 }
+
+void DungeonLogger::Update(Subject *subject) {
+}
+

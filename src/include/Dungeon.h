@@ -6,20 +6,29 @@
 #define DUNGEON_H
 
 
+
+
 #include "Room.h"
+#include "ObserverPattern.h"
 #include <vector>
+
 
 /*
  * This uses the singleton pattern, there really should only be one
  * Dungeon in memory at a time, we should be grabbing different dungeons.
  */
+class Dungeon;
 
+class DungeonLogger : public Observer {
+public:
+    void Update(Subject* subject) override;
+};
 
-class Dungeon {
+class Dungeon : public Subject {
 public:
 
     static Dungeon* DungeonInstance();
-
+    Observer* logger = new DungeonLogger();
 
     /*
      * I'm thinking that room ids will start in the 100's
@@ -28,11 +37,9 @@ public:
      */
     std::vector<std::vector<std::shared_ptr<Room>>> generateDungeon();
     std::vector<std::vector<int>> getMap();
+    std::shared_ptr<Room> getCurrentRoom();
 
     Room setCharacterRoom(int roomID);
-
-
-
 
 private:
     ConcreteRoomBuilder roomBuilder;
@@ -49,8 +56,11 @@ private:
     const int dungeonSize = 10;
     const int dungeonIdRange = 100;
     const int rowIndexMult = 10;
+    const int startingRoomId = 100;
 
 };
+
+
 
 
 

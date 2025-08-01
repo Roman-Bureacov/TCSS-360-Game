@@ -23,8 +23,7 @@ Room::Room() {
 
 }
 
-ConcreteRoomBuilder::ConcreteRoomBuilder(): roomID(0) {
-}
+ConcreteRoomBuilder::ConcreteRoomBuilder() = default;
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomNorth(const bool north) {
     roomNorth = north;

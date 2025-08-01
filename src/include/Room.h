@@ -45,9 +45,9 @@ public:
     ~Room() = default;
 private:
 
-    std::vector<std::vector<std::string>> roomMap;
-
+    std::vector<std::vector<std::shared_ptr<std::string>>> roomMap;
     std::vector<std::shared_ptr<AbstractCharacter>> characters;
+
 
 
 
@@ -57,6 +57,8 @@ private:
 class RoomBuilder {
 
 public:
+    virtual ~RoomBuilder() = default;
+
     virtual RoomBuilder& setRoomNorth(bool north) = 0;
     virtual RoomBuilder& setRoomEast(bool east) = 0;
     virtual RoomBuilder& setRoomWest(bool west) = 0;
@@ -68,7 +70,7 @@ public:
 
 };
 
-class ConcreteRoomBuilder : public RoomBuilder {
+class ConcreteRoomBuilder final : public RoomBuilder {
 public:
     ConcreteRoomBuilder();
     ConcreteRoomBuilder& setRoomNorth(bool north) override;
