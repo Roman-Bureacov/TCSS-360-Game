@@ -63,6 +63,7 @@ Dungeon::Dungeon() {
 
 }
 
+
 void DungeonLogger::Update(Subject *subject) {
 }
 
