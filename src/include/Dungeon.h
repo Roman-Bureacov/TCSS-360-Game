@@ -18,8 +18,14 @@
 class Dungeon {
 public:
 
-    static Dungeon DungeonInstance();
+    static Dungeon* DungeonInstance();
 
+
+    /*
+     * I'm thinking that room ids will start in the 100's
+     * the tens place will be rows, and the ones columns.
+     * I'm starting it in the 100's just because that's kinda like its own area.
+     */
     std::vector<std::vector<std::shared_ptr<Room>>> generateDungeon();
     std::vector<std::vector<int>> getMap();
 
@@ -29,10 +35,20 @@ public:
 
 
 private:
+    ConcreteRoomBuilder roomBuilder;
+
+    static std::unique_ptr<Dungeon> dungeonInstance;
 
     Dungeon();
-    Room currentRoom;
+    //This is basically a placeholder room before, dungeon generation
+    std::shared_ptr<Room> currentRoom = roomBuilder.build();
     std::vector<std::vector<int>> idMap;
+
+    //Could possibly make it some people can choose dungeon size, but Ids.
+    //Would be More complex.
+    const int dungeonSize = 10;
+    const int dungeonIdRange = 100;
+    const int rowIndexMult = 10;
 
 };
 

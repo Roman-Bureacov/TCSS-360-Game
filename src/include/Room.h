@@ -23,11 +23,15 @@ public:
     void setCharacters(std::vector<std::shared_ptr<AbstractCharacter>> characters);
 
     int getRoomID() const;
+    bool getNorth() const;
+    bool getEast() const;
+    bool getSouth() const;
+    bool getWest() const;
 
-    Room(int roomID);
-    ~Room() = default;
+    void setRoomID(int roomID);
 
     //Door flags
+    //Gotta ask tom how to not break encapsulation with builder
     bool roomNorth;
     bool roomEast;
     bool roomWest;
@@ -35,16 +39,17 @@ public:
 
     int enemyAmount;
 
+    int roomID;
 
-
-
+    Room();
+    ~Room() = default;
 private:
 
     std::vector<std::vector<std::string>> roomMap;
 
     std::vector<std::shared_ptr<AbstractCharacter>> characters;
 
-    int roomID;
+
 
 
 };
@@ -52,10 +57,12 @@ private:
 class RoomBuilder {
 
 public:
-    virtual void setRoomNorth(bool north) = 0;
-    virtual void setRoomEast(bool east) = 0;
-    virtual void setRoomWest(bool west) = 0;
-    virtual void setRoomSouth(bool south) = 0;
+    virtual RoomBuilder& setRoomNorth(bool north) = 0;
+    virtual RoomBuilder& setRoomEast(bool east) = 0;
+    virtual RoomBuilder& setRoomWest(bool west) = 0;
+    virtual RoomBuilder& setRoomSouth(bool south) = 0;
+    virtual RoomBuilder& setRoomId(int id) = 0;
+    virtual RoomBuilder& setEnemyAmount(int amount) = 0;
 
     virtual std::shared_ptr<Room> build() = 0;
 
@@ -64,19 +71,22 @@ public:
 class ConcreteRoomBuilder : public RoomBuilder {
 public:
     ConcreteRoomBuilder();
-    void setRoomNorth(bool north) override;
-    void setRoomEast(bool east) override;
-    void setRoomWest(bool west) override;
-    void setRoomSouth(bool south) override;
+    ConcreteRoomBuilder& setRoomNorth(bool north) override;
+    ConcreteRoomBuilder& setRoomEast(bool east) override;
+    ConcreteRoomBuilder& setRoomWest(bool west) override;
+    ConcreteRoomBuilder& setRoomSouth(bool south) override;
+    ConcreteRoomBuilder& setRoomId(int id) override;
+    ConcreteRoomBuilder& setEnemyAmount(int enAmount) override;
     std::shared_ptr<Room> build() override;
 
 private:
-    bool roomNorth = false;
-    bool roomEast = false;
-    bool roomWest = false;
-    bool roomSouth = false;
+    bool roomNorth = true;
+    bool roomEast = true;
+    bool roomWest = true;
+    bool roomSouth = true;
 
-    int roomID;
+    int roomID = 0;
+    int amount = 0;
 
 
 };
