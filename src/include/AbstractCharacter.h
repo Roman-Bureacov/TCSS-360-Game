@@ -19,7 +19,8 @@ private:
     const unsigned int myID;
     int myHealth = 0;
     int myMaxHealth = 0;
-    float myMovementSpeed = 0;
+    int myBaseMovement = 0;
+    int myCurrentMovement = 0;
 public:
     virtual ~AbstractCharacter() = default;
 
@@ -87,6 +88,30 @@ public:
      * @param theHealAmount the amount to increase this character's health by
      */
     void heal(int theHealAmount);
+
+    /**
+     * Sets the movement speed for this character.
+     * @param theNewMovementSpeed the new movement speed in pixels per tick
+     */
+    void setMovementSpeed(int theNewMovementSpeed);
+
+    /**
+     * Sets the new maximum movement speed for this character
+     * @param theNewBaseMovementSpeed the new maximum movement speed in pixels per tick
+     */
+    void setBaseMovementSpeed(int theNewBaseMovementSpeed);
+
+    /**
+     * Gets the movement speed for this character.
+     * @return the movement speed for this character in pixels per tick
+     */
+    int getMovementSpeed() const;
+
+    /**
+     * Gets the base movement speed for this character.
+     * @return  the base movement speed in pixels per tick
+     */
+    int getBaseMovementSpeed() const;
 
     /**
      * Sends out an attack event to the engine using this character's equipped weapon.
