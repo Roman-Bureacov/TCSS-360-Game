@@ -63,3 +63,33 @@ TEST(EngineTest, PersistentEvent) {
 
     EXPECT_EQ(modifyThis, 3);
 }
+
+/**
+* Tests if the persistent events prevent from enqueueing additional events by the same character.
+*/
+TEST(EngineTest, PersistentQueueEventPrevention) {
+    const Dummy d = Dummy();
+
+    modifyThis = 0;
+    Event* persistentEvent = new Event(
+        2,
+        []() -> void {
+            modifyThis++;
+            Clock::setActive(false);
+        }, d);
+    Event* singleEvent = new Event(
+        1,
+        []() -> void {
+            modifyThis = -999;
+            Clock::setActive(false);
+        }, d);
+
+    Bitz::enqueueEvent(persistentEvent);
+    Clock::setActive(true);
+    Clock::runClock();
+    Bitz::enqueueEvent(singleEvent);
+    Clock::setActive(true);
+    Clock::runClock();
+
+    EXPECT_EQ(modifyThis, 2);
+}
