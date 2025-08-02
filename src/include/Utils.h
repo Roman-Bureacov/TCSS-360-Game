@@ -11,11 +11,11 @@ namespace util {
 
 
     struct Point {
-        float x = 0.0f;
-        float y = 0.0f;
+        int x = 0;
+        int y = 0;
 
         Point() = default;
-        Point(float const theXCord, float const theYCord)
+        Point(const int theXCord, const int theYCord)
             : x(theXCord), y(theYCord) {}
     };
 

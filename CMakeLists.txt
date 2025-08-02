@@ -27,6 +27,7 @@ add_executable(TCSS-360-Game src/main.cpp
         src/eng/Bitz.cpp
         src/include/Event.h
         src/app/model/Characters/Dummy.h
+        src/app/model/Hitbox.cpp
 )
 
 # static libraries, primarily for testing purposes
@@ -38,6 +39,7 @@ add_library(engine STATIC
 add_library(model STATIC
         src/app/model/Characters/AbstractCharacter.cpp
         src/app/model/Characters/Dummy.h
+        src/app/model/Hitbox.cpp
 )
 
 target_include_directories(engine PUBLIC

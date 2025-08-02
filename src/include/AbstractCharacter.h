@@ -23,8 +23,7 @@ private:
     int myMaxHealth = 0;
     int myBaseMovement = 0;
     int myCurrentMovement = 0;
-    int myX = 0;
-    int myY = 0;
+    util::Point myOrigin;
     Hitbox myHitbox;
 public:
     virtual ~AbstractCharacter() = default;

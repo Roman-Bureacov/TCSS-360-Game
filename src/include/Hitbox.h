@@ -11,6 +11,8 @@
 
 /**
  * A hitbox class that encapsulates the idea of an interactable rectangle.
+ * <br>
+ * Hitboxes have an origin and extend to the right and up.
  * @version July 2025
  * @author Riley Hopper
  * @author Roman Bureacov
@@ -18,14 +20,34 @@
 class Hitbox {
 public:
     Hitbox(
-        util::Point middle,
+        const util::Point& theOrigin,
         int theWidth,
         int theHeight
     );
 
-    void setMiddle(util::Point theMiddle);
+    /**
+     * Sets the origin of this hitbox
+     * @param theNewOrigin the new origin for this hitbox
+     */
+    void setOrigin(const util::Point& theNewOrigin);
 
-    const util::Point& getMiddle() const;
+    /**
+     * Sets the new X origin for this hitbox
+     * @param newX the new X origin in pixels
+     */
+    void setOriginX(int newX);
+
+    /**
+     * Sets the new Y origin for this hitbox
+     * @param newY the new Y origin in pixels
+     */
+    void setOriginY(int newY);
+
+    /**
+     * Gets the origin of this hitbox.
+     * @return the origin of this hitbox in pixels
+     */
+    const util::Point& getOrigin() const;
 
     /**
      * Gets the width of this hitbox.
@@ -47,22 +69,25 @@ public:
     bool contains(util::Point thePoint) const;
 
     /**
+     * Asks if this hitbox contains the coordinate
+     * @param theX the X coordinate to query
+     * @param theY the Y coordinate to query
+     * @return if this hitbox contains the coordinate
+     */
+    bool contains(int theX, int theY) const;
+
+    /**
      * Asks if this hitbox intersects another hitbox.
      * @param theOtherHitbox the other hitbox to test for intersect
      * @return if this hitbox intersects the other hitbox
      */
     bool intersects(Hitbox theOtherHitbox) const;
 
-
 private:
-    util::Point myMiddle;
+    util::Point myOrigin;
 
     const int myWidth;
     const int myHeight;
-
-
-
-
 };
 
 
