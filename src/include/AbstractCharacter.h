@@ -6,6 +6,8 @@
 #define ABSTRACTCHARACTER_H
 #include <string>
 
+#include "Hitbox.h"
+
 
 /**
  * Represents the basic character.
@@ -21,6 +23,9 @@ private:
     int myMaxHealth = 0;
     int myBaseMovement = 0;
     int myCurrentMovement = 0;
+    int myX = 0;
+    int myY = 0;
+    Hitbox myHitbox;
 public:
     virtual ~AbstractCharacter() = default;
 
@@ -109,9 +114,52 @@ public:
 
     /**
      * Gets the base movement speed for this character.
-     * @return  the base movement speed in pixels per tick
+     * @return the base movement speed in pixels per tick
      */
     int getBaseMovementSpeed() const;
+
+    /**
+     * Gets the X position for this character.
+     * @return the X position in pixels
+     */
+    int getX() const;
+
+    /**
+     * Gets the Y position for this character.
+     * @return the Y position in pixels
+     */
+    int getY() const;
+
+    /**
+     * Sets the X position of this character.
+     * @param theNewX the new X position in pixels
+     */
+    void setX(int theNewX);
+
+    /**
+     * Sets the Y position of this character.
+     * @param theNewY the new Y position in pixels
+     */
+    void setY(int theNewY);
+
+    /**
+     * Gets the hitbox for this character.
+     * @return the immutable hitbox for this character
+     */
+    const Hitbox& getHitbox() const;
+
+    /**
+     * Sets the hitbox for this character.
+     * @param theNewHitbox the new hitbox for this character
+     */
+    void setHitbox(Hitbox& theNewHitbox);
+
+    /**
+     * Convenience behavior to set the hitbox for this character using explicit parameters.
+     * @param theWidth the width in pixels for the new hitbox
+     * @param theHeight the height in pixels for the new hitbox
+     */
+    void setHitbox(int theWidth, int theHeight);
 
     /**
      * Sends out an attack event to the engine using this character's equipped weapon.
