@@ -119,7 +119,8 @@ void DatabaseManager::createRoomTableIfNotExists() {
         south INTEGER,
         east INTEGER,
         west INTEGER,
-        enemyCount INTEGER);
+        enemyCount INTEGER,
+        serialMap TEXT);
         )";
 
     char *errmsg = nullptr;

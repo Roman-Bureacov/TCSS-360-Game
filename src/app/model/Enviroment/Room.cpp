@@ -4,56 +4,114 @@
 
 #include "../../../include/Room.h"
 
-//Monster function? I call that quality code.
-void Room::generateRoom() {
 
+
+void Room::generateNonExsistingRoom() {
+
+    //Awful algorithm.
     //(row, column) -> (i,j)
     for (int i = 0; i < roomSize; i++) {
-        std::vector<DunText::DungeonTile> row;
-        DunText::DungeonTile roomTile;
-
         for (int j = 0; j < roomSize; j++) {
 
-            //Praying to god my schizophrenic mental conception, works.
-            //I'm too goated to unit test. Toms face reading this comment : (
-            roomTile = DunText::DungeonTile::Floor;
+            std::string roomTile = "F";
 
             if (i == 0 || i == roomSize - 1) roomTile
-                = DunText::DungeonTile::HorizontalWall;
+                                             = "HW";
             if (j == 0 || j == roomSize - 1) roomTile
-                =  DunText::DungeonTile::VerticalWall;
-
+                =  "VW";
             if (i == 0) {
                 if (j == 0) roomTile
-                    = DunText::DungeonTile::NorthWestCorner;
+                    = "NWC";
                 else if (j == roomSize - 1) roomTile
-                    = DunText::DungeonTile::NorthEastCorner;
+                    = "NEC";
             } if (i == roomSize - 1) {
                 if (j == 0) roomTile
-                    = DunText::DungeonTile::SouthWestCorner;
+                    = "SWC";
                 else if (j == roomSize - 1) roomTile
-                    = DunText::DungeonTile::SouthEastCorner;
+                    = "SEC";
             }
-
             if (i == 0  && j == doorLocation && this->roomNorth) roomTile
-                = DunText::DungeonTile::HorizontalDoor;
+                = "HD";
             if (i == roomSize - 1 && j == doorLocation && this->roomSouth) roomTile
-                = DunText::DungeonTile::HorizontalDoor;
+                = "HD";
             if (j == 0  && i == doorLocation && this->roomWest) roomTile
-                = DunText::DungeonTile::VerticalDoor;
+                = "VD";
             if (j == roomSize - 1 && i == doorLocation && this->roomEast) roomTile
-                = DunText::DungeonTile::VerticalDoor;
+                = "VD";
 
-            row.push_back(roomTile);
+            serialRoomMap.append(roomTile);
+
+            if (j == roomSize - 1) serialRoomMap.append(";");
+            else serialRoomMap.append(",");
         }
-        roomMap.push_back(row);
+    }
+    this->alreadyGenerated = true;
+    this->generateCharacters();
+}
+
+void Room::generateCharacters() {
+
+    //TODO
+
+
+}
+
+void Room::generateExsistingRoom() {
+
+    roomMap.clear();
+
+    std::stringstream ss(serialRoomMap);
+    std::string rowStr;
+
+    while (std::getline(ss, rowStr, ';')) {
+        std::vector<DunText::DungeonTile> row;
+        std::stringstream rowStream(rowStr);
+        std::string tileStr;
+        while (std::getline(rowStream, tileStr, ',')) {
+            row.push_back(stringToDungeonTile(tileStr));
+        }
+        if (!row.empty()) roomMap.push_back(row);
+    }
+
+
+
+}
+
+void Room::initializeRoom() {
+
+    if (this->alreadyGenerated) {
+        //load data from database here
+        this->generateExsistingRoom();
+    } else {
+        this->generateNonExsistingRoom();
     }
 }
+
+void Room::serializeRoomMap() {
+
+    serialRoomMap.clear();
+    //Awful algorithm.
+    //(row, column) -> (i,j)
+    for (int i = 0; i < roomSize; i++) {
+        for (int j = 0; j < roomSize; j++) {
+
+            serialRoomMap.append(DungeonTileToString(roomMap[i][j]));
+
+
+            if (j == roomSize - 1) serialRoomMap.append(";");
+            else serialRoomMap.append(",");
+        }
+    }
+
+}
+
+
+
 
 std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
 }
 
-void Room::setCharacters(std::vector<std::shared_ptr<AbstractCharacter>> characters) {
+void Room::setCharacters(std::vector<int> ids) {
 
 }
 
@@ -61,11 +119,105 @@ int Room::getRoomID() const {
     return roomID;
 }
 
-Room::Room() {
-    this->generateRoom();
+bool Room::getNorth() const {
+    return roomNorth;
+}
+
+bool Room::getEast() const {
+    return roomEast;
+}
+
+bool Room::getSouth() const {
+    return roomSouth;
+}
+
+bool Room::getWest() const {
+    return roomWest;
+}
+
+void Room::setRoomID(const int roomID) {
+    this->roomID = roomID;
+}
+
+void Room::setNorth(const bool north) {
+    this->roomNorth = north;
+}
+
+void Room::setEast(const bool east) {
+    this->roomEast = east;
+}
+
+void Room::setSouth(const bool south) {
+    this->roomSouth = south;
+}
+
+void Room::setWest(const bool west) {
+    this->roomWest = west;
+}
+
+void Room::setEnemyAmount(const int amount) {
+    this->enemyAmount = amount;
+}
+
+void Room::setAlreadyGenerated(const bool alreadyMade) {
+    this->alreadyGenerated = alreadyMade;
+}
+
+void Room::setSerialRoomMap(const std::string &map) {
+    this->serialRoomMap = map;
+}
+
+Room::Room() {}
+
+void Room::printRoomMap() const {
+    for (const auto& row : roomMap) {
+        for (const auto& tile : row) {
+            std::cout << DungeonTileToString(tile) << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+DunText::DungeonTile Room::stringToDungeonTile(const std::string &tile) const {
+    if (tile == "F") return DunText::DungeonTile::Floor;
+    else if (tile == "HW") return DunText::DungeonTile::HorizontalWall;
+    else if (tile == "VW") return DunText::DungeonTile::VerticalWall;
+    else if (tile == "NWC") return DunText::DungeonTile::NorthWestCorner;
+    else if (tile == "NEC") return DunText::DungeonTile::NorthEastCorner;
+    else if (tile == "SWC") return DunText::DungeonTile::SouthWestCorner;
+    else if (tile == "SEC") return DunText::DungeonTile::SouthEastCorner;
+    else if (tile == "HD") return DunText::DungeonTile::HorizontalDoor;
+    else if (tile == "VD") return DunText::DungeonTile::VerticalDoor;
+
+
+    throw std::runtime_error("Unknown tile type: '" + tile
+        + "' in Room ID: " + std::to_string(roomID));
+
+
+}
+
+std::string Room::DungeonTileToString(const DunText::DungeonTile &tile) const {
+
+    switch (tile) {
+        case DunText::DungeonTile::HorizontalWall: return "HW";
+        case DunText::DungeonTile::VerticalWall: return "VW";
+        case DunText::DungeonTile::NorthWestCorner: return "NWC";
+        case DunText::DungeonTile::NorthEastCorner: return "NEC";
+        case DunText::DungeonTile::SouthWestCorner: return "SWC";
+        case DunText::DungeonTile::SouthEastCorner: return "SEC";
+        case DunText::DungeonTile::HorizontalDoor: return "HD";
+        case DunText::DungeonTile::VerticalDoor: return "VD";
+        default: return "F";
+    }
+
 }
 
 ConcreteRoomBuilder::ConcreteRoomBuilder() = default;
+
+ConcreteRoomBuilder& ConcreteRoomBuilder::setGenerated(const bool alreadyMade) {
+    alreadyGenerated = alreadyMade;
+    return *this;
+}
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomNorth(const bool north) {
     roomNorth = north;
@@ -92,7 +244,7 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
     return *this;
 }
 
-ConcreteRoomBuilder& ConcreteRoomBuilder::setEnemyAmount(int enAmount) {
+ConcreteRoomBuilder& ConcreteRoomBuilder::setEnemyAmount(const int enAmount) {
     amount = enAmount;
     return *this;
 
@@ -102,22 +254,27 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 
     auto room = std::make_shared<Room>();
 
-    room->roomNorth = roomNorth;
-    room->roomEast = roomEast;
-    room->roomWest = roomWest;
-    room->roomSouth = roomSouth;
-    room->roomID = roomID;
-    room->enemyAmount = amount;
+    room->setNorth(roomNorth);
+    room->setEast(roomEast);
+    room->setWest(roomWest);
+    room->setSouth(roomSouth);
+    room->setRoomID(roomID);
+    room->setEnemyAmount(amount);
+    room->setAlreadyGenerated(alreadyGenerated);
+
+    room->initializeRoom();
 
     //Reset the builder
-    bool roomNorth = true;
-    bool roomEast = true;
-    bool roomWest = true;
-    bool roomSouth = true;
-
-    int roomID = 0;
-    int amount = 0;
+    this->roomNorth = true;
+    this->roomEast = true;
+    this->roomWest = true;
+    this->roomSouth = true;
+    this->roomID = 0;
+    this->amount = 0;
+    this->alreadyGenerated = false;  // maybe reset this too?
 
     return room;
 
 }
+
+
