@@ -31,6 +31,8 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/model/Enviroment/Room.cpp
         src/include/Room.h
         src/include/DungeonTextures.h
+        src/db/DatabaseManager.cpp
+        src/include/DatabaseManager.h
 )
 
 # Link against SDL3 & SQLite

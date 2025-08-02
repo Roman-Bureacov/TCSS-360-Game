@@ -17,7 +17,7 @@
 class Room final {
 
 public:
-    generateRoom();
+    void generateRoom();
 
     std::vector<std::shared_ptr<AbstractCharacter>> getCharacters() const;
 
