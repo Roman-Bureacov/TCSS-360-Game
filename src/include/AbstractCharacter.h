@@ -15,8 +15,8 @@
  */
 class AbstractCharacter {
 private:
-    const std::string myName;
-    const unsigned int myID;
+    const std::string& myName;
+    const unsigned long long myID;
     int myHealth = 0;
     int myMaxHealth = 0;
     int myBaseMovement = 0;
@@ -30,7 +30,7 @@ public:
      * @param theMaxHealth the maximum health this character should have
      * @param theMovementSpeed the movement speed this character should have
      */
-    AbstractCharacter(std::string theName, int theMaxHealth, float theMovementSpeed);
+    AbstractCharacter(const std::string& theName, int theMaxHealth, int theMovementSpeed);
 
     /**
      * Returns the unique ID that represents this character.

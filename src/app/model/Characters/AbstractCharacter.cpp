@@ -6,10 +6,19 @@
 
 #include <iostream>
 
-AbstractCharacter::AbstractCharacter(const std::string theName, const int theMaxHealth, const float theMovementSpeed)
-        : myName(theName), myID(2), myMaxHealth(theMaxHealth),
-        myBaseMovement(theMovementSpeed) {
-    myHealth = myMaxHealth;
+#include "../ID_GEN.h"
+
+AbstractCharacter::AbstractCharacter(
+    const std::string& theName,
+    const int theMaxHealth,
+    const int theMovementSpeed)
+        : myName(theName),
+        myID(ID_GEN::makeID()),
+        myHealth(theMaxHealth),
+        myMaxHealth(theMaxHealth),
+        myBaseMovement(theMovementSpeed),
+        myCurrentMovement(theMovementSpeed) {
+
 }
 
 const std::string& AbstractCharacter::getName() const {
