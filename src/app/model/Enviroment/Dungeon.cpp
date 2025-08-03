@@ -4,25 +4,25 @@
 
 #include "../../../include/Dungeon.h"
 
-std::unique_ptr<Dungeon> Dungeon::dungeonInstance = nullptr;
+Dungeon* Dungeon::instance = 0;
 
 
 Dungeon* Dungeon::DungeonInstance() {
 
-    if (!dungeonInstance) {
-        dungeonInstance = std::make_unique<Dungeon>();
-
+    //Breaks at this if
+    if (instance == 0) {
+        instance = new Dungeon();
     }
 
-    return dungeonInstance.get();
+
+    return instance;
 }
 
-std::vector<std::vector<std::shared_ptr<Room>>> Dungeon::generateDungeon() {
-    std::vector<std::vector<std::shared_ptr<Room>>> dungeon;
+void Dungeon::generateDungeon() {
+
 
     //(row, column) -> (i,j)
     for (int i = 0; i < dungeonSize; i++) {
-        std::vector<std::shared_ptr<Room>> row;
         std::vector<int> idRow;
         for (int j = 0; j < dungeonSize; j++) {
             //Sets the row id somewhere in the hundreds.
@@ -32,10 +32,10 @@ std::vector<std::vector<std::shared_ptr<Room>>> Dungeon::generateDungeon() {
             if (i == dungeonSize - 1) roomBuilder.setRoomSouth(false);
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
-            row.push_back(roomBuilder.build());
+            roomBuilder.setGenerated(false);
+            roomBuilder.build();
             idRow.push_back(id);
         }
-        dungeon.push_back(row);
         idMap.push_back(idRow);
     }
 
@@ -43,12 +43,11 @@ std::vector<std::vector<std::shared_ptr<Room>>> Dungeon::generateDungeon() {
     setCharacterRoom(startingRoomId);
 
 
-    return dungeon;
 }
 
 
 
-Room Dungeon::setCharacterRoom(int roomID) {
+void Dungeon::setCharacterRoom(int roomID) {
     //Going to need to learn SQL for this bugger right here.
     //This is going to load the rooms data from the database.
 
@@ -56,6 +55,7 @@ Room Dungeon::setCharacterRoom(int roomID) {
 }
 
 std::vector<std::vector<int>> Dungeon::getMap() {
+    return idMap;
 
 }
 

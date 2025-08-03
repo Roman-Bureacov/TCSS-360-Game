@@ -29,21 +29,20 @@ public:
      * the tens place will be rows, and the ones columns.
      * I'm starting it in the 100's just because that's kinda like its own area.
      */
-    std::vector<std::vector<std::shared_ptr<Room>>> generateDungeon();
+    void generateDungeon();
     std::vector<std::vector<int>> getMap();
     std::shared_ptr<Room> getCurrentRoom();
 
-    Room setCharacterRoom(int roomID);
+    void setCharacterRoom(int roomID);
 
 private:
-    ConcreteRoomBuilder roomBuilder;
-
-    static std::unique_ptr<Dungeon> dungeonInstance;
-
     Dungeon();
+    ConcreteRoomBuilder roomBuilder;
     //This is basically a placeholder room before, dungeon generation
     std::shared_ptr<Room> currentRoom = roomBuilder.build();
     std::vector<std::vector<int>> idMap;
+
+    static Dungeon* instance;
 
     //Could possibly make it some people can choose dungeon size, but Ids.
     //Would be More complex.

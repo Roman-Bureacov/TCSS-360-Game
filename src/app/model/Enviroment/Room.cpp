@@ -46,7 +46,7 @@ void Room::generateNonExsistingRoom() {
         }
     }
     this->alreadyGenerated = true;
-    this->generateCharacters();
+    //this->generateCharacters();
 }
 
 void Room::generateCharacters() {

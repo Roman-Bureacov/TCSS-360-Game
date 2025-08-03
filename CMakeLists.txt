@@ -60,7 +60,34 @@ target_include_directories(engine PUBLIC
         src/include/DungeonTextures.h
         src/db/DatabaseManager.cpp
         src/include/DatabaseManager.h
+        src/include/ObserverPattern.h
+        src/app/control/ObserverPattern.cpp
+        src/test/TestMain.cpp
 )
+
+# adds tests to their own separate ecosystem.
+# the tests have like their own main so they need to be in,
+# a different place.
+add_executable(TCSS-360-Tests
+        src/app/model/Enviroment/Dungeon.cpp
+        src/include/Dungeon.h
+        src/app/model/Enviroment/Room.cpp
+        src/include/Room.h
+        src/include/DungeonTextures.h
+        src/db/DatabaseManager.cpp
+        src/include/DatabaseManager.h
+        src/include/ObserverPattern.h
+        src/app/control/ObserverPattern.cpp
+        src/test/TestMain.cpp
+        "${SQLITE_ROOT}/lib/sqlite3.c"
+        src/test/TestEnviroment/TestRoom.cpp
+        src/include/TestRoom.h
+        src/test/TestEnviroment/TestDungeon.cpp
+        src/include/TestDungeon.h
+)
+
+#Adds the test ecosystem
+target_include_directories(TCSS-360-Tests PRIVATE src/include)
 
 # Link against SDL3
 target_link_libraries(TCSS-360-Game SDL3)
