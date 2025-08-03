@@ -18,7 +18,7 @@
 class AbstractCharacter {
 private:
     const std::string& myName;
-    const unsigned long long myID;
+    const long long myID;
     int myHealth = 0;
     int myMaxHealth = 0;
     int myBaseMovement = 0;
@@ -40,7 +40,7 @@ public:
      * Returns the unique ID that represents this character.
      * @return the unique ID that represents this character
      */
-    unsigned int getID() const;
+    long long getID() const;
 
     /**
      * Retrieve the name for this character.

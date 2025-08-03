@@ -22,7 +22,7 @@ public:
      * Generates a unique ID based on the system time.
      * @return an ID in the form of a long long as the current time in microseconds since epoch.
      */
-    static unsigned long long makeID() {
+    static long long makeID() {
         std::lock_guard lock(idMutex);
         const auto currentTime = std::chrono::high_resolution_clock::now();
         const auto timeSinceEpoch = currentTime.time_since_epoch();
