@@ -6,6 +6,7 @@
 #define ID_GEN_H
 
 #include <chrono>
+#include <mutex>
 
 /**
  * Static class that provides unique IDs as longs using the system time.
@@ -14,7 +15,7 @@
  */
 class ID_GEN {
 private:
-    static std::mutex idMutex; // lock the thread, preventing possible ID collisions
+    inline static std::mutex idMutex; // lock the thread, preventing possible ID collisions
 
 public:
     /**

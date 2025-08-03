@@ -8,7 +8,6 @@
 #include <functional>
 #include <mutex>
 #include <unordered_set>
-#include <vector>
 
 #include "Event.h"
 #include "AbstractCharacter.h"

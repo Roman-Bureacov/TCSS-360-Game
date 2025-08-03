@@ -12,13 +12,13 @@ AbstractCharacter::AbstractCharacter(
     const std::string& theName,
     const int theMaxHealth,
     const int theMovementSpeed)
-        : myName(theName),
-        myID(ID_GEN::makeID()),
-        myHealth(theMaxHealth),
-        myMaxHealth(theMaxHealth),
-        myBaseMovement(theMovementSpeed),
-        myCurrentMovement(theMovementSpeed) {
-
+    : myName(theName),
+      myID(ID_GEN::makeID()),
+      myHealth(theMaxHealth),
+      myMaxHealth(theMaxHealth),
+      myBaseMovement(theMovementSpeed),
+      myCurrentMovement(theMovementSpeed),
+      myHitbox(Hitbox(util::Point(), 100, 100)) {
 }
 
 const std::string& AbstractCharacter::getName() const {
