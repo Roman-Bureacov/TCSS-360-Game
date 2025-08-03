@@ -37,6 +37,8 @@ public:
     bool getEast() const;
     bool getSouth() const;
     bool getWest() const;
+    int getEnemyAmount() const;
+    std::string getSerialRoomMap() const;
 
     void setRoomID(int roomID);
     void setNorth(bool north);

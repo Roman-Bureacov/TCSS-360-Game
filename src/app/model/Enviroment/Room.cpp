@@ -90,7 +90,6 @@ void Room::initializeRoom() {
 void Room::serializeRoomMap() {
 
     serialRoomMap.clear();
-    //Awful algorithm.
     //(row, column) -> (i,j)
     for (int i = 0; i < roomSize; i++) {
         for (int j = 0; j < roomSize; j++) {
@@ -133,6 +132,14 @@ bool Room::getSouth() const {
 
 bool Room::getWest() const {
     return roomWest;
+}
+
+int Room::getEnemyAmount() const {
+    return enemyAmount;
+}
+
+std::string Room::getSerialRoomMap() const {
+    return serialRoomMap;
 }
 
 void Room::setRoomID(const int roomID) {

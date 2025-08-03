@@ -19,12 +19,11 @@ DatabaseManager::~DatabaseManager() {
     closeDatabase();
 }
 
-void DatabaseManager::insertRoom(int id, bool north, bool south
-    , bool east, bool west, int enemyCount) {
+void DatabaseManager::insertRoom(Room &room) {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms
-                        (id, north, south, east, west, enemyCount)
-                        VALUES(?, ?, ?, ?, ?, ?);
+                        (id, north, south, east, west, enemyCount, serialMap)
+                        VALUES(?, ?, ?, ?, ?, ?, ?);
                         )";
 
     sqlite3_stmt *stmt;
@@ -33,12 +32,15 @@ void DatabaseManager::insertRoom(int id, bool north, bool south
         throw std::runtime_error(sqlite3_errmsg(db));
     }
 
-    sqlite3_bind_int(stmt, 1, id);
-    sqlite3_bind_int(stmt, 2, north);
-    sqlite3_bind_int(stmt, 3, south);
-    sqlite3_bind_int(stmt, 4, east);
-    sqlite3_bind_int(stmt, 5, west);
-    sqlite3_bind_int(stmt, 6, enemyCount);
+    room.serializeRoomMap();
+
+    sqlite3_bind_int(stmt, 1, room.getRoomID());
+    sqlite3_bind_int(stmt, 2, room.getNorth());
+    sqlite3_bind_int(stmt, 3, room.getSouth());
+    sqlite3_bind_int(stmt, 4, room.getEast());
+    sqlite3_bind_int(stmt, 5, room.getWest());
+    sqlite3_bind_int(stmt, 6, room.getEnemyAmount());
+    sqlite3_bind_text(stmt, 7, room.getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         throw std::runtime_error(sqlite3_errmsg(db));
@@ -49,7 +51,7 @@ void DatabaseManager::insertRoom(int id, bool north, bool south
 
 std::shared_ptr<Room> DatabaseManager::loadRoom(int id) {
     const char *sql = R"(SELECT north, south, east
-                        , west, enemyCount FROM rooms WHERE id = ?;)";
+                        , west, enemyCount, serialMap FROM rooms WHERE id = ?;)";
     sqlite3_stmt *stmt;
 
     if (sqlite3_prepare_v2(db, sql, -1
@@ -66,15 +68,18 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(int id) {
         bool east = sqlite3_column_int(stmt, 2);
         bool west = sqlite3_column_int(stmt, 3);
         int enemyCount = sqlite3_column_int(stmt, 4);
+        const char *mapStr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
 
         room = std::make_shared<Room>();
-        room->roomID = id;
-        room->roomNorth = north;
-        room->roomSouth = south;
-        room->roomEast = east;
-        room->roomWest = west;
-        room->enemyAmount = enemyCount;
-        room->generateRoom();
+        room->setRoomID(id);
+        room->setNorth(north);
+        room->setSouth(south);
+        room->setEast(east);
+        room->setWest(west);
+        room->setEnemyAmount(enemyCount);
+        room->setSerialRoomMap(mapStr ? mapStr : "");
+        room->setAlreadyGenerated(true);
+        room->initializeRoom();
     }
 
     sqlite3_finalize(stmt);

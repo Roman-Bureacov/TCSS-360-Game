@@ -19,8 +19,7 @@ public:
 
 
     //Dungeon and rooms section.
-    void insertRoom(int id, bool north, bool south
-        , bool east, bool west, int enemyCount);
+    void insertRoom(Room &room);
     std::shared_ptr<Room> loadRoom(int id);
 
 private:
