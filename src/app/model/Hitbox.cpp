@@ -60,11 +60,13 @@ bool Hitbox::intersects(const Hitbox& theOtherHitbox) const {
         xContained = xMax >= theOtherHitbox.getOrigin().x;
     } else xContained = myOrigin.x <= xMaxOther;
 
+    if (!xContained) return false;
+
     // check the y-coordinate
     if (yMax <= yMaxOther) {
         // is y contained?
         yContained = yMax >= theOtherHitbox.getOrigin().y;
     } else yContained = myOrigin.y <= yMaxOther;
 
-    return xContained && yContained;
+    return yContained;
 }
