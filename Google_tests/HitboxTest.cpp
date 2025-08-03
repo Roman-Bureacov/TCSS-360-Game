@@ -2,7 +2,7 @@
 // Created by iwant on 8/2/2025.
 //
 
-#include "../../src/include/Hitbox.h"
+#include "../src/include/Hitbox.h"
 #include "gtest/gtest.h"
 
 Hitbox basicHitbox();
