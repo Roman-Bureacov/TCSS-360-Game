@@ -81,7 +81,7 @@ public:
      * @param theOtherHitbox the other hitbox to test for intersect
      * @return if this hitbox intersects the other hitbox
      */
-    bool intersects(Hitbox theOtherHitbox) const;
+    bool intersects(const Hitbox& theOtherHitbox) const;
 
 private:
     util::Point myOrigin;

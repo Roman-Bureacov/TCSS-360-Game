@@ -25,11 +25,11 @@ void Hitbox::setOriginY(const int newY) {
 }
 
 int Hitbox::getWidth() const {
-    return myOrigin.x;
+    return myWidth;
 }
 
 int Hitbox::getHeight() const {
-    return myOrigin.y;
+    return myHeight;
 }
 
 bool Hitbox::contains(const util::Point thePoint) const {
@@ -39,12 +39,12 @@ bool Hitbox::contains(const util::Point thePoint) const {
 bool Hitbox::contains(const int theX, const int theY) const {
     const int endX = myOrigin.x + myWidth;
     const int endY = myOrigin.y + myHeight;
-    
+
     return myOrigin.x <= theX && theX <= endX
             && myOrigin.y <= theY && theY <= endY;
 }
 
-bool Hitbox::intersects(const Hitbox theOtherHitbox) const {
+bool Hitbox::intersects(const Hitbox& theOtherHitbox) const {
     // see: https://dyn4j.org/2010/01/sat/
     const int xMax = myOrigin.x + myWidth;
     const int xMaxOther = theOtherHitbox.getOrigin().x + theOtherHitbox.getWidth();
@@ -53,18 +53,18 @@ bool Hitbox::intersects(const Hitbox theOtherHitbox) const {
 
     bool xContained;
     bool yContained;
-    
+
     // check the x-coordinate first
-    if (xMax < xMaxOther) {
+    if (xMax <= xMaxOther) {
         // is x contained?
-        xContained = xMax > theOtherHitbox.getOrigin().x;
-    } else xContained = myOrigin.x < xMaxOther;
+        xContained = xMax >= theOtherHitbox.getOrigin().x;
+    } else xContained = myOrigin.x <= xMaxOther;
 
     // check the y-coordinate
-    if (yMax < xMaxOther) {
+    if (yMax <= yMaxOther) {
         // is y contained?
-        yContained = yMax > theOtherHitbox.getOrigin().y;
-    } else yContained = myOrigin.y < yMaxOther;
+        yContained = yMax >= theOtherHitbox.getOrigin().y;
+    } else yContained = myOrigin.y <= yMaxOther;
 
     return xContained && yContained;
 }

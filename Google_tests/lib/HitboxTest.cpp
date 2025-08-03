@@ -31,6 +31,22 @@ TEST(HitboxTest, ContainsTest) {
     EXPECT_FALSE(doesNotContain5);
 }
 
+TEST(HitboxTest, IntersectTest) {
+    const Hitbox h = basicHitbox();
+    const Hitbox topLeft = Hitbox(util::Point(-5, 5), 10, 10);
+    const Hitbox topRight = Hitbox(util::Point(5, 5), 10, 10);
+    const Hitbox botLeft = Hitbox(util::Point(-5, -5), 10, 10);
+    const Hitbox botRight = Hitbox(util::Point(5, -5), 10, 10);
+    const Hitbox edgeIntersect = Hitbox(util::Point(10, 10), 10, 10);
+    const Hitbox notIntersect = Hitbox(util::Point(11, 11), 10, 10);
+
+    EXPECT_TRUE(h.intersects(topLeft));
+    EXPECT_TRUE(h.intersects(topRight));
+    EXPECT_TRUE(h.intersects(botLeft));
+    EXPECT_TRUE(h.intersects(botRight));
+    EXPECT_TRUE(h.intersects(edgeIntersect));
+    EXPECT_FALSE(h.intersects(notIntersect));
+}
 
 /**
  * Creates a generic hitbox for testing.
