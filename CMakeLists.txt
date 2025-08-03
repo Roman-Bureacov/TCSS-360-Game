@@ -70,3 +70,6 @@ add_custom_command(TARGET TCSS-360-Game POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${SDL3_ROOT}/lib/x64/SDL3.dll"
         $<TARGET_FILE_DIR:TCSS-360-Game>)
+
+
+add_subdirectory(Google_tests)
