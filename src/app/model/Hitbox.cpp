@@ -44,14 +44,27 @@ bool Hitbox::contains(const int theX, const int theY) const {
             && myOrigin.y <= theY && theY <= endY;
 }
 
-bool Hitbox::intersects(Hitbox theOtherHitbox) const {
-    // TODO: is this the best way to go about intersection detection?
-    const util::Point otherOrigin = theOtherHitbox.getOrigin();
-    const int otherEndX = otherOrigin.x + theOtherHitbox.getWidth();
-    const int otherEndY = otherOrigin.y + theOtherHitbox.getWidth();
-    return
-        contains(otherOrigin)
-        || contains(otherEndX, otherOrigin.y)
-        || contains(otherOrigin.x, otherEndY)
-        || contains(otherEndX, otherEndY);
+bool Hitbox::intersects(const Hitbox theOtherHitbox) const {
+    // see: https://dyn4j.org/2010/01/sat/
+    const int xMax = myOrigin.x + myWidth;
+    const int xMaxOther = theOtherHitbox.getOrigin().x + theOtherHitbox.getWidth();
+    const int yMax = myOrigin.y + myHeight;
+    const int yMaxOther = theOtherHitbox.getOrigin().y + theOtherHitbox.getHeight();
+
+    bool xContained;
+    bool yContained;
+    
+    // check the x-coordinate first
+    if (xMax < xMaxOther) {
+        // is x contained?
+        xContained = xMax > theOtherHitbox.getOrigin().x;
+    } else xContained = myOrigin.x < xMaxOther;
+
+    // check the y-coordinate
+    if (yMax < xMaxOther) {
+        // is y contained?
+        yContained = yMax > theOtherHitbox.getOrigin().y;
+    } else yContained = myOrigin.y < yMaxOther;
+
+    return xContained && yContained;
 }
