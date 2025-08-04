@@ -101,6 +101,7 @@ TEST(EngineTest, AttackingInRange) {
     auto d2 = new Dummy();
 
     d1->setDirection(util::EAST);
+    d1->setHitbox(10, 10);
     d1->giveWeapon(
         new Weapon(
             10,
