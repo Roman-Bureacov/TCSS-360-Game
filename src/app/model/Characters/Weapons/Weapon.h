@@ -4,6 +4,8 @@
 
 #ifndef WEAPON_H
 #define WEAPON_H
+#include <stdexcept>
+
 #include "../../../../include/Hitbox.h"
 
 /**
@@ -12,12 +14,12 @@
  * @version August 2025
  */
 struct Weapon {
-    const int attackTicks;
     const int damage;
-    Hitbox& hitboxNorth;
-    Hitbox& hitboxEast;
-    Hitbox& hitboxSouth;
-    Hitbox& hitboxWest;
+    const int attackTicks;
+    Hitbox hitboxNorth;
+    Hitbox hitboxEast;
+    Hitbox hitboxSouth;
+    Hitbox hitboxWest;
     float damageMultiplier = 1;
 
     /**
@@ -30,18 +32,21 @@ struct Weapon {
      * @param theHitboxWest the hitbox when attacking west
      */
     Weapon(
-        const int theAttackTicks,
         const int theDamage,
-        Hitbox& theHitboxNorth,
-        Hitbox& theHitboxEast,
-        Hitbox& theHitboxSouth,
-        Hitbox& theHitboxWest
-    ) : attackTicks(theAttackTicks),
+        const int theAttackTicks,
+        const Hitbox& theHitboxNorth,
+        const Hitbox& theHitboxEast,
+        const Hitbox& theHitboxSouth,
+        const Hitbox& theHitboxWest
+    ) :
         damage(theDamage),
+        attackTicks(theAttackTicks),
         hitboxNorth(theHitboxNorth),
         hitboxEast(theHitboxEast),
         hitboxSouth(theHitboxSouth),
         hitboxWest(theHitboxWest) {
+
+        if (theAttackTicks < 1) throw new std::logic_error("attack ticks must be positive");
 
     }
 

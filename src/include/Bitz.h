@@ -33,12 +33,13 @@ private:
     static std::mutex eventQueueMutex;
 
     /**
-     * Processes the enqueued events, and adds them to the persistent events as necessary.
-     * Also processes persistent events as well.
+     * Processes the enqueued single events and persistent events.
      */
     static void processEvents();
 
 public:
+
+
     /**
      * Enqueues an event to occur in the next engine tick.
      * <br>
@@ -58,6 +59,11 @@ public:
      */
     static void enqueueAttackEvent(AbstractCharacter* theCharacter);
 
+    /**
+     * Registers a character with the engine to make it aware of said character
+     * @param theCharacter the character that the engine should be aware of
+     */
+    static void registerCharacter(AbstractCharacter* theCharacter);
 };
 
 #endif //ENG_H

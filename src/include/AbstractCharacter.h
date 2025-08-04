@@ -18,7 +18,7 @@
  */
 class AbstractCharacter {
 private:
-    const std::string& myName;
+    const std::string myName;
     const long long myID;
     int myHealth = 0;
     int myMaxHealth = 0;
@@ -154,7 +154,7 @@ public:
      * Sets the hitbox for this character.
      * @param theNewHitbox the new hitbox for this character
      */
-    void setHitbox(const Hitbox& theNewHitbox);
+    void setHitbox(Hitbox& theNewHitbox);
 
     /**
      * Convenience behavior to set the hitbox for this character using explicit parameters.
@@ -173,7 +173,7 @@ public:
      * Gives this character a new weapon to equip.
      * @param theWeapon the new weapon this character will wield
      */
-    void giveWeapon(Weapon&& theWeapon);
+    void giveWeapon(Weapon* theWeapon);
 
     /**
      * Gets the direction this character is facing.
@@ -185,7 +185,7 @@ public:
      * Sets the direction for this character.
      * @param theDirection the new direction for this character
      */
-    void setDirection(const util::Direction theDirection);
+    void setDirection(util::Direction theDirection);
 
     /**
      * Gets the attack hitbox for attack events.

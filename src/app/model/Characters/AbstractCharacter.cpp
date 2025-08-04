@@ -100,7 +100,8 @@ const Hitbox& AbstractCharacter::getHitbox() const {
     return myHitbox;
 }
 
-void AbstractCharacter::setHitbox(const Hitbox& theNewHitbox) {
+void AbstractCharacter::setHitbox(Hitbox& theNewHitbox) {
+    theNewHitbox.setOrigin(myOrigin);
     myHitbox = theNewHitbox;
 }
 
@@ -112,8 +113,9 @@ Weapon& AbstractCharacter::getWeapon() const {
     return *myWeapon;
 }
 
-void AbstractCharacter::giveWeapon(Weapon&& theWeapon) {
-    myWeapon = &theWeapon;
+void AbstractCharacter::giveWeapon(Weapon* theWeapon) {
+    if (myWeapon) delete myWeapon;
+    myWeapon = theWeapon;
 }
 
 util::Direction AbstractCharacter::getDirection() const {
@@ -130,6 +132,8 @@ const Hitbox& AbstractCharacter::getAttackHitbox() const {
     int xOffset;
     int yOffset;
 
+    // TODO: need to redefine how this hitbox is gathered
+    // myDimension - (myDimension + weapDimension)/2
     switch (myDirection) {
         case util::NORTH:
             h = &myWeapon->hitboxNorth;

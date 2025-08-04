@@ -14,8 +14,9 @@ int modifyThis;
  * Tests if only one event is enqueued at a time.
  */
 TEST(EngineTest, EnqueueOnlyOneEvent) {
-    Dummy d = Dummy();
+    auto d = new Dummy();
     modifyThis = 0;
+    Bitz::registerCharacter(d);
 
     // events to enqueue
     Bitz::enqueueEvent(new Event(
@@ -24,7 +25,7 @@ TEST(EngineTest, EnqueueOnlyOneEvent) {
           modifyThis += 1;
           Clock::setActive(false);
       },
-      d
+      *d
     ));
     Bitz::enqueueEvent(new Event(
       1,
@@ -32,7 +33,7 @@ TEST(EngineTest, EnqueueOnlyOneEvent) {
           modifyThis += -999;
           Clock::setActive(false);
       },
-      d
+      *d
     ));
 
     // run the clock
@@ -92,4 +93,44 @@ TEST(EngineTest, PersistentQueueEventPrevention) {
     Clock::runClock();
 
     EXPECT_EQ(modifyThis, 2);
+}
+
+TEST(EngineTest, AttackingInRange) {
+    // setup
+    auto d1 = new Dummy();
+    auto d2 = new Dummy();
+
+    d1->setDirection(util::EAST);
+    d1->giveWeapon(
+        new Weapon(
+            10,
+            1,
+            Hitbox(10, 10)
+        )
+    );
+
+    d2->setHitbox(10, 10);
+    d2->setX(15);
+    d2->setHealth(10);
+
+    Bitz::registerCharacter(d1);
+    Bitz::registerCharacter(d2);
+
+    // attack
+    Clock::setActive(true);
+
+    Bitz::enqueueAttackEvent(d1);
+    Bitz::enqueueEvent(
+        new Event(
+        1,
+        []() -> void {
+            Clock::setActive(false);
+        },
+        *d2
+        )
+    );
+
+    Clock::runClock();
+
+    EXPECT_FALSE(d2->isAlive());
 }

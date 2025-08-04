@@ -46,6 +46,7 @@ add_library(engine STATIC
 )
 
 add_library(model STATIC
+        src/include/Utils.h
         src/app/model/Characters/AbstractCharacter.cpp
         src/app/model/Characters/Dummy.h # header-only implementation
         src/app/model/Hitbox.cpp

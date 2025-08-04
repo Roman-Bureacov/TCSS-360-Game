@@ -52,8 +52,26 @@ int runGame() {
 }
 
 void userPolling() {
-    Dummy d = Dummy();
-    std::cout << "I am " << d.getName() << std::endl;
+    Dummy* d1 = new Dummy();
+    Dummy* d2 = new Dummy();
+
+    d1->setDirection(util::EAST);
+    d1->setHitbox(10, 10);
+
+    d2->setHitbox(10, 10);
+    d2->setX(15);
+
+    Bitz::registerCharacter(d1);
+    Bitz::registerCharacter(d2);
+
+    Bitz::enqueueEvent(new Event(
+        1,
+        []() -> void {
+            std::cout << "stuff" << std::endl;
+        },
+        *d1
+    ));
+
     while (true) {
         char ch;
         std::cin.get(ch);
@@ -62,18 +80,12 @@ void userPolling() {
         if (ch == 'q') break;
 
         if (ch == 'c') {
-            d.attack();
+            d1->attack();
         } else {
             Event* ev;
-            if (ch == '2') {
-                // Construct an Event and enqueue it
-                ev = new Event(
-                    2,
-                    [ch]() -> void {
-                        std::cout << "Persistent event: " << ch << std::endl;
-                    },
-                    d
-                );
+            if (ch == 'a') {
+                // do an attack
+                Bitz::enqueueAttackEvent(d1);
             } else {
                 // Construct an Event and enqueue it
                 ev = new Event(
@@ -81,11 +93,11 @@ void userPolling() {
                     [ch]() -> void {
                         std::cout << "Character event: " << ch << std::endl;
                     },
-                    d
+                    *d1
                 );
+                Bitz::enqueueEvent(ev);
             }
 
-            Bitz::enqueueEvent(ev);
         }
 
     }

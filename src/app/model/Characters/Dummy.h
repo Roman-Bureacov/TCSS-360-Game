@@ -15,6 +15,9 @@ class DummyWeapon : public Weapon {
 private:
 
 public:
+    /**
+     * Creates a dummy weapon with 10 damage, 1 attack tick, and a 10x10 hitbox
+     */
     DummyWeapon()
     : Weapon(
         10,
@@ -38,7 +41,7 @@ private:
 public:
     Dummy() : AbstractCharacter("Dummy", 25, 0) {
         std::cout << "I, the dummy, have been CONSTRUCTED into existance!" << std::endl;
-        giveWeapon(DummyWeapon());
+        giveWeapon(new DummyWeapon());
     }
 
     ~Dummy() override {
@@ -47,7 +50,7 @@ public:
 
     void attack() {
 
-    // TODO: informal test here
+        Bitz::enqueueAttackEvent(this);
 
     }
 };

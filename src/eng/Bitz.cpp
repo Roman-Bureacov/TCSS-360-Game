@@ -31,6 +31,7 @@ void Bitz::processEvents() {
             iter = eventProcessQueue.erase(iter);
             delete e;
         } else ++iter;
+
     }
 
 }
@@ -62,17 +63,21 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
     enqueueEvent(new Event(
         theCharacter->getWeapon().attackTicks,
         [theCharacter]() -> void {
-            entities.extract(theCharacter);
+            auto c = entities.extract(theCharacter);
             const Weapon w = theCharacter->getWeapon();
             const Hitbox h = theCharacter->getAttackHitbox();
+
             // check for any and all intersections
             for (const auto character : entities) {
                 if (h.intersects(character->getHitbox()))
                     character->damage(w.getModifiedDamage());
             }
-            entities.insert(theCharacter);
-
+            entities.insert(std::move(c));
         },
         *theCharacter
     ));
+}
+
+void Bitz::registerCharacter(AbstractCharacter* theCharacter) {
+    entities.insert(theCharacter);
 }
