@@ -25,7 +25,7 @@ class Bitz {
     Bitz() = delete;
 private:
     /** The list of characters active. */
-    static std::unordered_set<const AbstractCharacter*> entities;
+    static std::unordered_set<AbstractCharacter*> entities;
     /** The queue representing the events to be put into the process queue. */
     static std::unordered_map<const AbstractCharacter*, Event*> eventQueue;
     /** The queue representing the events currently being processed. */
@@ -48,6 +48,16 @@ public:
      * @param theEvent event to enqueue.
      */
     static void enqueueEvent(Event* theEvent);
+
+    /**
+     * Tells the engine that the character wants to attack and perform
+     * hitbox detection their weapons.
+     * <br>
+     * Friendly fire beware.
+     * @param theCharacter the character that is requesting the attack
+     */
+    static void enqueueAttackEvent(AbstractCharacter* theCharacter);
+
 };
 
 #endif //ENG_H

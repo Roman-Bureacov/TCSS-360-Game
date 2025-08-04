@@ -6,8 +6,24 @@
 #define DUMMY_H
 #include <iostream>
 
+#include "Dummy.h"
 #include "../../../include/AbstractCharacter.h"
 #include "../../../include/Bitz.h"
+
+
+class DummyWeapon : public Weapon {
+private:
+
+public:
+    DummyWeapon()
+    : Weapon(
+        10,
+        1,
+        Hitbox(10, 10)
+    ) { }
+
+};
+
 
 /**
  * Dummy character derived from AbstractCharacter.
@@ -22,25 +38,20 @@ private:
 public:
     Dummy() : AbstractCharacter("Dummy", 25, 0) {
         std::cout << "I, the dummy, have been CONSTRUCTED into existance!" << std::endl;
+        giveWeapon(DummyWeapon());
     }
 
     ~Dummy() override {
         std::cout << "I, the dummy, have been deconstructed!" << std::endl;
-    };
+    }
 
-    void attack() override {
-        count = attackTicks;
-        Bitz::enqueueEvent(
-            new Event (
-                attackTicks,
-                [this]() -> void {
-                    std::cout << "HAHAH I AM DUMMY!!! AND I COUNT " << count-- << std::endl;
-                },
-                *this
-            )
-        );
-    };
+    void attack() {
+
+    // TODO: informal test here
+
+    }
 };
+
 
 
 

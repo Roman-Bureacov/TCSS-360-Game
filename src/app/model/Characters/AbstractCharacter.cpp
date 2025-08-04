@@ -18,7 +18,10 @@ AbstractCharacter::AbstractCharacter(
       myMaxHealth(theMaxHealth),
       myBaseMovement(theMovementSpeed),
       myCurrentMovement(theMovementSpeed),
-      myHitbox(Hitbox(util::Point(), 100, 100)) {
+      myHitbox(Hitbox(util::Point(), 100, 100)),
+      myDirection(util::NORTH) {
+
+    myWeapon = nullptr;
 }
 
 const std::string& AbstractCharacter::getName() const {
@@ -73,4 +76,89 @@ int AbstractCharacter::getMovementSpeed() const {
 
 int AbstractCharacter::getBaseMovementSpeed() const {
     return myBaseMovement;
+}
+
+int AbstractCharacter::getX() const {
+    return myOrigin.x;
+}
+
+int AbstractCharacter::getY() const {
+    return myOrigin.y;
+}
+
+void AbstractCharacter::setX(const int theNewX) {
+    myHitbox.setOrigin(theNewX, myOrigin.y);
+    myOrigin.x = theNewX;
+}
+
+void AbstractCharacter::setY(const int theNewY) {
+    myHitbox.setOrigin(myOrigin.x, theNewY);
+    myOrigin.y = theNewY;
+}
+
+const Hitbox& AbstractCharacter::getHitbox() const {
+    return myHitbox;
+}
+
+void AbstractCharacter::setHitbox(const Hitbox& theNewHitbox) {
+    myHitbox = theNewHitbox;
+}
+
+void AbstractCharacter::setHitbox(const int theWidth, const int theHeight) {
+    myHitbox = Hitbox(myOrigin, theWidth, theHeight);
+}
+
+Weapon& AbstractCharacter::getWeapon() const {
+    return *myWeapon;
+}
+
+void AbstractCharacter::giveWeapon(Weapon&& theWeapon) {
+    myWeapon = &theWeapon;
+}
+
+util::Direction AbstractCharacter::getDirection() const {
+    return myDirection;
+}
+
+void AbstractCharacter::setDirection(const util::Direction theDirection) {
+    myDirection = theDirection;
+}
+
+const Hitbox& AbstractCharacter::getAttackHitbox() const {
+
+    Hitbox* h;
+    int xOffset;
+    int yOffset;
+
+    switch (myDirection) {
+        case util::NORTH:
+            h = &myWeapon->hitboxNorth;
+            xOffset = myHitbox.getWidth() / 4;
+            yOffset = myHitbox.getHeight();
+            break;
+        case util::EAST:
+            h = &myWeapon->hitboxEast;
+            xOffset = myHitbox.getWidth();
+            yOffset = myHitbox.getHeight() / 4;
+            break;
+        case util::SOUTH:
+            h = &myWeapon->hitboxSouth;
+            xOffset = myHitbox.getWidth() / 4;
+            yOffset = -myHitbox.getHeight();
+            break;
+        case util::WEST:
+            h = &myWeapon->hitboxWest;
+            xOffset = -myHitbox.getWidth();
+            yOffset = myHitbox.getHeight() / 4;
+            break;
+        default: throw new std::logic_error("Bad direction in getAttackHitbox");
+    }
+
+    h->setOrigin(
+            getX() + xOffset,
+            getY() + yOffset
+        );
+
+    return *h;
+
 }

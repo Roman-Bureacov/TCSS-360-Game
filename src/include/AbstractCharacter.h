@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Hitbox.h"
+#include "../app/model/Characters/Weapons/Weapon.h"
 
 
 /**
@@ -25,6 +26,8 @@ private:
     int myCurrentMovement = 0;
     util::Point myOrigin;
     Hitbox myHitbox;
+    Weapon* myWeapon;
+    util::Direction myDirection;
 public:
     virtual ~AbstractCharacter() = default;
 
@@ -151,7 +154,7 @@ public:
      * Sets the hitbox for this character.
      * @param theNewHitbox the new hitbox for this character
      */
-    void setHitbox(Hitbox& theNewHitbox);
+    void setHitbox(const Hitbox& theNewHitbox);
 
     /**
      * Convenience behavior to set the hitbox for this character using explicit parameters.
@@ -161,9 +164,34 @@ public:
     void setHitbox(int theWidth, int theHeight);
 
     /**
-     * Sends out an attack event to the engine using this character's equipped weapon.
+     * Gets the weapon of this character.
+     * @return the weapon this character is wielding
      */
-    virtual void attack() = 0;
+    Weapon& getWeapon() const;
+
+    /**
+     * Gives this character a new weapon to equip.
+     * @param theWeapon the new weapon this character will wield
+     */
+    void giveWeapon(Weapon&& theWeapon);
+
+    /**
+     * Gets the direction this character is facing.
+     * @return the direction this character is facing
+     */
+    util::Direction getDirection() const;
+
+    /**
+     * Sets the direction for this character.
+     * @param theDirection the new direction for this character
+     */
+    void setDirection(const util::Direction theDirection);
+
+    /**
+     * Gets the attack hitbox for attack events.
+     * @return the appropriate hitbox based on the weapon of this character
+     */
+    const Hitbox& getAttackHitbox() const;
 
 };
 

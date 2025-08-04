@@ -4,7 +4,7 @@
 
 #include "../include/Bitz.h"
 
-std::unordered_set<const AbstractCharacter*> Bitz::entities;
+std::unordered_set<AbstractCharacter*> Bitz::entities;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventQueue;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventProcessQueue;
 std::mutex Bitz::eventQueueMutex;
@@ -58,3 +58,21 @@ void Bitz::enqueueEvent(Event* theEvent) {
     eventQueue[originChar] = theEvent;
 }
 
+void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
+    enqueueEvent(new Event(
+        theCharacter->getWeapon().attackTicks,
+        [theCharacter]() -> void {
+            entities.extract(theCharacter);
+            const Weapon w = theCharacter->getWeapon();
+            const Hitbox h = theCharacter->getAttackHitbox();
+            // check for any and all intersections
+            for (const auto character : entities) {
+                if (h.intersects(character->getHitbox()))
+                    character->damage(w.getModifiedDamage());
+            }
+            entities.insert(theCharacter);
+
+        },
+        *theCharacter
+    ));
+}
