@@ -25,7 +25,7 @@ const std::string& AbstractCharacter::getName() const {
     return myName;
 }
 
-unsigned long long AbstractCharacter::getID() const {
+long long AbstractCharacter::getID() const {
     return myID;
 }
 
