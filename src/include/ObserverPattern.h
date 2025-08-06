@@ -9,7 +9,6 @@
 class Subject;
 
 
-
 class Observer {
 public:
     virtual ~Observer();
@@ -34,4 +33,3 @@ private:
      */
     std::list<Observer *> *_observers;
 };
-

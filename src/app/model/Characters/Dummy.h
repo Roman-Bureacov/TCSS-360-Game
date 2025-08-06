@@ -20,8 +20,8 @@ private:
     const int attackTicks = 3;
     int count = 3;
 public:
-    Dummy() : AbstractCharacter("Dummy", 25, 0) {
-        std::cout << "I, the dummy, have been CONSTRUCTED into existance!" << std::endl;
+    Dummy() : AbstractCharacter("Dumpy", 25, 0) {
+        std::cout << "I, the dummy, have been CONSTRUCTED into existence!" << std::endl;
     }
 
     ~Dummy() override {

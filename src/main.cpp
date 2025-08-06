@@ -11,23 +11,52 @@
 #include <thread>
 
 #include "app/model/Characters/Dummy.h"
+
+#include "app/view/View.h"
+
 #include "include/Bitz.h"
 #include "include/Clock.h"
 
-int runGame();
+void runGame();
 int runTest();
 int showWindow();
 void userPolling();
 
 int main(int argc, char* argv[]) {
 
+    std::cout << "Hello Console, we're opening window..." << std::endl;
+
+    //VIEW TEST BEGINS
+    //Create the view
+    View userView;
+    //Initialize (open) Window
+    userView.initialize();
+
+    std::cout << "The window is created, hit X when done..." << std::endl;
+
+    //Main should be creating the controller and controller will handle view and model
+
+    //While window is open and running...
+    while (userView.isWindowRunning()) {
+        //Check if window has been closed
+        if (!userView.handleEvents()) {
+            break;
+        }
+
+        userView.render();
+
+    }
+
+    //Closes Window and closes all associated resources
+    userView.cleanup();
+    //VIEW TEST ENDS
+
     runGame();
-    //runTest();
 
     return 0;
 }
 
-int runGame() {
+void runGame() {
     std::cout << "Running clock..." << std::endl;
     Clock::setActive(true);
     std::thread clockThread([] {
@@ -48,21 +77,24 @@ int runGame() {
     inputThread.join();
     Clock::setActive(false);
     clockThread.join();
-    return 69;
+    std::cout << "Goodbye!" << std::endl;
 }
 
 void userPolling() {
-    Dummy d = Dummy();
-    std::cout << "I am " << d.getName() << std::endl;
+    char ch;
+    Dummy dumb;
+
+    //std::cout << "I am " << dumb.getName() << std::endl;
+
+    std::cout << "Start Loop" << std::endl;
     while (true) {
-        char ch;
         std::cin.get(ch);
 
         if (ch == '\n') continue;
         if (ch == 'q') break;
 
         if (ch == 'c') {
-            d.attack();
+            dumb.attack();
         } else {
             Event* ev;
             if (ch == '2') {
@@ -72,7 +104,7 @@ void userPolling() {
                     [ch]() -> void {
                         std::cout << "Persistent event: " << ch << std::endl;
                     },
-                    d
+                    dumb
                 );
             } else {
                 // Construct an Event and enqueue it
@@ -81,7 +113,7 @@ void userPolling() {
                     [ch]() -> void {
                         std::cout << "Character event: " << ch << std::endl;
                     },
-                    d
+                    dumb
                 );
             }
 
@@ -89,58 +121,4 @@ void userPolling() {
         }
 
     }
-}
-
-
-/**
- * SDL example to show that it's running
- */
-int showWindow() {
-    std::cout << "Starting..." << std::endl;
-
-    SDL_Window *window;                    // Declare a pointer
-    bool done = false;
-
-    std::cout << "Getting a window..." << std::endl;
-
-    SDL_Init(SDL_INIT_VIDEO);              // Initialize SDL3
-
-    std::cout << "Creating window..." << std::endl;
-
-    // Create an application window with the following settings:
-    window = SDL_CreateWindow(
-        "An SDL3 window",                  // window title
-        640,                               // width, in pixels
-        480,                               // height, in pixels
-        SDL_WINDOW_OPENGL                  // flags - see below
-    );
-
-    std::cout << "Does this window exist?" << std::endl;
-
-    // Check that the window was successfully created
-    if (window == NULL) {
-        // In the case that the window could not be made...
-        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not create window: %s\n", SDL_GetError());
-        std::cout << "did not create window" << std::endl;
-        return 1;
-    }
-
-    while (!done) {
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                done = true;
-            }
-        }
-
-        // Do game logic, present a frame, etc.
-    }
-
-    // Close and destroy the window
-    SDL_DestroyWindow(window);
-
-    // Clean up
-    SDL_Quit();
-    return 0;
 }

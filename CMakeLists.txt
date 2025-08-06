@@ -7,14 +7,14 @@ set(CMAKE_CXX_STANDARD 23)
 set(SDL3_ROOT "${CMAKE_SOURCE_DIR}/SDL3-3.2.16")
 set(SQLITE_ROOT "${CMAKE_SOURCE_DIR}/sqlite")
 
-# Add include directory
+# Add include directories for SLD and SQLite
 include_directories("${SDL3_ROOT}/include")
 include_directories("${SQLITE_ROOT}/include")
 
-# Add include directory for our files
+# Add include directory for our project files
 include_directories("${CMAKE_SOURCE_DIR}/include")
 
-# Link directory
+# Link SDL3 directory
 link_directories("${SDL3_ROOT}/lib/x64")
 
 # Add source files
@@ -22,7 +22,7 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/control/ObserverPattern.cpp
         src/app/control/control.cpp
         src/app/model/model.cpp
-        src/app/view/view.cpp
+        src/app/view/View.cpp
         src/include/Clock.h
         src/eng/Clock.cpp
         src/include/AbstractCharacter.h
@@ -66,7 +66,7 @@ target_include_directories(engine PUBLIC
 )
 
 # adds tests to their own separate ecosystem.
-# the tests have like their own main so they need to be in,
+# the tests have their own main so they need to be in,
 # a different place.
 add_executable(TCSS-360-Tests
         src/app/model/Enviroment/Dungeon.cpp

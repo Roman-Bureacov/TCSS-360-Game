@@ -22,6 +22,7 @@ AbstractCharacter::AbstractCharacter(
 }
 
 const std::string& AbstractCharacter::getName() const {
+    std::cout << "retrieving name..." << std::endl;
     return myName;
 }
 
