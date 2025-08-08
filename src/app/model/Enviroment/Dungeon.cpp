@@ -39,7 +39,8 @@ void Dungeon::generateDungeon() {
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
             roomBuilder.setGenerated(false);
-            roomBuilder.build();
+            //This will build the room and throw it in the database.
+            DatabaseManager::insertRoom(roomBuilder.build());
             idRow.push_back(id);
         }
         idMap.push_back(idRow);
@@ -52,27 +53,39 @@ void Dungeon::generateDungeon() {
 }
 
 
-
-void Dungeon::setCharacterRoom(int roomID) {
-    //Going to need to learn SQL for this bugger right here.
-    //This is going to load the rooms data from the database.
-
+/**
+ * This changes the current room on screen.
+ * @param roomID room to change to.
+ */
+void Dungeon::setCharacterRoom(const int roomID) {
+    currentRoom = DatabaseManager::loadRoom(roomID);
     notify();
 }
 
+/**
+ * This returns a map of the ids from the dungeon.
+ * @return 2D vector of the dungeons ids.
+ */
 std::vector<std::vector<int>> Dungeon::getMap() {
     return idMap;
 
 }
 
+/**
+ * This will return the current room on the screen.
+ * @return The current room on the screen.
+ */
 std::shared_ptr<Room> Dungeon::getCurrentRoom() {
     return currentRoom;
 }
 
-
+/**
+ * Constructor generates a new dungeon.
+ */
 Dungeon::Dungeon() {
     this->generateDungeon();
-
 }
+
+
 
 

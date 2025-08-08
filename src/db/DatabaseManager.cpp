@@ -3,12 +3,15 @@
 //
 
 #include "../include/DatabaseManager.h"
-
 #include <iostream>
 #include <stdexcept>
 
 sqlite3* db = nullptr;
 
+/**
+ * This creates the database and setup needed tables
+ * @param dbFile This is the database
+ */
 DatabaseManager::DatabaseManager(const std::string &dbFile) {
     openDatabase(dbFile);
 
@@ -17,11 +20,18 @@ DatabaseManager::DatabaseManager(const std::string &dbFile) {
     createTypeTableIfNotExists();
 }
 
+/**
+ * Closes the database.
+ */
 DatabaseManager::~DatabaseManager() {
     closeDatabase();
 }
 
-void DatabaseManager::insertRoom(Room &room) {
+/**
+ * Adds a new room to the database
+ * @param room This is a reference to the room
+ */
+void DatabaseManager::insertRoom(std::shared_ptr<Room> &room) {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms
                         (id, north, south, east, west, serialMap)
@@ -50,7 +60,12 @@ void DatabaseManager::insertRoom(Room &room) {
     sqlite3_finalize(stmt);
 }
 
-std::shared_ptr<Room> DatabaseManager::loadRoom(int id) {
+/**
+ * This loads a room from the database.
+ * @param id this is the id of the room to be loaded.
+ * @return This is a smart pointer to the room.
+ */
+std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
     const char *sql = R"(SELECT north, south, east
                         , west, serialMap FROM rooms WHERE id = ?;)";
     sqlite3_stmt *stmt;
@@ -92,6 +107,10 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(int id) {
     return room;
 }
 
+/**
+ * This opens the database.
+ * @param dbFile This is the database file.
+ */
 void DatabaseManager::openDatabase(const std::string &dbFile) {
 
     int rc = sqlite3_open(dbFile.c_str(), &db);
@@ -107,6 +126,9 @@ void DatabaseManager::openDatabase(const std::string &dbFile) {
     }
 }
 
+/**
+ * This closes the database.
+ */
 void DatabaseManager::closeDatabase() {
     if (db) {
         sqlite3_close(db);
@@ -114,6 +136,9 @@ void DatabaseManager::closeDatabase() {
     }
 }
 
+/**
+ * Creates a table for the rooms if it doesn't already exist.
+ */
 void DatabaseManager::createRoomTableIfNotExists() {
 
     const char *sql = R"(

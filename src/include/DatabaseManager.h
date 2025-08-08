@@ -21,7 +21,7 @@ public:
     ~DatabaseManager();
 
     //Insert, new member to table.
-    void insertRoom(Room &room);
+    void insertRoom(std::shared_ptr<Room> &room);
     void insertCharacter(AbstractCharacter &character);
     void insertCharacterType(AbstractCharacter &character);
 

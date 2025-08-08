@@ -36,8 +36,7 @@ public:
     void setCharacterRoom(int roomID);
 
 private:
-    Dungeon();
-    ConcreteRoomBuilder roomBuilder;
+    Dungeon();ConcreteRoomBuilder roomBuilder;
     //This is basically a placeholder room before, dungeon generation
     std::shared_ptr<Room> currentRoom = roomBuilder.build();
     std::vector<std::vector<int>> idMap;
