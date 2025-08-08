@@ -5,7 +5,10 @@
 #include "../../../include/Room.h"
 
 
-
+/**
+ * Generates a string map of the dungeon if it doesn't already
+ * exist.
+ */
 void Room::generateNonExsistingRoom() {
 
     //Awful algorithm.
@@ -49,13 +52,10 @@ void Room::generateNonExsistingRoom() {
     //this->generateCharacters();
 }
 
-void Room::generateCharacters() {
 
-    //TODO
-
-
-}
-
+/**
+ * This takes a serialized, room map string and makes in the enum formate.
+ */
 void Room::generateExsistingRoom() {
 
     roomMap.clear();
@@ -77,6 +77,10 @@ void Room::generateExsistingRoom() {
 
 }
 
+/**
+ * This will either generate a new room if the room doesn't already exist or
+ * generate an existing room.
+ */
 void Room::initializeRoom() {
 
     if (this->alreadyGenerated) {
@@ -87,6 +91,9 @@ void Room::initializeRoom() {
     }
 }
 
+/**
+ * This takes a room map in enum form and puts into string form.
+ */
 void Room::serializeRoomMap() {
 
     serialRoomMap.clear();
@@ -110,9 +117,6 @@ void Room::serializeRoomMap() {
 std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
 }
 
-void Room::setCharacters(std::vector<int> ids) {
-
-}
 
 int Room::getRoomID() const {
     return roomID;
@@ -132,10 +136,6 @@ bool Room::getSouth() const {
 
 bool Room::getWest() const {
     return roomWest;
-}
-
-int Room::getEnemyAmount() const {
-    return enemyAmount;
 }
 
 std::string Room::getSerialRoomMap() const {
@@ -162,9 +162,6 @@ void Room::setWest(const bool west) {
     this->roomWest = west;
 }
 
-void Room::setEnemyAmount(const int amount) {
-    this->enemyAmount = amount;
-}
 
 void Room::setAlreadyGenerated(const bool alreadyMade) {
     this->alreadyGenerated = alreadyMade;
@@ -185,6 +182,11 @@ void Room::printRoomMap() const {
     }
 }
 
+/**
+ * This takes a tile, string code and makes it an enum.
+ * @param tile This is the string code for the tile
+ * @return This is the corresponding enum to the tiles
+ */
 DunText::DungeonTile Room::stringToDungeonTile(const std::string &tile) const {
     if (tile == "F") return DunText::DungeonTile::Floor;
     else if (tile == "HW") return DunText::DungeonTile::HorizontalWall;
@@ -203,6 +205,11 @@ DunText::DungeonTile Room::stringToDungeonTile(const std::string &tile) const {
 
 }
 
+/**
+ * This takes a enum tile and turns it into a string code.
+ * @param tile a enum tile.
+ * @return String code for tile.
+ */
 std::string Room::DungeonTileToString(const DunText::DungeonTile &tile) const {
 
     switch (tile) {
@@ -221,42 +228,70 @@ std::string Room::DungeonTileToString(const DunText::DungeonTile &tile) const {
 
 ConcreteRoomBuilder::ConcreteRoomBuilder() = default;
 
+/**
+ * Sets if the room has been generated before.
+ * @param alreadyMade boolean for if a room as been made.
+ * @return Returns a concreteRoomBuilder reference.
+ */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setGenerated(const bool alreadyMade) {
     alreadyGenerated = alreadyMade;
     return *this;
 }
 
+/**
+ * This sets if there is a room to north.
+ * @param north Boolean for if there is a northern room.
+ * @return Returns a concreteRoomBuilder reference.
+ */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomNorth(const bool north) {
     roomNorth = north;
     return *this;
 }
 
+/**
+ * This sets if there is a room to east.
+ * @param east Boolean for if there is an eastern room.
+ * @return Returns a concreteRoomBuilder reference.
+ */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomEast(const bool east) {
     roomEast = east;
     return *this;
 }
 
+/**
+ * This sets if there is a room to west.
+ * @param west Boolean for if there is a western room.
+ * @return Returns a concreteRoomBuilder reference.
+ */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomWest(const bool west) {
     roomWest = west;
     return *this;
 }
 
+/**
+ * This sets if there is a room to south.
+ * @param south Boolean for if there is a southern room.
+ * @return Returns a concreteRoomBuilder reference.
+ */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomSouth(const bool south) {
     roomSouth = south;
     return *this;
 }
 
+/**
+ * This sets the id for the room.
+ * @param id rooms id.
+ * @return Returns a concreteRoomBuilder reference.
+ */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
     roomID = id;
     return *this;
 }
 
-ConcreteRoomBuilder& ConcreteRoomBuilder::setEnemyAmount(const int enAmount) {
-    amount = enAmount;
-    return *this;
-
-}
-
+/**
+ * This builds the rooms according to the build rules.
+ * @return A shared smart pointer to the built room.
+ */
 std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 
     auto room = std::make_shared<Room>();
@@ -266,7 +301,6 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
     room->setWest(roomWest);
     room->setSouth(roomSouth);
     room->setRoomID(roomID);
-    room->setEnemyAmount(amount);
     room->setAlreadyGenerated(alreadyGenerated);
 
     room->initializeRoom();
@@ -277,7 +311,6 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
     this->roomWest = true;
     this->roomSouth = true;
     this->roomID = 0;
-    this->amount = 0;
     this->alreadyGenerated = false;  // maybe reset this too?
 
     return room;

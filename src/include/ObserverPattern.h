@@ -13,7 +13,8 @@ class Subject;
 class Observer {
 public:
     virtual ~Observer();
-    virtual void Update(Subject* theChangedSubject) = 0;
+
+    virtual void Update(std::unique_ptr<Subject> subject);
 
 protected:
     Observer();
@@ -22,8 +23,8 @@ protected:
 class Subject {
 public:
     virtual ~Subject();
-    virtual void attach(Observer*);
-    virtual void detach(Observer*);
+    virtual void attach(std::unique_ptr<Observer>);
+    virtual void detach(std::unique_ptr<Observer>);
     virtual void notify();
 protected:
     Subject();
@@ -32,6 +33,6 @@ private:
      * Should ask tom if std::list<Observer*> *_observers;
      * is better than std::list<Observer*> _observers;
      */
-    std::list<Observer *> *_observers;
+    std::list<std::unique_ptr<Observer>> _observers;
 };
 

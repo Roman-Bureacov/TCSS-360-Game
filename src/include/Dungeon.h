@@ -42,7 +42,7 @@ private:
     std::shared_ptr<Room> currentRoom = roomBuilder.build();
     std::vector<std::vector<int>> idMap;
 
-    static Dungeon* instance;
+    static std::unique_ptr<Dungeon> instance;
 
     //Could possibly make it some people can choose dungeon size, but Ids.
     //Would be More complex.

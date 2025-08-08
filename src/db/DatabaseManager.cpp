@@ -6,13 +6,15 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <bits/ostream.tcc>
 
+sqlite3* db = nullptr;
 
 DatabaseManager::DatabaseManager(const std::string &dbFile) {
     openDatabase(dbFile);
 
     createRoomTableIfNotExists();
+    createActiveCharacterTableIfNotExists();
+    createTypeTableIfNotExists();
 }
 
 DatabaseManager::~DatabaseManager() {
@@ -22,8 +24,8 @@ DatabaseManager::~DatabaseManager() {
 void DatabaseManager::insertRoom(Room &room) {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms
-                        (id, north, south, east, west, enemyCount, serialMap)
-                        VALUES(?, ?, ?, ?, ?, ?, ?);
+                        (id, north, south, east, west, serialMap)
+                        VALUES(?, ?, ?, ?, ?, ?);
                         )";
 
     sqlite3_stmt *stmt;
@@ -39,8 +41,7 @@ void DatabaseManager::insertRoom(Room &room) {
     sqlite3_bind_int(stmt, 3, room.getSouth());
     sqlite3_bind_int(stmt, 4, room.getEast());
     sqlite3_bind_int(stmt, 5, room.getWest());
-    sqlite3_bind_int(stmt, 6, room.getEnemyAmount());
-    sqlite3_bind_text(stmt, 7, room.getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 6, room.getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         throw std::runtime_error(sqlite3_errmsg(db));
@@ -51,7 +52,7 @@ void DatabaseManager::insertRoom(Room &room) {
 
 std::shared_ptr<Room> DatabaseManager::loadRoom(int id) {
     const char *sql = R"(SELECT north, south, east
-                        , west, enemyCount, serialMap FROM rooms WHERE id = ?;)";
+                        , west, serialMap FROM rooms WHERE id = ?;)";
     sqlite3_stmt *stmt;
 
     if (sqlite3_prepare_v2(db, sql, -1
@@ -67,8 +68,7 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(int id) {
         bool south = sqlite3_column_int(stmt, 1);
         bool east = sqlite3_column_int(stmt, 2);
         bool west = sqlite3_column_int(stmt, 3);
-        int enemyCount = sqlite3_column_int(stmt, 4);
-        const char *mapStr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
+        const char *mapStr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
 
         room = std::make_shared<Room>();
         room->setRoomID(id);
@@ -76,7 +76,6 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(int id) {
         room->setSouth(south);
         room->setEast(east);
         room->setWest(west);
-        room->setEnemyAmount(enemyCount);
         room->setSerialRoomMap(mapStr ? mapStr : "");
         room->setAlreadyGenerated(true);
         room->initializeRoom();
@@ -124,13 +123,30 @@ void DatabaseManager::createRoomTableIfNotExists() {
         south INTEGER,
         east INTEGER,
         west INTEGER,
-        enemyCount INTEGER,
         serialMap TEXT);
         )";
 
     char *errmsg = nullptr;
     if (sqlite3_exec(db, sql, nullptr, nullptr, &errmsg) != SQLITE_OK) {
-        throw std::runtime_error(sqlite3_errmsg(db));
         sqlite3_free(errmsg);
+        throw std::runtime_error(sqlite3_errmsg(db));
     }
+}
+
+void DatabaseManager::insertCharacter(AbstractCharacter &character) {
+}
+
+void DatabaseManager::insertCharacterType(AbstractCharacter &character) {
+}
+
+std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int roomId) {
+}
+
+std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int charType) {
+}
+
+void DatabaseManager::createActiveCharacterTableIfNotExists() {
+}
+
+void DatabaseManager::createTypeTableIfNotExists() {
 }

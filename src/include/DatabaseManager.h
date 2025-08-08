@@ -8,31 +8,45 @@
 #include <memory>
 #include <string>
 #include <sqlite3.h>
+#include <iostream>
+#include <stdexcept>
+#include <bits/ostream.tcc>
 #include "Room.h"
 
 
 class DatabaseManager {
 public:
+
     explicit DatabaseManager(const std::string& dbFile);
     ~DatabaseManager();
 
-
-
-    //Dungeon and rooms section.
+    //Insert, new member to table.
     void insertRoom(Room &room);
+    void insertCharacter(AbstractCharacter &character);
+    void insertCharacterType(AbstractCharacter &character);
+
+    //Loads members from the database.
     std::shared_ptr<Room> loadRoom(int id);
+    std::shared_ptr<AbstractCharacter> loadCharacter(int roomId);
+    std::shared_ptr<AbstractCharacter> loadCharacterType(int charType);
+
 
 private:
     sqlite3 *db;
 
-    void openDatabase(const std::string& dbFile );
+    //This opens and closes a database
+    void openDatabase(const std::string& dbFile);
     void closeDatabase();
 
-
-    //Dungeon and rooms section.
+    //Create tables, if they don't exist
     void createRoomTableIfNotExists();
+    void createActiveCharacterTableIfNotExists();
+    void createTypeTableIfNotExists();
 
-
+    //These are the saved states of the dungeon.
+    void saveRoomTable();
+    void saveActiveCharacter();
+    void saveTypeTable();
 };
 
 

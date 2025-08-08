@@ -4,13 +4,16 @@
 
 #include "../../../include/Dungeon.h"
 
-Dungeon* Dungeon::instance = 0;
+std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
 
-
+/**
+ * This controls the amount of dungeons, for the singleton pattern.
+ * @return Returns a pointer to the dungeon instance.
+ */
 Dungeon* Dungeon::DungeonInstance() {
 
     //Breaks at this if
-    if (instance == 0) {
+    if (instance == nullptr) {
         instance = new Dungeon();
     }
 
@@ -18,6 +21,9 @@ Dungeon* Dungeon::DungeonInstance() {
     return instance;
 }
 
+/**
+ * Generates the dungeon.
+ */
 void Dungeon::generateDungeon() {
 
 
