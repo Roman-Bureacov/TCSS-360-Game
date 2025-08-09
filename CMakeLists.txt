@@ -19,7 +19,7 @@ link_directories("${SDL3_ROOT}/lib/x64")
 
 # Add source files
 add_executable(TCSS-360-Game src/main.cpp
-        src/app/control/ObserverPattern.cpp
+        src/app/model/ObserverPattern.cpp
         src/app/control/control.cpp
         src/app/model/model.cpp
         src/app/view/view.cpp
@@ -52,6 +52,7 @@ add_library(model STATIC
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
         src/app/model/Characters/Weapons/Weapon.h
+        src/app/model/ObserverPattern.cpp
 )
 
 target_include_directories(engine PUBLIC
@@ -66,7 +67,7 @@ target_include_directories(engine PUBLIC
         src/db/DatabaseManager.cpp
         src/include/DatabaseManager.h
         src/include/ObserverPattern.h
-        src/app/control/ObserverPattern.cpp
+        src/app/model/ObserverPattern.cpp
         src/test/TestMain.cpp
 )
 
@@ -82,7 +83,7 @@ add_executable(TCSS-360-Tests
         src/db/DatabaseManager.cpp
         src/include/DatabaseManager.h
         src/include/ObserverPattern.h
-        src/app/control/ObserverPattern.cpp
+        src/app/model/ObserverPattern.cpp
         src/test/TestMain.cpp
         "${SQLITE_ROOT}/lib/sqlite3.c"
         src/test/TestEnviroment/TestRoom.cpp

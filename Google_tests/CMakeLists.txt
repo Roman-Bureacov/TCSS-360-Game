@@ -8,6 +8,8 @@ add_executable(
         EngineTest.cpp
         HitboxTest.cpp
         CharacterTest.cpp
+        CharacterObserverTest.cpp
+        ObserverTest.cpp
 )
 
 target_link_libraries(
