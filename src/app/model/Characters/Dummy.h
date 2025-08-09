@@ -34,7 +34,7 @@ public:
  * @author Roman Bureacov
  * @version 2025 July
  */
-class Dummy final : public AbstractCharacter {
+class Dummy : public AbstractCharacter {
 private:
     const int attackTicks = 3;
     int count = 3;
@@ -53,6 +53,8 @@ public:
         Bitz::enqueueAttackEvent(this);
 
     }
+
+    void Update(Subject *theChangedSubject, const std::string &thePropertyName) override { }
 };
 
 

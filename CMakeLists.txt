@@ -66,7 +66,6 @@ target_include_directories(engine PUBLIC
         src/include/DungeonTextures.h
         src/db/DatabaseManager.cpp
         src/include/DatabaseManager.h
-        src/include/ObserverPattern.h
         src/app/model/ObserverPattern.cpp
         src/test/TestMain.cpp
 )

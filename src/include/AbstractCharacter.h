@@ -17,7 +17,7 @@
  * @author Roman Bureacov
  * @version 2025 July
  */
-class AbstractCharacter : Subject {
+class AbstractCharacter : public Subject, public Observer {
 private:
     const std::string myName;
     const long long myID;
@@ -30,6 +30,29 @@ private:
     Weapon* myWeapon;
     util::Direction myDirection;
 public:
+    /** the property name for when the character is damaged. */
+    inline static const std::string PROPERTY_DAMAGED = "I have been damaged!";
+    /** the property name for when the character is healed. */
+    inline static const std::string PROPERTY_HEALED = "I have been healed!";
+    /** the property name for when the character's health changed. */
+    inline static const std::string PROPERTY_HEALTH_CHANGED = "My health changed!";
+    /** the property name for when the character's max health changed. */
+    inline static const std::string PROPERTY_MAX_HEALTH_CHANGED = "My Max health changed!";
+    /** the property name for when the character's weapon changed. */
+    inline static const std::string PROPERTY_WEAPON_CHANGED = "My weapon changed!";
+    /** the property name for when the character's movement speed changed. */
+    inline static const std::string PROPERTY_MVMT_CHANGED = "My movement speed changed!";
+    /** the property name for when the character's base movement speed changed. */
+    inline static const std::string PROPERTY_BASE_MVMT_CHANGED = "My base movement speed changed!";
+    /** the property name for when the character's location changed. */
+    inline static const std::string PROPERTY_LOCATION_CHANGED = "My location changed!";
+    /** the property name for when the character's health reached zero. */
+    inline static const std::string PROPERTY_KILLED = "I have been slain!";
+    /** the property name for when the character's hitbox changed. */
+    inline static const std::string PROPERTY_HITBOX_CHANGED = "My hitbox changed!";
+    /** the property name for when the character's direction changed. */
+    inline static const std::string PROPERTY_DIRECTION_CHANGED = "My direction changed!";
+
     virtual ~AbstractCharacter() = default;
 
     /**
