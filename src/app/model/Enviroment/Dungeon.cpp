@@ -10,11 +10,12 @@ std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
  * This controls the amount of dungeons, for the singleton pattern.
  * @return Returns a pointer to the dungeon instance.
  */
+
 Dungeon* Dungeon::DungeonInstance() {
 
     //Breaks at this if
     if (instance == nullptr) {
-        instance = new Dungeon();
+        instance = std::make_unique<Dungeon>();
     }
 
 
@@ -22,10 +23,24 @@ Dungeon* Dungeon::DungeonInstance() {
 }
 
 /**
+ * Does all the setup for the dungeon.
+ * @param dbManager This is a pointer to the database
+ */
+void Dungeon::initialize(const
+    std::shared_ptr<DatabaseManager> &dbManager) {
+    databaseManager = dbManager;
+    this->generateDungeon();
+}
+
+/**
  * Generates the dungeon.
  */
 void Dungeon::generateDungeon() {
 
+    if (!databaseManager) {
+        throw std::runtime_error
+            ("Database manager is not found");
+    }
 
     //(row, column) -> (i,j)
     for (int i = 0; i < dungeonSize; i++) {
@@ -39,8 +54,15 @@ void Dungeon::generateDungeon() {
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
             roomBuilder.setGenerated(false);
+
+            auto room = roomBuilder.build();
             //This will build the room and throw it in the database.
-            DatabaseManager::insertRoom(roomBuilder.build());
+            try {
+                databaseManager->insertRoom(room);
+            }catch (std::runtime_error &e) {
+                std::cerr << "Failed to insert room: "
+                    << e.what() << std::endl;
+            }
             idRow.push_back(id);
         }
         idMap.push_back(idRow);
@@ -58,7 +80,7 @@ void Dungeon::generateDungeon() {
  * @param roomID room to change to.
  */
 void Dungeon::setCharacterRoom(const int roomID) {
-    currentRoom = DatabaseManager::loadRoom(roomID);
+    currentRoom = databaseManager->loadRoom(roomID);
     notify();
 }
 
@@ -80,12 +102,6 @@ std::shared_ptr<Room> Dungeon::getCurrentRoom() {
 }
 
 /**
- * Constructor generates a new dungeon.
+ * Constructs the object.
  */
-Dungeon::Dungeon() {
-    this->generateDungeon();
-}
-
-
-
-
+Dungeon::Dungeon() {}

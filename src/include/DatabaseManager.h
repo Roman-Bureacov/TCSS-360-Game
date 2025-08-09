@@ -8,9 +8,6 @@
 #include <memory>
 #include <string>
 #include <sqlite3.h>
-#include <iostream>
-#include <stdexcept>
-#include <bits/ostream.tcc>
 #include "Room.h"
 
 
@@ -48,7 +45,5 @@ private:
     void saveActiveCharacter();
     void saveTypeTable();
 };
-
-
 
 #endif //DATABASEMANAGER_H

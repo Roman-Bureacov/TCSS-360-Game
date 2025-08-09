@@ -8,16 +8,16 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include"DatabaseManager.h"
+#include <sstream>
 #include "DungeonTextures.h"
 
 
 
 class Room final {
-
+    friend class ConcreteRoomBuilder;
 public:
-    void generateNonExsistingRoom();
-    void generateExsistingRoom();
+    void generateNonExistingRoom();
+    void generateExistingRoom();
     void initializeRoom();
 
     //This is for storing, and retriving textures.

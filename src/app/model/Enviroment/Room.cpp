@@ -9,7 +9,7 @@
  * Generates a string map of the dungeon if it doesn't already
  * exist.
  */
-void Room::generateNonExsistingRoom() {
+void Room::generateNonExistingRoom() {
 
     //Awful algorithm.
     //(row, column) -> (i,j)
@@ -56,7 +56,7 @@ void Room::generateNonExsistingRoom() {
 /**
  * This takes a serialized, room map string and makes in the enum formate.
  */
-void Room::generateExsistingRoom() {
+void Room::generateExistingRoom() {
 
     roomMap.clear();
 
@@ -206,8 +206,8 @@ DunText::DungeonTile Room::stringToDungeonTile(const std::string &tile) const {
 }
 
 /**
- * This takes a enum tile and turns it into a string code.
- * @param tile a enum tile.
+ * This takes an enum tile and turns it into a string code.
+ * @param tile an enum tile.
  * @return String code for tile.
  */
 std::string Room::DungeonTileToString(const DunText::DungeonTile &tile) const {
@@ -232,6 +232,7 @@ ConcreteRoomBuilder::ConcreteRoomBuilder() = default;
  * Sets if the room has been generated before.
  * @param alreadyMade boolean for if a room as been made.
  * @return Returns a concreteRoomBuilder reference.
+ *
  */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setGenerated(const bool alreadyMade) {
     alreadyGenerated = alreadyMade;
@@ -242,6 +243,7 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setGenerated(const bool alreadyMade) {
  * This sets if there is a room to north.
  * @param north Boolean for if there is a northern room.
  * @return Returns a concreteRoomBuilder reference.
+ *
  */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomNorth(const bool north) {
     roomNorth = north;
@@ -252,6 +254,7 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomNorth(const bool north) {
  * This sets if there is a room to east.
  * @param east Boolean for if there is an eastern room.
  * @return Returns a concreteRoomBuilder reference.
+ *
  */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomEast(const bool east) {
     roomEast = east;
@@ -262,6 +265,7 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomEast(const bool east) {
  * This sets if there is a room to west.
  * @param west Boolean for if there is a western room.
  * @return Returns a concreteRoomBuilder reference.
+
  */
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomWest(const bool west) {
     roomWest = west;
@@ -311,10 +315,8 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
     this->roomWest = true;
     this->roomSouth = true;
     this->roomID = 0;
-    this->alreadyGenerated = false;  // maybe reset this too?
+    this->alreadyGenerated = false;
 
     return room;
 
 }
-
-

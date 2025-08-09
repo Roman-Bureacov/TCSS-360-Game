@@ -6,8 +6,6 @@
 #include <iostream>
 #include <stdexcept>
 
-sqlite3* db = nullptr;
-
 /**
  * This creates the database and setup needed tables
  * @param dbFile This is the database
@@ -44,14 +42,14 @@ void DatabaseManager::insertRoom(std::shared_ptr<Room> &room) {
         throw std::runtime_error(sqlite3_errmsg(db));
     }
 
-    room.serializeRoomMap();
+    room->serializeRoomMap();
 
-    sqlite3_bind_int(stmt, 1, room.getRoomID());
-    sqlite3_bind_int(stmt, 2, room.getNorth());
-    sqlite3_bind_int(stmt, 3, room.getSouth());
-    sqlite3_bind_int(stmt, 4, room.getEast());
-    sqlite3_bind_int(stmt, 5, room.getWest());
-    sqlite3_bind_text(stmt, 6, room.getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(stmt, 1, room->getRoomID());
+    sqlite3_bind_int(stmt, 2, room->getNorth());
+    sqlite3_bind_int(stmt, 3, room->getSouth());
+    sqlite3_bind_int(stmt, 4, room->getEast());
+    sqlite3_bind_int(stmt, 5, room->getWest());
+    sqlite3_bind_text(stmt, 6, room->getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         throw std::runtime_error(sqlite3_errmsg(db));
@@ -143,13 +141,13 @@ void DatabaseManager::createRoomTableIfNotExists() {
 
     const char *sql = R"(
         CREATE TABLE IF NOT EXISTS rooms(
-        id INTEGER PRIMARY KEY,
-        north INTEGER,
-        south INTEGER,
-        east INTEGER,
-        west INTEGER,
-        serialMap TEXT);
-        )";
+                                        id INTEGER PRIMARY KEY,
+                                        north INTEGER,
+                                        south INTEGER,
+                                        east INTEGER,
+                                        west INTEGER,
+                                        serialMap TEXT);
+                                        )";
 
     char *errmsg = nullptr;
     if (sqlite3_exec(db, sql, nullptr, nullptr, &errmsg) != SQLITE_OK) {
