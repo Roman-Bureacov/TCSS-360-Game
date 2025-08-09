@@ -7,7 +7,7 @@ add_executable(
         Google_Tests_run
         EngineTest.cpp
         HitboxTest.cpp
-        CharacterTest.cpp
+        CharacterAttackTest.cpp
         CharacterObserverTest.cpp
         ObserverTest.cpp
 )

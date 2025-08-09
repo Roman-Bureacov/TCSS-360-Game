@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Hitbox.h"
+#include "ObserverPattern.h"
 #include "../app/model/Characters/Weapons/Weapon.h"
 
 
@@ -16,7 +17,7 @@
  * @author Roman Bureacov
  * @version 2025 July
  */
-class AbstractCharacter {
+class AbstractCharacter : Subject {
 private:
     const std::string myName;
     const long long myID;

@@ -3,7 +3,11 @@
 // This tests the observer design pattern on the characters
 //
 
+#include "../src/app/model/Characters/Dummy.h"
+#include "../src/include/AbstractCharacter.h"
 #include "gtest/gtest.h"
+
+Dummy d = Dummy();
 
 /**
  * Tests if the character properly updates on damaged events
