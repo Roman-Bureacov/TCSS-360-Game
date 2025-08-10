@@ -143,6 +143,10 @@ std::string Room::getSerialRoomMap() const {
     return serialRoomMap;
 }
 
+int Room::getRoomSize() const {
+    return roomSize;
+}
+
 void Room::setRoomID(const int roomID) {
     this->roomID = roomID;
 }

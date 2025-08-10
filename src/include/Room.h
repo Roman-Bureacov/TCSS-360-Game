@@ -39,6 +39,7 @@ public:
     bool getWest() const;
     int getEnemyAmount() const;
     std::string getSerialRoomMap() const;
+    int getRoomSize() const;
 
     void setRoomID(int roomID);
     void setNorth(bool north);
@@ -74,8 +75,8 @@ private:
 
     //2 blocks for the border, and 13 for the interior.
     //The reason it's an odd number is for the door to be centered.
-    const int roomSize = 15;
-    const int doorLocation = (roomSize - 1) / 2;
+    static constexpr int roomSize = 15;
+    static constexpr int doorLocation = (roomSize - 1) / 2;
 
     //For testing
     void printRoomMap() const;
