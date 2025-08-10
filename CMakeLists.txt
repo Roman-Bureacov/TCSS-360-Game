@@ -36,7 +36,7 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/model/Characters/Dummy.h
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
-        src/app/model/Characters/Weapons/Weapon.h
+        src/include/Weapon.h
 )
 
 # static libraries, primarily for testing purposes
@@ -51,7 +51,7 @@ add_library(model STATIC
         src/app/model/Characters/Dummy.h # header-only implementation
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
-        src/app/model/Characters/Weapons/Weapon.h
+        src/include/Weapon.h
         src/app/model/ObserverPattern.cpp
 )
 

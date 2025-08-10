@@ -11,11 +11,11 @@ Subject::Subject() = default;
 Subject::~Subject() = default;
 
 
-void Subject::attach(Observer* theObserver) {
-    _observers.push_back(theObserver);
+void Subject::attach(const std::unique_ptr<Observer> theObserver) {
+    _observers.push_back(theObserver.get());
 }
-void Subject::detach(Observer* theObserver) {
-    _observers.remove(theObserver);
+void Subject::detach(const std::unique_ptr<Observer> theObserver) {
+    _observers.remove(theObserver.get());
 }
 void Subject::notify(const std::string& thePropertyName) {
 

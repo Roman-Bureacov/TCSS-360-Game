@@ -6,7 +6,7 @@
 #define WEAPON_H
 #include <stdexcept>
 
-#include "../../../../include/Hitbox.h"
+#include "Hitbox.h"
 
 /**
  * Struct that represents a basic weapon.

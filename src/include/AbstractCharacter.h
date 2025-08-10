@@ -8,7 +8,7 @@
 
 #include "Hitbox.h"
 #include "ObserverPattern.h"
-#include "../app/model/Characters/Weapons/Weapon.h"
+#include "Weapon.h"
 
 
 /**

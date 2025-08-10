@@ -10,30 +10,55 @@
 
 #include "Room.h"
 #include "ObserverPattern.h"
+#include "DatabaseManager.h"
 #include <vector>
+#include <iostream>
 
 
-/*
- * This uses the singleton pattern, there really should only be one * Dungeon in memory at a time, we should be grabbing different dungeons.
- */
+
 class Dungeon final : public Subject {
 public:
 
+    /**
+     * This controls the amount of dungeons, for the singleton pattern.
+     * @return Returns a pointer to the dungeon instance.
+     */
     static Dungeon* DungeonInstance();
+
+    /**
+    * Does all the setup for the dungeon.
+    * @param dbManager This is a pointer to the database
+    */
     void initialize(const std::shared_ptr<DatabaseManager> &dbManager);
 
-    /*
-     * I'm thinking that room ids will start in the 100's
-     * the tens place will be rows, and the ones columns.
-     * I'm starting it in the 100's just because that's kinda like its own area.
-     */
+    /**
+    * Generates the dungeon.
+    */
     void generateDungeon();
+
+    /**
+     * This returns a map of the ids from the dungeon.
+     * @return 2D vector of the dungeons ids.
+     */
     std::vector<std::vector<int>> getMap();
+
+    /**
+     * This will return the current room on the screen.
+     * @return The current room on the screen.
+     */
     std::shared_ptr<Room> getCurrentRoom();
 
+    /**
+     * This changes the current room on screen.
+    * Fires "Room Changed" event.
+    * @param roomID room to change to.
+    */
     void setCharacterRoom(int roomID);
 
 private:
+    /**
+     * Constructs the object.
+     */
     Dungeon();
     ConcreteRoomBuilder roomBuilder;
     std::shared_ptr<Room> currentRoom;
@@ -48,6 +73,9 @@ private:
     const int dungeonIdRange = 100;
     const int rowIndexMult = 10;
     const int startingRoomId = 100;
+
+    //These are the property changes events
+    inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
 
 };
 
