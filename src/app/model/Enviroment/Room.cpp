@@ -108,6 +108,7 @@ void Room::serializeRoomMap() {
 
 
 std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
+    return characters;
 }
 
 void Room::setCharacters(std::vector<int> ids) {

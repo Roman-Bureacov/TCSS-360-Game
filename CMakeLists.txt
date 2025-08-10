@@ -27,7 +27,6 @@ add_executable(TCSS-360-Game src/main.cpp
         src/eng/Clock.cpp
         src/include/AbstractCharacter.h
         src/include/Utils.h
-        src/app/model/Characters/Weapons/Hitbox.cpp
         src/include/Hitbox.h
         src/app/model/Characters/AbstractCharacter.cpp
         src/include/Bitz.h
@@ -53,6 +52,8 @@ add_library(model STATIC
         src/app/model/Characters/Weapons/Weapon.cpp
         src/app/model/Characters/Weapons/Weapon.h
         src/app/model/ObserverPattern.cpp
+        src/app/model/Enviroment/Dungeon.cpp
+        src/app/model/Enviroment/Room.cpp
 )
 
 target_include_directories(engine PUBLIC

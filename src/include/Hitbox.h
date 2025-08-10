@@ -108,6 +108,14 @@ public:
      */
     bool intersects(const Hitbox& theOtherHitbox) const;
 
+    /**
+     * Projects the other hitbox on this hitbox in the direction. The
+     * projected hitbox will be centered in the desired direction.
+     * @param theOtherHitbox the hitbox to project on this hitbox
+     * @param theDirection the direction to project.
+     */
+    void project(Hitbox& theOtherHitbox, const util::Direction theDirection) const;
+
 private:
     util::Point myOrigin;
 

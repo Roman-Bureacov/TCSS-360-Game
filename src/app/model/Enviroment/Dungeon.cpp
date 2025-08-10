@@ -51,7 +51,6 @@ void Dungeon::setCharacterRoom(int roomID) {
     //Going to need to learn SQL for this bugger right here.
     //This is going to load the rooms data from the database.
 
-    notify();
 }
 
 std::vector<std::vector<int>> Dungeon::getMap() {

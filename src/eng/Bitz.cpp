@@ -3,11 +3,15 @@
 //
 
 #include "../include/Bitz.h"
+#include "../include/Dungeon.h"
+
 
 std::unordered_set<AbstractCharacter*> Bitz::entities;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventQueue;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventProcessQueue;
 std::mutex Bitz::eventQueueMutex;
+Dungeon& Bitz::dungeonGenerator = *Dungeon::DungeonInstance();
+AbstractCharacter* Bitz::player = nullptr;
 
 void Bitz::processEvents() {
     std::lock_guard lock(eventQueueMutex);
@@ -80,4 +84,32 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
 
 void Bitz::registerCharacter(AbstractCharacter* theCharacter) {
     entities.insert(theCharacter);
+}
+
+void Bitz::registerPlayer(AbstractCharacter *theCharacter) {
+    if (entities.contains(player)) entities.erase(player);
+    delete player;
+    registerCharacter(theCharacter);
+    player = theCharacter;
+}
+
+void Bitz::loadDungeonRoom(const int theRoomID) {
+    // cleanup
+    eventQueue.clear();
+    eventProcessQueue.clear();
+
+    // cleanup entities, store their information in the database
+    entities.erase(player);
+    for (auto c : entities) {
+        // TODO: while clearing entities, store them in the database
+        delete c;
+    }
+    entities.clear();
+    entities.insert(player);
+
+    // next room
+    dungeonGenerator.setCharacterRoom(theRoomID);
+
+    // position player
+
 }

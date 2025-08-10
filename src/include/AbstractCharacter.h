@@ -27,6 +27,7 @@ private:
     int myCurrentMovement = 0;
     util::Point myOrigin;
     Hitbox myHitbox;
+    Hitbox myInteractionHitbox;
     Weapon* myWeapon;
     util::Direction myDirection;
 public:
@@ -217,6 +218,12 @@ public:
      * centered at the respective direction of this character.
      */
     const Hitbox& getAttackHitbox() const;
+
+    /**
+     * Gets the hitbox for interaction events.
+     * @return the appropriate hitbox for interacting centered at the resepctive direction of this character
+     */
+    const Hitbox& getInteractionHitbox() const;
 
 };
 
