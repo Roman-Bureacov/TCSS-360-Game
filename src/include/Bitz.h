@@ -12,6 +12,7 @@
 #include "Event.h"
 #include "AbstractCharacter.h"
 #include "Dungeon.h"
+#include "Interactable.h"
 
 
 /**
@@ -27,6 +28,7 @@ class Bitz final {
 private:
     /** The list of characters active. */
     static std::unordered_set<AbstractCharacter*> entities;
+    static std::unordered_set<Interactable*> interactables;
     /** The queue representing the events to be put into the process queue. */
     static std::unordered_map<const AbstractCharacter*, Event*> eventQueue;
     /** The queue representing the events currently being processed. */
@@ -66,6 +68,13 @@ public:
     static void enqueueAttackEvent(AbstractCharacter* theCharacter);
 
     /**
+     * Tells the engine that the character wants to interact and
+     * should perform hitbox detection for where they are interacting.
+     * @param theCharacter the character than is interacting
+     */
+    static void enqueueInteractEvent(AbstractCharacter* theCharacter);
+
+    /**
      * Registers a character with the engine to make it aware of said character.
      * Will free the memory of the previous character.
      * @param theCharacter the character that the engine should be aware of
@@ -77,6 +86,12 @@ public:
      * @param theCharacter the character that will act as the player
      */
     static void registerPlayer(AbstractCharacter* theCharacter);
+
+    /**
+     * Registers an interactable that may be used in events.
+     * @param theInteractable hte interactable to register
+     */
+    static void registerInteractable(Interactable* theInteractable);
 
     /**
      * loads the dungeon room into the engine.
