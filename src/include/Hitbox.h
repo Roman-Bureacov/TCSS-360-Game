@@ -114,7 +114,7 @@ public:
      * @param theOtherHitbox the hitbox to project on this hitbox
      * @param theDirection the direction to project.
      */
-    void project(Hitbox& theOtherHitbox, const util::Direction theDirection) const;
+    void project(Hitbox& theOtherHitbox, util::Direction theDirection) const;
 
 private:
     util::Point myOrigin;

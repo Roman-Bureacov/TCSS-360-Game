@@ -27,7 +27,7 @@ private:
     int myCurrentMovement = 0;
     util::Point myOrigin;
     Hitbox myHitbox;
-    Hitbox myInteractionHitbox;
+    mutable Hitbox myInteractionHitbox;
     Weapon* myWeapon;
     util::Direction myDirection;
 public:
@@ -225,6 +225,12 @@ public:
      */
     const Hitbox& getInteractionHitbox() const;
 
+    /**
+     * Sets the interaction hitbox for this character
+     * @param theWidth the new width for the interaction hitbox
+     * @param theHeight the new height for the interaction hitbox
+     */
+    void setInteractionHitbox(int theWidth, int theHeight);
 };
 
 

@@ -174,7 +174,12 @@ const Hitbox& AbstractCharacter::getAttackHitbox() const {
 
 }
 
-const Hitbox & AbstractCharacter::getInteractionHitbox() const {
+void AbstractCharacter::setInteractionHitbox(const int theWidth, const int theHeight) {
+    myInteractionHitbox = Hitbox(theWidth, theHeight);
+}
+
+const Hitbox& AbstractCharacter::getInteractionHitbox() const {
+    myHitbox.project(myInteractionHitbox, myDirection);
     return myInteractionHitbox;
 }
 

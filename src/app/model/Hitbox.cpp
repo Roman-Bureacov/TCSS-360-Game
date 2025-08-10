@@ -83,7 +83,7 @@ bool Hitbox::intersects(const Hitbox& theOtherHitbox) const {
     return yContained;
 }
 
-void Hitbox::project(Hitbox &theOtherHitbox, util::Direction theDirection) const {
+void Hitbox::project(Hitbox& theOtherHitbox, util::Direction theDirection) const {
 
     int xOffset;
     int yOffset;
