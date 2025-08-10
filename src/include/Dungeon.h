@@ -14,15 +14,13 @@
 
 
 /*
- * This uses the singleton pattern, there really should only be one
- * Dungeon in memory at a time, we should be grabbing different dungeons.
+ * This uses the singleton pattern, there really should only be one * Dungeon in memory at a time, we should be grabbing different dungeons.
  */
-
-
 class Dungeon final : public Subject {
 public:
 
     static Dungeon* DungeonInstance();
+    void initialize(const std::shared_ptr<DatabaseManager> &dbManager);
 
     /*
      * I'm thinking that room ids will start in the 100's
@@ -38,11 +36,11 @@ public:
 private:
     Dungeon();
     ConcreteRoomBuilder roomBuilder;
-    //This is basically a placeholder room before, dungeon generation
-    std::shared_ptr<Room> currentRoom = roomBuilder.build();
+    std::shared_ptr<Room> currentRoom;
     std::vector<std::vector<int>> idMap;
 
-    static Dungeon* instance;
+    static std::unique_ptr<Dungeon> instance;
+    std::shared_ptr<DatabaseManager> databaseManager;
 
     //Could possibly make it some people can choose dungeon size, but Ids.
     //Would be More complex.
