@@ -8,6 +8,8 @@
 #include <memory>
 #include <iostream>
 #include "AbstractCharacter.h"
+#include "../include/Bitz.h"
+
 
 /**
  * Enumeration of all supported NPC types.
@@ -83,6 +85,12 @@ protected:
      * @return True if the NPC can attack the player this turn.
      */
     bool canAttack();
+
+    /**
+     * This makes tells the NPC to changes its
+     * Direction to look at the player.
+     */
+    void lookAtPlayer();
 
 
 };

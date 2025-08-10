@@ -5,6 +5,8 @@
 #include "../../../include/Room.h"
 
 
+
+
 /**
  * Generates a string map of the dungeon if it doesn't already
  * exist.
@@ -85,9 +87,9 @@ void Room::initializeRoom() {
 
     if (this->alreadyGenerated) {
         //load data from database here
-        this->generateExsistingRoom();
+        this->generateExistingRoom();
     } else {
-        this->generateNonExsistingRoom();
+        this->generateNonExistingRoom();
     }
 }
 
@@ -111,11 +113,6 @@ void Room::serializeRoomMap() {
 
 }
 
-
-
-
-std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
-}
 
 
 int Room::getRoomID() const {

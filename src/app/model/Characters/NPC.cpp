@@ -40,6 +40,8 @@ void NPC::moveNPCToPlayer() {
 
 void NPC::attackPlayer() {
 
+    Bitz::enqueueAttackEvent(this);
+
 }
 
 bool NPC::canAttack() {
@@ -51,8 +53,23 @@ bool NPC::canAttack() {
 
 }
 
+void NPC::lookAtPlayer() {
+
+    int xDiff = this->getX() - player->getX();
+    int yDiff = this->getY() - player->getY();
+
+    if (std::abs(xDiff) > std::abs(yDiff)) {
+        if  (xDiff < 0) this->setDirection(util::Direction::EAST);
+        else this->setDirection(util::Direction::WEST);
+    } else {
+        if (yDiff < 0) this->setDirection(util::Direction::SOUTH);
+        else this->setDirection(util::Direction::NORTH);
+    }
+}
+
 void NPC::takeAction() {
     if (canAttack()) {
+        this->lookAtPlayer();
         attackPlayer();
     } else {
         moveNPCToPlayer();
@@ -81,7 +98,6 @@ TimCapaul::TimCapaul()
     : NPC(name, maxHealth, movementSpeed) {}
 
 void TimCapaul::takeAction() {
-    // TimCapaul might have more advanced behavior
     if (canAttack()) {
         attackPlayer();
     } else {
