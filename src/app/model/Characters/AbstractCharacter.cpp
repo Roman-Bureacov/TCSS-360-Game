@@ -145,42 +145,44 @@ void AbstractCharacter::setDirection(const util::Direction theDirection) {
 
 const Hitbox& AbstractCharacter::getAttackHitbox() const {
 
-    Hitbox* h;
+    Hitbox* hb;
     int xOffset;
     int yOffset;
+    const int h = myHitbox.getHeight();
+    const int w = myHitbox.getWidth();
 
-    // TODO: need to redefine how this hitbox is gathered
     // myDimension - (myDimension + weapDimension)/2
+    // simplified to (myDimension - weapDimension)/2
     switch (myDirection) {
         case util::NORTH:
-            h = &myWeapon->hitboxNorth;
-            xOffset = myHitbox.getWidth() / 4;
-            yOffset = myHitbox.getHeight();
+            hb = &myWeapon->hitboxNorth;
+            xOffset = (w - hb->getWidth()) / 2;
+            yOffset = h;
             break;
         case util::EAST:
-            h = &myWeapon->hitboxEast;
-            xOffset = myHitbox.getWidth();
-            yOffset = myHitbox.getHeight() / 4;
+            hb = &myWeapon->hitboxEast;
+            xOffset = w;
+            yOffset = (h - hb->getHeight()) / 2;
             break;
         case util::SOUTH:
-            h = &myWeapon->hitboxSouth;
-            xOffset = myHitbox.getWidth() / 4;
-            yOffset = -myHitbox.getHeight();
+            hb = &myWeapon->hitboxSouth;
+            xOffset = (w - hb->getWidth()) / 2;
+            yOffset = -h;
             break;
         case util::WEST:
-            h = &myWeapon->hitboxWest;
-            xOffset = -myHitbox.getWidth();
-            yOffset = myHitbox.getHeight() / 4;
+            hb = &myWeapon->hitboxWest;
+            xOffset = -w;
+            yOffset = (h - hb->getHeight()) / 2;
             break;
         default: throw new std::logic_error("Bad direction in getAttackHitbox");
     }
 
-    h->setOrigin(
+    hb->setOrigin(
             getX() + xOffset,
             getY() + yOffset
         );
 
-    return *h;
+    return *hb;
 
 }
 

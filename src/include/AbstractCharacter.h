@@ -213,7 +213,8 @@ public:
 
     /**
      * Gets the attack hitbox for attack events.
-     * @return the appropriate hitbox based on the weapon of this character
+     * @return the appropriate hitbox based on the weapon of this character,
+     * centered at the respective direction of this character.
      */
     const Hitbox& getAttackHitbox() const;
 
