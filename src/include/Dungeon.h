@@ -6,7 +6,7 @@
 #define DUNGEON_H
 
 
-
+#include <unordered_set>
 
 #include "Room.h"
 #include "ObserverPattern.h"
@@ -34,6 +34,13 @@ public:
     std::shared_ptr<Room> getCurrentRoom();
 
     void setCharacterRoom(int roomID);
+
+    /**
+     * Updates the state of this room with the new set of entities
+     * to set in persistent storage.
+     * @param entities the set of entities in this room
+     */
+    void updateRoom(std::unordered_set<AbstractCharacter*> entities);
 
 private:
     Dungeon();

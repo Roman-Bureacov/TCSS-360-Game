@@ -134,7 +134,7 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     // cleanup entities, store their information in the database
     entities.erase(player);
     for (auto c : entities) {
-        // TODO: while clearing entities, store them in the database
+        // TODO: while clearing entities, store them
         delete c;
     }
     entities.clear();
@@ -144,6 +144,7 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     interactables.clear();
 
     // next room
+    dungeonGenerator.updateRoom(entities);
     dungeonGenerator.setCharacterRoom(theRoomID);
     currentRoom = dungeonGenerator.getCurrentRoom().get();
     roomSize = (currentRoom->getRoomSize() - 2) * tileSize;
@@ -195,4 +196,8 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
             break;
         default: throw std::logic_error("missing handle on direction " + comingFrom);
     }
+
+    // position others
+    for (const auto& character : currentRoom->getCharacters())
+        registerCharacter(character.get());
 }
