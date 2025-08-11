@@ -39,6 +39,12 @@ private:
     static Dungeon& dungeonGenerator;
     /** The player character. */
     static AbstractCharacter* player;
+    /** the current room instance. */
+    static Room* currentRoom;
+    /** The units per tile from the dungeon. */
+    static constexpr int tileSize = 100;
+    /** The side length of the room. */
+    static int roomSize;
 
     /**
      * Processes the enqueued single events and persistent events.
