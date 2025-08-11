@@ -82,6 +82,21 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
     ));
 }
 
+void Bitz::enqueueInteractEvent(AbstractCharacter *theCharacter) {
+    enqueueEvent(new Event(
+        1,
+        [theCharacter]() -> void {
+            const Hitbox h = theCharacter->getInteractionHitbox();
+
+            for (const auto interactable : interactables) {
+                if (h.intersects(interactable->getHitbox()))
+                    interactable->interact();
+            }
+        },
+        *theCharacter
+        ));
+}
+
 void Bitz::registerCharacter(AbstractCharacter* theCharacter) {
     entities.insert(theCharacter);
 }
@@ -92,6 +107,7 @@ void Bitz::registerPlayer(AbstractCharacter *theCharacter) {
     registerCharacter(theCharacter);
     player = theCharacter;
 }
+
 
 void Bitz::loadDungeonRoom(const int theRoomID) {
     // cleanup
