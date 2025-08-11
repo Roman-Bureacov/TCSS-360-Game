@@ -36,7 +36,7 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
         src/app/model/Characters/Weapons/Weapon.h
-        src/app/model/Enviroment/Interactible.cpp
+        src/app/model/Enviroment/Interactable.cpp
         src/include/Interactable.h
         src/app/model/Enviroment/Door.h
 )
@@ -57,7 +57,7 @@ add_library(model STATIC
         src/app/model/ObserverPattern.cpp
         src/app/model/Enviroment/Dungeon.cpp
         src/app/model/Enviroment/Room.cpp
-        src/app/model/Enviroment/Interactible.cpp
+        src/app/model/Enviroment/Interactable.cpp
         src/include/Interactable.h
         src/app/model/Enviroment/Door.h
 )
