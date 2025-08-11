@@ -55,7 +55,7 @@ private:
     //Would be More complex.
     const int dungeonSize = 10;
     const int dungeonIdRange = 100;
-    const int rowIndexMult = 10;
+    const int rowIndexMult = 100;
     const int startingRoomId = 100;
 
 };
