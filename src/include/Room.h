@@ -22,7 +22,7 @@ class Room final {
 public:
     void generateNonExsistingRoom();
     void generateCharacters();
-    void generateExsistingRoom();
+    void generateExistingRoom();
     void initializeRoom();
 
     //This is for storing, and retriving textures.

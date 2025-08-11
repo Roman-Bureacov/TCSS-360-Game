@@ -19,6 +19,14 @@ DatabaseManager::~DatabaseManager() {
     closeDatabase();
 }
 
+std::shared_ptr<AbstractCharacter> DatabaseManager::fetchCharacter(int theCharacterID) const {
+    // TODO: create character function
+}
+
+std::shared_ptr<Weapon> DatabaseManager::fetchWeapon(int theWeaponID) const {
+    // TODO: create weapon creation function
+}
+
 void DatabaseManager::insertRoom(Room &room) {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms

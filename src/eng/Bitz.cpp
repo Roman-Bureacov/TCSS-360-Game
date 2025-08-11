@@ -133,10 +133,7 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
 
     // cleanup entities, store their information in the database
     entities.erase(player);
-    for (auto c : entities) {
-        // TODO: while clearing entities, store them
-        delete c;
-    }
+    dungeonGenerator.updateRoomEntities(entities);
     entities.clear();
     entities.insert(player);
 
@@ -144,7 +141,6 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     interactables.clear();
 
     // next room
-    dungeonGenerator.updateRoom(entities);
     dungeonGenerator.setCharacterRoom(theRoomID);
     currentRoom = dungeonGenerator.getCurrentRoom().get();
     roomSize = (currentRoom->getRoomSize() - 2) * tileSize;

@@ -56,7 +56,7 @@ void Room::generateCharacters() {
 
 }
 
-void Room::generateExsistingRoom() {
+void Room::generateExistingRoom() {
 
     roomMap.clear();
 
@@ -81,7 +81,7 @@ void Room::initializeRoom() {
 
     if (this->alreadyGenerated) {
         //load data from database here
-        this->generateExsistingRoom();
+        this->generateExistingRoom();
     } else {
         this->generateNonExsistingRoom();
     }

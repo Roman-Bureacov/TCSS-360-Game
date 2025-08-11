@@ -55,7 +55,7 @@ void Dungeon::setCharacterRoom(int roomID) {
 
 }
 
-void Dungeon::updateRoom(std::unordered_set<AbstractCharacter *> entities) {
+void Dungeon::updateRoomEntities(std::unordered_set<AbstractCharacter *> entities) {
     // TODO: database implementation
 }
 
