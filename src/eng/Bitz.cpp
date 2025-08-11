@@ -6,12 +6,13 @@
 #include "../include/Dungeon.h"
 
 
+AbstractCharacter* Bitz::player = nullptr;
 std::unordered_set<AbstractCharacter*> Bitz::entities;
+std::unordered_set<Interactable*> Bitz::interactables;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventQueue;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventProcessQueue;
 std::mutex Bitz::eventQueueMutex;
 Dungeon& Bitz::dungeonGenerator = *Dungeon::DungeonInstance();
-AbstractCharacter* Bitz::player = nullptr;
 
 void Bitz::processEvents() {
     std::lock_guard lock(eventQueueMutex);
@@ -108,6 +109,9 @@ void Bitz::registerPlayer(AbstractCharacter *theCharacter) {
     player = theCharacter;
 }
 
+void Bitz::registerInteractable(Interactable *theInteractable) {
+    interactables.insert((theInteractable));
+}
 
 void Bitz::loadDungeonRoom(const int theRoomID) {
     // cleanup

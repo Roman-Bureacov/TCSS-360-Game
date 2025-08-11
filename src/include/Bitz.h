@@ -75,8 +75,8 @@ public:
     static void enqueueInteractEvent(AbstractCharacter* theCharacter);
 
     /**
-     * Registers a character with the engine to make it aware of said character.
-     * Will free the memory of the previous character.
+     * Registers a character with the engine to make it aware of said
+     * character when it comes to hitbox detection.
      * @param theCharacter the character that the engine should be aware of
      */
     static void registerCharacter(AbstractCharacter* theCharacter);
