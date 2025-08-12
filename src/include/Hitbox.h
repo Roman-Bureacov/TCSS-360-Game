@@ -19,8 +19,38 @@
  */
 class Hitbox {
 public:
+    /**
+     * Constructs a new hitbox at the point specified.
+     * @param theOrigin where the hitbox is constructed at
+     * @param theWidth the width of this hitbox
+     * @param theHeight the height of this hitbox
+     */
     Hitbox(
         const util::Point& theOrigin,
+        int theWidth,
+        int theHeight
+    );
+
+    /**
+     * Constructs a new hitbox at the coordinates specified.
+     * @param theX the x position of this hitbox
+     * @param theY the y position of this hitbox
+     * @param theWidth the width of this hitbox
+     * @param theHeight the height of this hitbox
+     */
+    Hitbox(
+        int theX,
+        int theY,
+        int theWidth,
+        int theHeight
+    );
+
+    /**
+     * Constructs a new hitbox at (0,0).
+     * @param theWidth the width of this hitbox
+     * @param theHeight the height of this hitbox
+     */
+    Hitbox(
         int theWidth,
         int theHeight
     );
@@ -32,16 +62,11 @@ public:
     void setOrigin(const util::Point& theNewOrigin);
 
     /**
-     * Sets the new X origin for this hitbox
-     * @param newX the new X origin in pixels
+     * Set the origin of this hitbox.
+     * @param theNewX the new x position of the origin
+     * @param theNewY the new y position of the origin
      */
-    void setOriginX(int newX);
-
-    /**
-     * Sets the new Y origin for this hitbox
-     * @param newY the new Y origin in pixels
-     */
-    void setOriginY(int newY);
+    void setOrigin(int theNewX, int theNewY);
 
     /**
      * Gets the origin of this hitbox.
@@ -86,8 +111,8 @@ public:
 private:
     util::Point myOrigin;
 
-    const int myWidth;
-    const int myHeight;
+    int myWidth;
+    int myHeight;
 };
 
 

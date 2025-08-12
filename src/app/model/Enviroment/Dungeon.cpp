@@ -4,22 +4,43 @@
 
 #include "../../../include/Dungeon.h"
 
-Dungeon* Dungeon::instance = 0;
+std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
 
+/**
+ * This controls the amount of dungeons, for the singleton pattern.
+ * @return Returns a pointer to the dungeon instance.
+ */
 
 Dungeon* Dungeon::DungeonInstance() {
 
     //Breaks at this if
-    if (instance == 0) {
-        instance = new Dungeon();
+    if (instance == nullptr) {
+        instance = std::make_unique<Dungeon>();
     }
 
 
     return instance;
 }
 
+/**
+ * Does all the setup for the dungeon.
+ * @param dbManager This is a pointer to the database
+ */
+void Dungeon::initialize(const
+    std::shared_ptr<DatabaseManager> &dbManager) {
+    databaseManager = dbManager;
+    this->generateDungeon();
+}
+
+/**
+ * Generates the dungeon.
+ */
 void Dungeon::generateDungeon() {
 
+    if (!databaseManager) {
+        throw std::runtime_error
+            ("Database manager is not found");
+    }
 
     //(row, column) -> (i,j)
     for (int i = 0; i < dungeonSize; i++) {
@@ -33,7 +54,15 @@ void Dungeon::generateDungeon() {
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
             roomBuilder.setGenerated(false);
-            roomBuilder.build();
+
+            auto room = roomBuilder.build();
+            //This will build the room and throw it in the database.
+            try {
+                databaseManager->insertRoom(room);
+            }catch (std::runtime_error &e) {
+                std::cerr << "Failed to insert room: "
+                    << e.what() << std::endl;
+            }
             idRow.push_back(id);
         }
         idMap.push_back(idRow);
@@ -46,27 +75,33 @@ void Dungeon::generateDungeon() {
 }
 
 
-
-void Dungeon::setCharacterRoom(int roomID) {
-    //Going to need to learn SQL for this bugger right here.
-    //This is going to load the rooms data from the database.
-
+/**
+ * This changes the current room on screen.
+ * @param roomID room to change to.
+ */
+void Dungeon::setCharacterRoom(const int roomID) {
+    currentRoom = databaseManager->loadRoom(roomID);
     notify();
 }
 
+/**
+ * This returns a map of the ids from the dungeon.
+ * @return 2D vector of the dungeons ids.
+ */
 std::vector<std::vector<int>> Dungeon::getMap() {
     return idMap;
 
 }
 
+/**
+ * This will return the current room on the screen.
+ * @return The current room on the screen.
+ */
 std::shared_ptr<Room> Dungeon::getCurrentRoom() {
     return currentRoom;
 }
 
-
-Dungeon::Dungeon() {
-    this->generateDungeon();
-
-}
-
-
+/**
+ * Constructs the object.
+ */
+Dungeon::Dungeon() {}

@@ -4,32 +4,41 @@
 #pragma once
 
 #include <list>
-#include <memory>
+#include <string>
 
 class Subject;
 
+/**
+ * Class that observes changes. This class will await any
+ * changes from a subject and respond accordingly.
+ * @version 2025 August
+ * @author Riley Hopper
+ * @author Roman Bureacov
+ */
 
 class Observer {
 public:
     virtual ~Observer();
-    virtual void Update(Subject* theChangedSubject) = 0;
+    virtual void Update(Subject* theChangedSubject, const std::string& thePropertyName) = 0;
 
 protected:
     Observer();
 };
 
+/**
+ * Class that notifies any observers for changes.
+ * @version August 2025
+ * @author Riley Hopper
+ * @author Roman Bureacov
+ */
 class Subject {
 public:
     virtual ~Subject();
-    virtual void attach(Observer*);
-    virtual void detach(Observer*);
-    virtual void notify();
+    virtual void attach(Observer* theObserver);
+    virtual void detach(Observer* theObserver);
+    virtual void notify(const std::string& thePropertyName);
 protected:
     Subject();
 private:
-    /* Professor GPT doesn't like this approach, book does though.
-     * Should ask tom if std::list<Observer*> *_observers;
-     * is better than std::list<Observer*> _observers;
-     */
-    std::list<Observer *> *_observers;
+    std::list<Observer *> _observers;
 };

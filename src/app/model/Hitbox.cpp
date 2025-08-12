@@ -4,24 +4,36 @@
 
 #include "../../include/Hitbox.h"
 
+#include <stdexcept>
+
 Hitbox::Hitbox(const util::Point& theOrigin, const int theWidth, const int theHeight)
     : myOrigin(theOrigin), myWidth(theWidth), myHeight(theHeight){
+
+    if (theWidth < 0) throw std::logic_error("width must be zero or greater");
+    if (theHeight < 0) throw std::logic_error("height must be zero or greater");
+}
+
+Hitbox::Hitbox(const int theX, const int theY, const int theWidth, const int theHeight)
+    : Hitbox(util::Point(theX, theY), theWidth, theHeight) {
+
+}
+
+Hitbox::Hitbox(const int theWidth, const int theHeight)
+    : Hitbox(util::Point(0,0), theWidth, theHeight) {
+
 }
 
 void Hitbox::setOrigin(const util::Point& theNewOrigin) {
     myOrigin = theNewOrigin;
 }
 
+void Hitbox::setOrigin(const int theNewX, const int theNewY) {
+    myOrigin.x = theNewX;
+    myOrigin.y = theNewY;
+}
+
 const util::Point & Hitbox::getOrigin() const {
     return myOrigin;
-}
-
-void Hitbox::setOriginX(const int newX) {
-    myOrigin.x = newX;
-}
-
-void Hitbox::setOriginY(const int newY) {
-    myOrigin.y = newY;
 }
 
 int Hitbox::getWidth() const {

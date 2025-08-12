@@ -7,6 +7,8 @@
 #include <string>
 
 #include "Hitbox.h"
+#include "ObserverPattern.h"
+#include "../app/model/Characters/Weapons/Weapon.h"
 
 
 /**
@@ -15,9 +17,9 @@
  * @author Roman Bureacov
  * @version 2025 July
  */
-class AbstractCharacter {
+class AbstractCharacter : public Subject, public Observer {
 private:
-    const std::string& myName;
+    const std::string myName;
     const long long myID;
     int myHealth = 0;
     int myMaxHealth = 0;
@@ -25,7 +27,32 @@ private:
     int myCurrentMovement = 0;
     util::Point myOrigin;
     Hitbox myHitbox;
+    Weapon* myWeapon;
+    util::Direction myDirection;
 public:
+    /** the property name for when the character is damaged. */
+    inline static const std::string PROPERTY_DAMAGED = "I have been damaged!";
+    /** the property name for when the character is healed. */
+    inline static const std::string PROPERTY_HEALED = "I have been healed!";
+    /** the property name for when the character's health changed. */
+    inline static const std::string PROPERTY_HEALTH_CHANGED = "My health changed!";
+    /** the property name for when the character's max health changed. */
+    inline static const std::string PROPERTY_MAX_HEALTH_CHANGED = "My Max health changed!";
+    /** the property name for when the character's weapon changed. */
+    inline static const std::string PROPERTY_WEAPON_CHANGED = "My weapon changed!";
+    /** the property name for when the character's movement speed changed. */
+    inline static const std::string PROPERTY_MVMT_CHANGED = "My movement speed changed!";
+    /** the property name for when the character's base movement speed changed. */
+    inline static const std::string PROPERTY_BASE_MVMT_CHANGED = "My base movement speed changed!";
+    /** the property name for when the character's location changed. */
+    inline static const std::string PROPERTY_LOCATION_CHANGED = "My location changed!";
+    /** the property name for when the character's health reached zero. */
+    inline static const std::string PROPERTY_KILLED = "I have been slain!";
+    /** the property name for when the character's hitbox changed. */
+    inline static const std::string PROPERTY_HITBOX_CHANGED = "My hitbox changed!";
+    /** the property name for when the character's direction changed. */
+    inline static const std::string PROPERTY_DIRECTION_CHANGED = "My direction changed!";
+
     virtual ~AbstractCharacter() = default;
 
     /**
@@ -161,9 +188,35 @@ public:
     void setHitbox(int theWidth, int theHeight);
 
     /**
-     * Sends out an attack event to the engine using this character's equipped weapon.
+     * Gets the weapon of this character.
+     * @return the weapon this character is wielding
      */
-    virtual void attack() = 0;
+    Weapon& getWeapon() const;
+
+    /**
+     * Gives this character a new weapon to equip.
+     * @param theWeapon the new weapon this character will wield
+     */
+    void giveWeapon(Weapon* theWeapon);
+
+    /**
+     * Gets the direction this character is facing.
+     * @return the direction this character is facing
+     */
+    util::Direction getDirection() const;
+
+    /**
+     * Sets the direction for this character.
+     * @param theDirection the new direction for this character
+     */
+    void setDirection(util::Direction theDirection);
+
+    /**
+     * Gets the attack hitbox for attack events.
+     * @return the appropriate hitbox based on the weapon of this character,
+     * centered at the respective direction of this character.
+     */
+    const Hitbox& getAttackHitbox() const;
 
 };
 

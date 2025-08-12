@@ -18,7 +18,10 @@ AbstractCharacter::AbstractCharacter(
       myMaxHealth(theMaxHealth),
       myBaseMovement(theMovementSpeed),
       myCurrentMovement(theMovementSpeed),
-      myHitbox(Hitbox(util::Point(), 100, 100)) {
+      myHitbox(Hitbox(util::Point(), 100, 100)),
+      myDirection(util::NORTH) {
+
+    myWeapon = nullptr;
 }
 
 const std::string& AbstractCharacter::getName() const {
@@ -36,6 +39,7 @@ bool AbstractCharacter::isAlive() const {
 
 void AbstractCharacter::setMaxHealth(const int theNewMaxHealth) {
     myHealth = theNewMaxHealth;
+    notify(PROPERTY_MAX_HEALTH_CHANGED);
 }
 
 int AbstractCharacter::getMaxHealth() const {
@@ -44,6 +48,8 @@ int AbstractCharacter::getMaxHealth() const {
 
 void AbstractCharacter::setHealth(const int theNewHealth) {
     myHealth = theNewHealth;
+    if (myHealth == 0) notify(PROPERTY_KILLED);
+    else notify(PROPERTY_HEALTH_CHANGED);
 }
 
 int AbstractCharacter::getHealth() const {
@@ -51,21 +57,29 @@ int AbstractCharacter::getHealth() const {
 }
 
 void AbstractCharacter::damage(const int theDamageAmount) {
-    if (myHealth > theDamageAmount) myHealth -= theDamageAmount;
-    else myHealth = 0;
+    if (myHealth > theDamageAmount) {
+        myHealth -= theDamageAmount;
+        notify(PROPERTY_DAMAGED);
+    } else {
+        myHealth = 0;
+        notify(PROPERTY_KILLED);
+    }
 }
 
 void AbstractCharacter::heal(const int theHealAmount) {
     myHealth += theHealAmount;
     if (myHealth > myMaxHealth) myHealth = myMaxHealth;
+    notify(PROPERTY_HEALED);
 }
 
 void AbstractCharacter::setMovementSpeed(const int theNewMovementSpeed) {
     myCurrentMovement = theNewMovementSpeed;
+    notify(PROPERTY_MVMT_CHANGED);
 }
 
 void AbstractCharacter::setBaseMovementSpeed(const int theNewBaseMovementSpeed) {
     myBaseMovement = theNewBaseMovementSpeed;
+    notify(PROPERTY_BASE_MVMT_CHANGED);
 }
 
 int AbstractCharacter::getMovementSpeed() const {
@@ -75,3 +89,101 @@ int AbstractCharacter::getMovementSpeed() const {
 int AbstractCharacter::getBaseMovementSpeed() const {
     return myBaseMovement;
 }
+
+int AbstractCharacter::getX() const {
+    return myOrigin.x;
+}
+
+int AbstractCharacter::getY() const {
+    return myOrigin.y;
+}
+
+void AbstractCharacter::setX(const int theNewX) {
+    myHitbox.setOrigin(theNewX, myOrigin.y);
+    myOrigin.x = theNewX;
+    notify(PROPERTY_LOCATION_CHANGED);
+}
+
+void AbstractCharacter::setY(const int theNewY) {
+    myHitbox.setOrigin(myOrigin.x, theNewY);
+    myOrigin.y = theNewY;
+    notify(PROPERTY_LOCATION_CHANGED);
+}
+
+const Hitbox& AbstractCharacter::getHitbox() const {
+    return myHitbox;
+}
+
+void AbstractCharacter::setHitbox(Hitbox& theNewHitbox) {
+    theNewHitbox.setOrigin(myOrigin);
+    myHitbox = theNewHitbox;
+    notify(PROPERTY_HITBOX_CHANGED);
+}
+
+void AbstractCharacter::setHitbox(const int theWidth, const int theHeight) {
+    myHitbox = Hitbox(myOrigin, theWidth, theHeight);
+    notify(PROPERTY_HITBOX_CHANGED);
+}
+
+Weapon& AbstractCharacter::getWeapon() const {
+    return *myWeapon;
+}
+
+void AbstractCharacter::giveWeapon(Weapon* theWeapon) {
+    if (myWeapon) delete myWeapon;
+    myWeapon = theWeapon;
+    notify(PROPERTY_WEAPON_CHANGED);
+}
+
+util::Direction AbstractCharacter::getDirection() const {
+    return myDirection;
+}
+
+void AbstractCharacter::setDirection(const util::Direction theDirection) {
+    myDirection = theDirection;
+    notify(PROPERTY_DIRECTION_CHANGED);
+}
+
+const Hitbox& AbstractCharacter::getAttackHitbox() const {
+
+    Hitbox* hb;
+    int xOffset;
+    int yOffset;
+    const int h = myHitbox.getHeight();
+    const int w = myHitbox.getWidth();
+
+    // myDimension - (myDimension + weapDimension)/2
+    // simplified to (myDimension - weapDimension)/2
+    switch (myDirection) {
+        case util::NORTH:
+            hb = &myWeapon->hitboxNorth;
+            xOffset = (w - hb->getWidth()) / 2;
+            yOffset = h;
+            break;
+        case util::EAST:
+            hb = &myWeapon->hitboxEast;
+            xOffset = w;
+            yOffset = (h - hb->getHeight()) / 2;
+            break;
+        case util::SOUTH:
+            hb = &myWeapon->hitboxSouth;
+            xOffset = (w - hb->getWidth()) / 2;
+            yOffset = -h;
+            break;
+        case util::WEST:
+            hb = &myWeapon->hitboxWest;
+            xOffset = -w;
+            yOffset = (h - hb->getHeight()) / 2;
+            break;
+        default: throw new std::logic_error("Bad direction in getAttackHitbox");
+    }
+
+    hb->setOrigin(
+            getX() + xOffset,
+            getY() + yOffset
+        );
+
+    return *hb;
+
+}
+

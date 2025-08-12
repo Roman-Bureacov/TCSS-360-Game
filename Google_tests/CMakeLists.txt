@@ -7,6 +7,9 @@ add_executable(
         Google_Tests_run
         EngineTest.cpp
         HitboxTest.cpp
+        CharacterAttackTest.cpp
+        CharacterObserverTest.cpp
+        ObserverTest.cpp
 )
 
 target_link_libraries(
