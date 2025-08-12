@@ -15,6 +15,7 @@ class Subject;
  * @author Riley Hopper
  * @author Roman Bureacov
  */
+
 class Observer {
 public:
     virtual ~Observer();
@@ -41,4 +42,3 @@ protected:
 private:
     std::list<Observer *> _observers;
 };
-

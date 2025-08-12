@@ -6,6 +6,7 @@
 #include "../include/Bitz.h"
 #include <chrono>
 #include <iostream>
+#include <thread>
 
 long Clock::getTimestamp() {
     // TODO: what here???
