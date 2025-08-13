@@ -56,6 +56,9 @@ void Room::generateCharacters() {
 
 }
 
+std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
+    return characters;
+}
 void Room::generateExistingRoom() {
 
     roomMap.clear();
