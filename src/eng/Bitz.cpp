@@ -4,10 +4,17 @@
 
 #include "../include/Bitz.h"
 
+#include "../app/model/Enviroment/Door.h"
+#include "../include/Dungeon.h"
+
+
+AbstractCharacter* Bitz::player = nullptr;
 std::unordered_set<AbstractCharacter*> Bitz::entities;
+std::unordered_set<Interactable*> Bitz::interactables;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventQueue;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventProcessQueue;
 std::mutex Bitz::eventQueueMutex;
+Dungeon& Bitz::dungeonGenerator = *Dungeon::DungeonInstance();
 
 void Bitz::processEvents() {
     std::lock_guard lock(eventQueueMutex);
@@ -78,6 +85,115 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
     ));
 }
 
+void Bitz::enqueueInteractEvent(AbstractCharacter *theCharacter) {
+    enqueueEvent(new Event(
+        1,
+        [theCharacter]() -> void {
+            const Hitbox h = theCharacter->getInteractionHitbox();
+
+            for (const auto interactable : interactables) {
+                if (h.intersects(interactable->getHitbox()))
+                    interactable->interact();
+            }
+        },
+        *theCharacter
+        ));
+}
+
 void Bitz::registerCharacter(AbstractCharacter* theCharacter) {
     entities.insert(theCharacter);
+}
+
+void Bitz::registerPlayer(AbstractCharacter *theCharacter) {
+    if (entities.contains(player)) entities.erase(player);
+    delete player;
+    registerCharacter(theCharacter);
+    player = theCharacter;
+}
+
+void Bitz::registerInteractable(Interactable *theInteractable) {
+    interactables.insert((theInteractable));
+}
+
+void Bitz::loadDungeonRoom(const int theRoomID) {
+    // get current room code to infer where we are coming from
+    const int dif = theRoomID - currentRoom->getRoomID();
+    util::Direction comingFrom;
+    switch (dif) {
+        case 1: comingFrom = util::WEST; break;
+        case -1: comingFrom = util::EAST; break;
+        case 10: comingFrom = util::NORTH; break;
+        case -10: comingFrom = util::SOUTH; break;
+        default: throw std::logic_error("Unknown room ID translation" + dif);
+    }
+
+    // cleanup
+    eventQueue.clear();
+    eventProcessQueue.clear();
+
+    // cleanup entities, store their information in the database
+    entities.erase(player);
+    dungeonGenerator.updateRoomEntities(entities);
+    entities.clear();
+    entities.insert(player);
+
+    for (auto i : interactables) delete i;
+    interactables.clear();
+
+    // next room
+    dungeonGenerator.setCharacterRoom(theRoomID);
+    currentRoom = dungeonGenerator.getCurrentRoom().get();
+    roomSize = (currentRoom->getRoomSize() - 2) * tileSize;
+
+    // position NESW doors
+    // each room is made of tiles, with 2 tiles serving as walls on both ends
+    const int doorWidth = tileSize;
+    const int doorDepth = tileSize / 2;
+    const int centeredPos = (roomSize - doorWidth)/2;
+    const int doorInsetPos = (doorDepth / 2);
+    if (currentRoom->getNorth())
+        registerInteractable(new Door(
+            Hitbox(centeredPos, roomSize - doorInsetPos, doorWidth, doorDepth),
+            theRoomID - 10
+            ));
+    if (currentRoom->getEast())
+        registerInteractable(   new Door(
+            Hitbox(roomSize - doorInsetPos, centeredPos, doorDepth, doorWidth),
+            theRoomID + 1));
+    if (currentRoom->getSouth())
+        registerInteractable(new Door(
+            Hitbox(centeredPos, -doorInsetPos, doorWidth, doorDepth),
+            theRoomID + 10));
+    if (currentRoom->getWest())
+        registerInteractable(new Door(
+            Hitbox(-doorInsetPos, centeredPos, doorDepth, doorWidth),
+            theRoomID - 1));
+
+    // position player
+    const int centeredPlayerX = (roomSize - player->getHitbox().getWidth()) / 2;
+    const int centeredPlayerY = (roomSize - player->getHitbox().getHeight()) / 2;
+    constexpr int doorOffset = 50;
+    switch (comingFrom) {
+        case util::NORTH:
+            player->setX(centeredPlayerX);
+            player->setY(roomSize - doorInsetPos - doorOffset);
+            break;
+        case util::EAST:
+            player->setX(roomSize - doorInsetPos - doorOffset);
+            player->setY(centeredPlayerY);
+            break;
+        case util::SOUTH:
+            player->setX(centeredPlayerX);
+            player->setY(doorInsetPos + doorOffset);
+            break;
+        case util::WEST:
+            player->setX(doorInsetPos + doorOffset);
+            player->setY(centeredPlayerY);
+            break;
+        default: throw std::logic_error("missing handle on direction " + comingFrom);
+    }
+
+    // position others
+    for (const auto& character : currentRoom->getCharacters())
+        registerCharacter(character.get());
 }

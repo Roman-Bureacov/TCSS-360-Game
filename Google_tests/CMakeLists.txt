@@ -10,6 +10,8 @@ add_executable(
         CharacterAttackTest.cpp
         CharacterObserverTest.cpp
         ObserverTest.cpp
+        ../src/app/model/Characters/NPC.cpp
+        ../src/include/NPC.h
 )
 
 target_link_libraries(

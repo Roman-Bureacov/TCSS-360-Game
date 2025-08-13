@@ -8,7 +8,7 @@
 
 #include "Hitbox.h"
 #include "ObserverPattern.h"
-#include "../app/model/Characters/Weapons/Weapon.h"
+#include "Weapon.h"
 
 
 /**
@@ -27,6 +27,7 @@ private:
     int myCurrentMovement = 0;
     util::Point myOrigin;
     Hitbox myHitbox;
+    mutable Hitbox myInteractionHitbox;
     Weapon* myWeapon;
     util::Direction myDirection;
 public:
@@ -218,6 +219,18 @@ public:
      */
     const Hitbox& getAttackHitbox() const;
 
+    /**
+     * Gets the hitbox for interaction events.
+     * @return the appropriate hitbox for interacting centered at the resepctive direction of this character
+     */
+    const Hitbox& getInteractionHitbox() const;
+
+    /**
+     * Sets the interaction hitbox for this character
+     * @param theWidth the new width for the interaction hitbox
+     * @param theHeight the new height for the interaction hitbox
+     */
+    void setInteractionHitbox(int theWidth, int theHeight);
 };
 
 

@@ -82,3 +82,39 @@ bool Hitbox::intersects(const Hitbox& theOtherHitbox) const {
 
     return yContained;
 }
+
+void Hitbox::project(Hitbox& theOtherHitbox, util::Direction theDirection) const {
+
+    int xOffset;
+    int yOffset;
+    const int h = getHeight();
+    const int w = getWidth();
+
+    // myDimension - (myDimension + otherDimension)/2
+    // simplified to (myDimension - otherDimension)/2
+    switch (theDirection) {
+        case util::NORTH:
+            xOffset = (w - theOtherHitbox.getWidth()) / 2;
+            yOffset = h;
+            break;
+        case util::EAST:
+            xOffset = w;
+            yOffset = (h - theOtherHitbox.getHeight()) / 2;
+            break;
+        case util::SOUTH:
+            xOffset = (w - theOtherHitbox.getWidth()) / 2;
+            yOffset = -h;
+            break;
+        case util::WEST:
+            xOffset = -w;
+            yOffset = (h - theOtherHitbox.getHeight()) / 2;
+            break;
+        default: throw new std::logic_error("Bad direction in getAttackHitbox");
+    }
+
+    theOtherHitbox.setOrigin(
+            myOrigin.x + xOffset,
+            myOrigin.y + yOffset
+        );
+
+}

@@ -4,6 +4,7 @@
 #pragma once
 
 #include <list>
+#include <memory>
 #include <string>
 
 class Subject;
@@ -34,8 +35,8 @@ protected:
 class Subject {
 public:
     virtual ~Subject();
-    virtual void attach(Observer* theObserver);
-    virtual void detach(Observer* theObserver);
+    virtual void attach(std::unique_ptr<Observer> theObserver);
+    virtual void detach(std::unique_ptr<Observer> theObserver);
     virtual void notify(const std::string& thePropertyName);
 protected:
     Subject();

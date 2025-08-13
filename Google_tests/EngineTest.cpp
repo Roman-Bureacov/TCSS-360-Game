@@ -135,3 +135,45 @@ TEST(EngineTest, AttackingInRange) {
 
     EXPECT_FALSE(d2->isAlive());
 }
+
+TEST(EngineTest, InteractionTest) {
+    int* event = new int(0);
+    auto d = new Dummy();
+
+    struct i : public Interactable {
+        int* myEvent;
+
+        explicit i(Hitbox hitbox) : Interactable(hitbox) {};
+
+        void interact() override {
+            (*myEvent)++;
+        }
+
+    };
+
+    d->setHitbox(10,10);
+    d->setDirection(util::EAST);
+    d->setX(0);
+    d->setY(0);
+    auto lever = new i(Hitbox(10, 0, 20, 20));
+    lever->myEvent = event;
+
+    Bitz::registerInteractable(lever);
+    Bitz::registerCharacter(d);
+
+    Bitz::enqueueInteractEvent(d);
+    auto clockEnder = new Dummy();
+    Bitz::enqueueEvent(new Event(
+        1,
+        []() -> void { Clock::setActive(false); },
+        *clockEnder
+    ));
+
+    Clock::setActive(true);
+    Clock::runClock();
+
+    EXPECT_EQ((*event), 1);
+    delete d;
+    delete clockEnder;
+    delete lever;
+}

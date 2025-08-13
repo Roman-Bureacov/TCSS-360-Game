@@ -9,6 +9,10 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <iostream>
+
+
+#include "AbstractCharacter.h"
 #include "DungeonTextures.h"
 
 
@@ -17,6 +21,12 @@ class Room final {
     friend class ConcreteRoomBuilder;
 public:
     void generateNonExistingRoom();
+
+    void generateNonExsistingRoom();
+    void generateCharacters();
+
+
+
     void generateExistingRoom();
     void initializeRoom();
 
@@ -29,6 +39,8 @@ public:
     bool getSouth() const;
     bool getWest() const;
     std::string getSerialRoomMap() const;
+    int getRoomSize() const;
+    std::vector<std::shared_ptr<AbstractCharacter>> getCharacters() const;
 
     void setRoomID(int roomID);
     void setNorth(bool north);
@@ -48,6 +60,8 @@ private:
     //IF IT IS NOT I will personally find you and
     //ver politely ask you to fix that.
     std::vector<std::vector<DunText::DungeonTile>> roomMap;
+    std::vector<std::shared_ptr<AbstractCharacter>> characters;
+
 
     //Non-active memory.
     std::vector<int> characterIDs;
@@ -61,12 +75,13 @@ private:
     bool roomEast;
     bool roomWest;
     bool roomSouth;
+    int enemyAmount;
     int roomID;
 
     //2 blocks for the border, and 13 for the interior.
     //The reason it's an odd number is for the door to be centered.
-    const int roomSize = 15;
-    const int doorLocation = (roomSize - 1) / 2;
+    static constexpr int roomSize = 15;
+    static constexpr int doorLocation = (roomSize - 1) / 2;
 
     //For testing
     void printRoomMap() const;
@@ -87,6 +102,7 @@ public:
     virtual RoomBuilder& setRoomWest(bool west) = 0;
     virtual RoomBuilder& setRoomSouth(bool south) = 0;
     virtual RoomBuilder& setRoomId(int id) = 0;
+    virtual RoomBuilder& setEnemyAmount(int amount) = 0;
     virtual RoomBuilder& setGenerated(bool alreadyMade) = 0;
 
     virtual std::shared_ptr<Room> build() = 0;
@@ -101,6 +117,7 @@ public:
     ConcreteRoomBuilder& setRoomWest(bool west) override;
     ConcreteRoomBuilder& setRoomSouth(bool south) override;
     ConcreteRoomBuilder& setRoomId(int id) override;
+    ConcreteRoomBuilder& setEnemyAmount(int enAmount) override;
     ConcreteRoomBuilder& setGenerated(bool alreadyMade) override;
     std::shared_ptr<Room> build() override;
 
@@ -112,6 +129,7 @@ private:
     bool alreadyGenerated = false;
 
     int roomID = 0;
+    int amount = 0;
 
 };
 

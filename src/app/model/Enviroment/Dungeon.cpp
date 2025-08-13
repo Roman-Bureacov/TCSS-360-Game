@@ -4,12 +4,11 @@
 
 #include "../../../include/Dungeon.h"
 
+#include <unordered_set>
+
 std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
 
-/**
- * This controls the amount of dungeons, for the singleton pattern.
- * @return Returns a pointer to the dungeon instance.
- */
+
 
 Dungeon* Dungeon::DungeonInstance() {
 
@@ -19,22 +18,16 @@ Dungeon* Dungeon::DungeonInstance() {
     }
 
 
-    return instance;
+    return instance.get();
 }
 
-/**
- * Does all the setup for the dungeon.
- * @param dbManager This is a pointer to the database
- */
+
 void Dungeon::initialize(const
     std::shared_ptr<DatabaseManager> &dbManager) {
     databaseManager = dbManager;
     this->generateDungeon();
 }
 
-/**
- * Generates the dungeon.
- */
 void Dungeon::generateDungeon() {
 
     if (!databaseManager) {
@@ -75,33 +68,32 @@ void Dungeon::generateDungeon() {
 }
 
 
-/**
- * This changes the current room on screen.
- * @param roomID room to change to.
- */
+
 void Dungeon::setCharacterRoom(const int roomID) {
     currentRoom = databaseManager->loadRoom(roomID);
-    notify();
+
+    this->notify(PROPERTY_ROOM_CHANGE);
 }
 
-/**
- * This returns a map of the ids from the dungeon.
- * @return 2D vector of the dungeons ids.
- */
+void Dungeon::updateRoomEntities(std::unordered_set<AbstractCharacter *> entities) {
+    // TODO: database implementation
+}
+
+
 std::vector<std::vector<int>> Dungeon::getMap() {
     return idMap;
 
 }
 
-/**
- * This will return the current room on the screen.
- * @return The current room on the screen.
- */
+
 std::shared_ptr<Room> Dungeon::getCurrentRoom() {
     return currentRoom;
 }
 
-/**
- * Constructs the object.
- */
-Dungeon::Dungeon() {}
+
+Dungeon::Dungeon() {
+    this->generateDungeon();
+
+}
+
+
