@@ -21,6 +21,12 @@ class Room final {
     friend class ConcreteRoomBuilder;
 public:
     void generateNonExistingRoom();
+
+    void generateNonExsistingRoom();
+    void generateCharacters();
+
+
+
     void generateExistingRoom();
     void initializeRoom();
 
@@ -34,6 +40,7 @@ public:
     bool getWest() const;
     std::string getSerialRoomMap() const;
     int getRoomSize() const;
+    std::vector<std::shared_ptr<AbstractCharacter>> getCharacters() const;
 
     void setRoomID(int roomID);
     void setNorth(bool north);
@@ -53,6 +60,8 @@ private:
     //IF IT IS NOT I will personally find you and
     //ver politely ask you to fix that.
     std::vector<std::vector<DunText::DungeonTile>> roomMap;
+    std::vector<std::shared_ptr<AbstractCharacter>> characters;
+
 
     //Non-active memory.
     std::vector<int> characterIDs;
