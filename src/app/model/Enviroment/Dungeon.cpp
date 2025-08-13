@@ -4,7 +4,7 @@
 
 #include "../../../include/Dungeon.h"
 
-
+#include <unordered_set>
 
 std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
 
@@ -75,6 +75,10 @@ void Dungeon::setCharacterRoom(const int roomID) {
     this->notify(PROPERTY_ROOM_CHANGE);
 }
 
+void Dungeon::updateRoomEntities(std::unordered_set<AbstractCharacter *> entities) {
+    // TODO: database implementation
+}
+
 
 std::vector<std::vector<int>> Dungeon::getMap() {
     return idMap;
@@ -87,4 +91,9 @@ std::shared_ptr<Room> Dungeon::getCurrentRoom() {
 }
 
 
-Dungeon::Dungeon() {}
+Dungeon::Dungeon() {
+    this->generateDungeon();
+
+}
+
+

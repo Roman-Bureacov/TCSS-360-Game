@@ -11,6 +11,8 @@
 
 #include "Event.h"
 #include "AbstractCharacter.h"
+#include "Dungeon.h"
+#include "Interactable.h"
 
 
 /**
@@ -19,18 +21,30 @@
  * @author Roman Bureacov
  * @version July 2025
  */
-class Bitz {
+class Bitz final {
     friend class Clock;
 
     Bitz() = delete;
 private:
     /** The list of characters active. */
     static std::unordered_set<AbstractCharacter*> entities;
+    static std::unordered_set<Interactable*> interactables;
     /** The queue representing the events to be put into the process queue. */
     static std::unordered_map<const AbstractCharacter*, Event*> eventQueue;
     /** The queue representing the events currently being processed. */
     static std::unordered_map<const AbstractCharacter*, Event*> eventProcessQueue;
+    /** The thread lock for the event queue. */
     static std::mutex eventQueueMutex;
+    /** The dungeon generator. */
+    static Dungeon& dungeonGenerator;
+    /** The player character. */
+    static AbstractCharacter* player;
+    /** the current room instance. */
+    static Room* currentRoom;
+    /** The units per tile from the dungeon. */
+    static constexpr int tileSize = 100;
+    /** The side length of the room. */
+    static int roomSize;
 
     /**
      * Processes the enqueued single events and persistent events.
@@ -60,10 +74,36 @@ public:
     static void enqueueAttackEvent(AbstractCharacter* theCharacter);
 
     /**
-     * Registers a character with the engine to make it aware of said character
+     * Tells the engine that the character wants to interact and
+     * should perform hitbox detection for where they are interacting.
+     * @param theCharacter the character than is interacting
+     */
+    static void enqueueInteractEvent(AbstractCharacter* theCharacter);
+
+    /**
+     * Registers a character with the engine to make it aware of said
+     * character when it comes to hitbox detection.
      * @param theCharacter the character that the engine should be aware of
      */
     static void registerCharacter(AbstractCharacter* theCharacter);
+
+    /**
+     * Registers a character as the main player into the engine.
+     * @param theCharacter the character that will act as the player
+     */
+    static void registerPlayer(AbstractCharacter* theCharacter);
+
+    /**
+     * Registers an interactable that may be used in events.
+     * @param theInteractable hte interactable to register
+     */
+    static void registerInteractable(Interactable* theInteractable);
+
+    /**
+     * loads the dungeon room into the engine.
+     * @param theRoomID the new room to load and its entities
+     */
+    static void loadDungeonRoom(int theRoomID);
 };
 
 #endif //ENG_H

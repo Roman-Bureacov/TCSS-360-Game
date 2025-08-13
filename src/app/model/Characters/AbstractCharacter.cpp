@@ -19,7 +19,8 @@ AbstractCharacter::AbstractCharacter(
       myBaseMovement(theMovementSpeed),
       myCurrentMovement(theMovementSpeed),
       myHitbox(Hitbox(util::Point(), 100, 100)),
-      myDirection(util::NORTH) {
+      myDirection(util::NORTH),
+      myInteractionHitbox(10, 10) {
 
     myWeapon = nullptr;
 }
@@ -145,44 +146,40 @@ void AbstractCharacter::setDirection(const util::Direction theDirection) {
 
 const Hitbox& AbstractCharacter::getAttackHitbox() const {
 
-    Hitbox* hb;
-    int xOffset;
-    int yOffset;
-    const int h = myHitbox.getHeight();
-    const int w = myHitbox.getWidth();
+        Hitbox* hb;
 
-    // myDimension - (myDimension + weapDimension)/2
-    // simplified to (myDimension - weapDimension)/2
-    switch (myDirection) {
-        case util::NORTH:
-            hb = &myWeapon->hitboxNorth;
-            xOffset = (w - hb->getWidth()) / 2;
-            yOffset = h;
-            break;
-        case util::EAST:
-            hb = &myWeapon->hitboxEast;
-            xOffset = w;
-            yOffset = (h - hb->getHeight()) / 2;
-            break;
-        case util::SOUTH:
-            hb = &myWeapon->hitboxSouth;
-            xOffset = (w - hb->getWidth()) / 2;
-            yOffset = -h;
-            break;
-        case util::WEST:
-            hb = &myWeapon->hitboxWest;
-            xOffset = -w;
-            yOffset = (h - hb->getHeight()) / 2;
-            break;
-        default: throw new std::logic_error("Bad direction in getAttackHitbox");
-    }
+        // myDimension - (myDimension + weapDimension)/2
+        // simplified to (myDimension - weapDimension)/2
+        switch (myDirection) {
+            case util::NORTH:
+                hb = &myWeapon->hitboxNorth;
+                myHitbox.project(*hb, util::NORTH);
+                break;
+            case util::EAST:
+                hb = &myWeapon->hitboxEast;
+                myHitbox.project(*hb, util::EAST);
+                break;
+            case util::SOUTH:
+                hb = &myWeapon->hitboxSouth;
+                myHitbox.project(*hb, util::SOUTH);
+                break;
+            case util::WEST:
+                hb = &myWeapon->hitboxWest;
+                myHitbox.project(*hb, util::WEST);
+                break;
+            default: throw new std::logic_error("Bad direction in getAttackHitbox");
+        }
 
-    hb->setOrigin(
-            getX() + xOffset,
-            getY() + yOffset
-        );
+        return *hb;
 
-    return *hb;
+}
 
+void AbstractCharacter::setInteractionHitbox(const int theWidth, const int theHeight) {
+    myInteractionHitbox = Hitbox(theWidth, theHeight);
+}
+
+const Hitbox& AbstractCharacter::getInteractionHitbox() const {
+    myHitbox.project(myInteractionHitbox, myDirection);
+    return myInteractionHitbox;
 }
 

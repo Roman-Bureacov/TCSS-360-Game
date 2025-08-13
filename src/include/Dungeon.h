@@ -6,7 +6,7 @@
 #define DUNGEON_H
 
 
-
+#include <unordered_set>
 
 #include "Room.h"
 #include "ObserverPattern.h"
@@ -55,6 +55,14 @@ public:
     */
     void setCharacterRoom(int roomID);
 
+    /**
+     * Updates the state of this room with the new set of entities
+     * to set in persistent storage.
+     * @param entities the set of entities in this room
+     */
+    void updateRoomEntities(std::unordered_set<AbstractCharacter*> entities);
+
+
 private:
     /**
      * Constructs the object.
@@ -71,7 +79,7 @@ private:
     //Would be More complex.
     const int dungeonSize = 10;
     const int dungeonIdRange = 100;
-    const int rowIndexMult = 10;
+    const int rowIndexMult = 100;
     const int startingRoomId = 100;
 
     //These are the property changes events
