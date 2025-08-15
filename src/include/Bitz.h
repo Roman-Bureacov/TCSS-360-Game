@@ -104,6 +104,18 @@ public:
      * @param theRoomID the new room to load and its entities
      */
     static void loadDungeonRoom(int theRoomID);
+
+    /**
+     * Retrieves characters that have been registered with the engine.
+     * @return the set of character entities registered with the engine
+     */
+    static const std::unordered_set<AbstractCharacter*>& getEntities();
+
+    /**
+     * Retrieves interactable objects that have been registered with the engine.
+     * @return the set of interactables registered with the engine
+     */
+    static const std::unordered_set<Interactable*>& getInteractables();
 };
 
 #endif //ENG_H
