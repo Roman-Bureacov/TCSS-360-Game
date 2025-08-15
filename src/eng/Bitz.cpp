@@ -15,6 +15,8 @@ std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventQueue;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventProcessQueue;
 std::mutex Bitz::eventQueueMutex;
 Dungeon& Bitz::dungeonGenerator = *Dungeon::DungeonInstance();
+Room* Bitz::currentRoom;
+int Bitz::roomSize;
 
 void Bitz::processEvents() {
     std::lock_guard lock(eventQueueMutex);
@@ -196,4 +198,12 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     // position others
     for (const auto& character : currentRoom->getCharacters())
         registerCharacter(character.get());
+}
+
+const std::unordered_set<AbstractCharacter *> & Bitz::getEntities() {
+    return entities;
+}
+
+const std::unordered_set<Interactable *> & Bitz::getInteractables() {
+    return interactables;
 }
