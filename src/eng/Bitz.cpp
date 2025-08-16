@@ -102,6 +102,123 @@ void Bitz::enqueueInteractEvent(AbstractCharacter *theCharacter) {
         ));
 }
 
+void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredForward) {
+    enqueueEvent(new Event(
+        1,
+        [theCharacter, theDesiredForward]() -> void {
+            // create a projection of the movement
+            int projWidth;
+            int projHeight;
+            int projX = theCharacter->getX();
+            int projY = theCharacter->getY();
+            const util::Direction d = theCharacter->getDirection();
+            switch (d) {
+                case util::NORTH:
+                    projWidth = theCharacter->getHitbox().getWidth();
+                    projHeight = theDesiredForward;
+                    break;
+                case util::EAST:
+                    projWidth = theDesiredForward;
+                    projHeight = theCharacter->getHitbox().getHeight();
+                    break;
+                case util::SOUTH:
+                    projY -= theDesiredForward;
+                    projWidth = theCharacter->getHitbox().getWidth();
+                    projHeight = theDesiredForward;
+                    break;
+                case util::WEST:
+                    projX -= theDesiredForward;
+                    projWidth = theDesiredForward;
+                    projHeight = theCharacter->getHitbox().getHeight();
+                    break;
+                default: throw new std::logic_error("Unknown direction enum");
+            }
+
+            // adjust parameters to fit the room
+            projX = std::min(0, projX);
+            projY = std::min(0, projY);
+            projWidth = std::min(roomSize - projX, projWidth);
+            projHeight = std::min(roomSize - projY, projHeight);
+            // create the projection
+            Hitbox* projection = new Hitbox(projX, projY, projWidth, projHeight);
+
+            // find the minimum possible distance to travel
+            // find the intersections
+            for (const AbstractCharacter* c : entities) {
+                if (projection->intersects(c->getHitbox())) {
+                    setMin(projection, c->getHitbox(), d);
+                }
+            }
+            for (const Interactable* i : interactables) {
+                if (projection->intersects((i->getHitbox()))) {
+                    setMin(projection, i->getHitbox(), d);
+                }
+            }
+
+            // position character appropriately
+            switch (d) {
+                case util::NORTH:
+                    theCharacter->setY(
+                        projection->getOrigin().y
+                        + theCharacter->getHitbox().getHeight() - projection->getHeight()
+                    );
+                    break;
+                case util::EAST:
+                    theCharacter->setX(
+                        projection->getOrigin().x
+                        + theCharacter->getHitbox().getWidth() - projection->getWidth()
+                    );
+                    break;
+                case util::SOUTH:
+                    theCharacter->setY(projection->getOrigin().y);
+                    break;
+                case util::WEST:
+                    theCharacter->setX(projection->getOrigin().x);
+                    break;
+                default: throw new std::logic_error("Unknown direction enum");
+            }
+
+            // cleanup
+            delete projection;
+        },
+        *theCharacter
+    ));
+}
+
+void Bitz::setMin(const Hitbox* theProjection, const Hitbox &theIntersection, const util::Direction theDirection) {
+    int minX = theProjection->getOrigin().x;
+    int minY = theProjection->getOrigin().y;
+    int minHeight = theProjection->getHeight();
+    int minWidth = theProjection->getWidth();
+
+    int intersectX;
+    int intersectY;
+    int intersectW;
+    int intersectH;
+    switch (theDirection) {
+        case util::NORTH:
+            minHeight = minY - theIntersection.getOrigin().y;
+            break;
+        case util::EAST:
+            minWidth = minX - theIntersection.getOrigin().x;
+            break;
+        case util::SOUTH:
+            intersectY = theIntersection.getOrigin().y;
+            intersectH = theIntersection.getHeight();
+            minHeight = minHeight - (intersectY + intersectH - minY);
+            minY = intersectY + intersectH;
+            break;
+        case util::WEST:
+            intersectX = theIntersection.getOrigin().x;
+            intersectW = theIntersection.getWidth();
+            minWidth = minWidth - (intersectX + intersectW - minX);
+            minX = intersectX + intersectW;
+            break;
+        default: throw new std::logic_error("Unknown direction enum");
+    }
+    theProjection = new Hitbox(minX, minY, minWidth, minHeight);
+}
+
 void Bitz::registerCharacter(AbstractCharacter* theCharacter) {
     entities.insert(theCharacter);
 }

@@ -177,3 +177,35 @@ TEST(EngineTest, InteractionTest) {
     delete clockEnder;
     delete lever;
 }
+
+TEST(EngineTest, MovementTest) {
+    auto d1 = new Dummy();
+    auto d2 = new Dummy();
+
+    auto hb = new Hitbox(10, 10);
+    d1->setHitbox(*hb);
+    d2->setHitbox(*hb);
+
+    d1->setX(0); d1->setY(0);
+    d2->setX(50); d2->setY(0);
+
+    d1->setDirection(util::EAST);
+
+    // no collision problems should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 25);
+    EXPECT_EQ(d1->getY(), 0);
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 50 - hb->getWidth());
+    EXPECT_EQ(d1->getY(), 0);
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 50 - hb->getWidth());
+    EXPECT_EQ(d1->getY(), 0);
+}

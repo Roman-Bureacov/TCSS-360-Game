@@ -51,6 +51,13 @@ private:
      */
     static void processEvents();
 
+    /**
+     * Helper function that adjusts the projection hitbox to be less than that of the other.
+     * @param theProjection the projection to set the minimum of
+     * @param theIntersection the intersecting hitbox to resize with respect to
+     * @param theDirection the direction to resize towards
+     */
+    static void setMin(const Hitbox* theProjection, const Hitbox& theIntersection, util::Direction theDirection);
 public:
 
 
@@ -79,6 +86,15 @@ public:
      * @param theCharacter the character than is interacting
      */
     static void enqueueInteractEvent(AbstractCharacter* theCharacter);
+
+    /**
+     * Enqueues a movement event for the character provided that will attempt to move
+     * them in the amount of space desired. The engine will perform collision and boundary
+     * checks accordingly and move the character appropriately.
+     * @param theCharacter the character that is trying to move
+     * @param theDesiredForward the amount the character should move, may be positive or negative
+     */
+    static void enqueueMovementEvent(AbstractCharacter* theCharacter, int theDesiredForward);
 
     /**
      * Registers a character with the engine to make it aware of said

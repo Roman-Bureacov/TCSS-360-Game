@@ -27,7 +27,6 @@ add_executable(TCSS-360-Game src/main.cpp
         src/eng/Clock.cpp
         src/include/AbstractCharacter.h
         src/include/Utils.h
-        src/app/model/Characters/Weapons/Hitbox.cpp
         src/include/Hitbox.h
         src/app/model/Characters/AbstractCharacter.cpp
         src/include/Bitz.h
@@ -36,7 +35,6 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/model/Characters/Dummy.h
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
-        src/app/model/Characters/Weapons/Weapon.h
         src/app/model/Enviroment/Interactable.cpp
         src/include/Interactable.h
         src/app/model/Enviroment/Door.h

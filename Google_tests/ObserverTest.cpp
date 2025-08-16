@@ -27,7 +27,7 @@ TEST(ObserverTest, SubjectIsNotified) {
     A a = A();
     B b = B();
 
-    b.attach(&a);
+    b.attach(std::unique_ptr<Observer>(&a));
 
     b.notify(testString);
 

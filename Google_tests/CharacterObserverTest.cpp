@@ -38,7 +38,7 @@ protected:
     DerivativeDummy *d2 = new DerivativeDummy();
 
     void SetUp() override {
-        d1->attach(d2);
+        d1->attach(std::unique_ptr<Observer>(d2));
     }
 
     void TearDown() override {
