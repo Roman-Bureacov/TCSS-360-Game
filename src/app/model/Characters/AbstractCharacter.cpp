@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#include "../ID_GEN.h"
+#include "../../../include/ID_GEN.h"
 
 AbstractCharacter::AbstractCharacter(
     const std::string& theName,

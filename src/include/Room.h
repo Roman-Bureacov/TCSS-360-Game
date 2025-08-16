@@ -49,10 +49,11 @@ public:
     void setSerialRoomMap(const std::string &map);
 
     ~Room() = default;
+    Room();
 
 private:
 
-    Room();
+
 
     //This should be read by the GUI for the room
     //IF IT IS NOT I will personally find you and
@@ -73,7 +74,6 @@ private:
     bool roomEast;
     bool roomWest;
     bool roomSouth;
-    int enemyAmount;
     int roomID;
 
     //2 blocks for the border, and 13 for the interior.
@@ -100,7 +100,6 @@ public:
     virtual RoomBuilder& setRoomWest(bool west) = 0;
     virtual RoomBuilder& setRoomSouth(bool south) = 0;
     virtual RoomBuilder& setRoomId(int id) = 0;
-    virtual RoomBuilder& setEnemyAmount(int amount) = 0;
     virtual RoomBuilder& setGenerated(bool alreadyMade) = 0;
 
     virtual std::shared_ptr<Room> build() = 0;
@@ -115,7 +114,6 @@ public:
     ConcreteRoomBuilder& setRoomWest(bool west) override;
     ConcreteRoomBuilder& setRoomSouth(bool south) override;
     ConcreteRoomBuilder& setRoomId(int id) override;
-    ConcreteRoomBuilder& setEnemyAmount(int enAmount) override;
     ConcreteRoomBuilder& setGenerated(bool alreadyMade) override;
     std::shared_ptr<Room> build() override;
 
@@ -127,8 +125,6 @@ private:
     bool alreadyGenerated = false;
 
     int roomID = 0;
-    int amount = 0;
-
 };
 
 

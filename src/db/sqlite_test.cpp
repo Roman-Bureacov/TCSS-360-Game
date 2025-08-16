@@ -2,7 +2,7 @@
 // Created by Kyler on 7/24/2025.
 // Used to showcase db functions at work
 
-#include "sqlite_test.h"
+#include "../include/sqlite_test.h"
 #include <iostream>
 #include "sqlite3.h"
 

@@ -4,8 +4,8 @@
 
 #ifndef DOOR_H
 #define DOOR_H
-#include "../../../include/Bitz.h"
-#include "../../../include/Interactable.h"
+#include "Bitz.h"
+#include "Interactable.h"
 
 class Door : public Interactable {
 private:

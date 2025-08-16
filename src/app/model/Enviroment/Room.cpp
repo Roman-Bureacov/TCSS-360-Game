@@ -247,7 +247,7 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
 
 std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 
-    auto room = std::shared_ptr<Room>(new Room());
+    auto room = std::make_shared<Room>();
 
     room->setNorth(roomNorth);
     room->setEast(roomEast);

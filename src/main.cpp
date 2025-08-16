@@ -12,7 +12,7 @@
 
 #include "app/model/Characters/Dummy.h"
 
-#include "app/view/View.h"
+#include "include/View.h"
 
 #include "include/Bitz.h"
 #include "include/Clock.h"

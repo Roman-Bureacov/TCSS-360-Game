@@ -56,6 +56,35 @@ void DatabaseManager::insertRoom(Room &room) const {
     sqlite3_finalize(stmt);
 }
 
+//TODO:
+
+void DatabaseManager::insertCharacter(AbstractCharacter &character) {
+}
+
+void DatabaseManager::insertCharacterType(AbstractCharacter &character) {
+}
+
+std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int roomId) {
+}
+
+std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int charType) {
+}
+
+void DatabaseManager::createActiveCharacterTableIfNotExists() {
+}
+
+void DatabaseManager::createTypeTableIfNotExists() {
+}
+
+void DatabaseManager::saveRoomTable() {
+}
+
+void DatabaseManager::saveActiveCharacter() {
+}
+
+void DatabaseManager::saveTypeTable() {
+}
+
 /**
  * This loads a room from the database.
  * @param id this is the id of the room to be loaded.
