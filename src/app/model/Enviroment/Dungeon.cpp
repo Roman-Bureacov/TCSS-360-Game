@@ -23,8 +23,9 @@ Dungeon* Dungeon::DungeonInstance() {
 
 
 void Dungeon::initialize(const
-    std::shared_ptr<DatabaseManager> &dbManager) {
+    std::shared_ptr<DatabaseManager> &dbManager, const std::shared_ptr<Bitz> &bitz) {
     databaseManager = dbManager;
+    engine = bitz;
     this->generateDungeon();
 }
 

@@ -17,36 +17,142 @@
 
 
 
+/**
+ * This is the room class, it creates the rooms the player will be within.
+ *
+ * @author Riley Hopper
+ * @version July 2025
+ */
 class Room final {
     friend class ConcreteRoomBuilder;
 public:
-    void generateNonExsistingRoom();
-    void generateCharacters();
+    /**
+     * This generates a room that doesn't already exist
+     */
+    void generateNonExistingRoom();
 
-
-
+    /**
+     * This generates a room from the database.
+     */
     void generateExistingRoom();
+
+
+    /**
+     * This initializes a room this will
+     * either create a new room or an existing one.
+     */
     void initializeRoom();
 
-    //This is for storing, and retriving textures.
+    /**
+     * Turns the tiles into a serializable
+     * string.
+     */
     void serializeRoomMap();
 
+    /**
+     *
+     * @return rooms ID
+     */
     int getRoomID() const;
-    bool getNorth() const;
-    bool getEast() const;
-    bool getSouth() const;
-    bool getWest() const;
-    std::string getSerialRoomMap() const;
-    int getRoomSize() const;
-    std::vector<std::shared_ptr<AbstractCharacter>> getCharacters() const;
 
+    /**
+     *
+     * @return A bool of it there is a room to the north.
+     */
+    bool getNorth() const;
+
+    /**
+     *
+     * @return A bool of it there is a room to the east.
+     */
+    bool getEast() const;
+
+    /**
+     *
+     * @return A bool of it there is a room to the south.
+     */
+    bool getSouth() const;
+
+    /**
+     *
+     * @return A bool of it there is a room to the west.
+     */
+    bool getWest() const;
+
+    /**
+     *
+     * @return a string of the room tile.
+     */
+    std::string getSerialRoomMap() const;
+
+    /**
+     *
+     * @return The size of the room.
+     */
+    int getRoomSize() const;
+
+    /**
+     * Returns the ids of the characters in the room.
+     * @return A vector of character ids
+     */
+    std::vector<int> getCharacters() const;
+
+    /**
+     * Sets the rooms ID.
+     * @param roomID ID of this room
+     */
     void setRoomID(int roomID);
+
+    /**
+     * Sets a room to the north.
+     * @param north bool for if there is a room to the north.
+     */
     void setNorth(bool north);
+    /**
+     * Sets a room to the east.
+     * @param east bool for if there is a room to the east.
+     */
     void setEast(bool east);
+    /**
+     * Sets a room to the south.
+     * @param south bool for if there is a room to the south.
+     */
     void setSouth(bool south);
+    /**
+     * Sets a room to the west.
+     * @param west bool for if there is a room to the west.
+     */
     void setWest(bool west);
+
+    /**
+     * Sets the room to have already been made.
+     * @param alreadyMade a bool if the room has already been made.
+     */
     void setAlreadyGenerated(bool alreadyMade);
+
+    /**
+     * Sets the serial string of the rooms map.
+     * @param map a serialized string of the rooms map.
+     */
     void setSerialRoomMap(const std::string &map);
+
+    /**
+     *  Sets the id of character 1.
+     * @param ID id of the character
+     */
+    void setChar1ID(const int ID);
+
+    /**
+     *  Sets the id of character 2.
+     * @param ID id of the character
+     */
+    void setChar2ID(const int ID);
+
+    /**
+     *  Sets the id of character 3.
+     * @param ID id of the character
+     */
+    void setChar3ID(const int ID);
 
     ~Room() = default;
     Room();
@@ -54,25 +160,30 @@ public:
 private:
 
 
+    /**This is the id of the first enemy.*/
+    int charID1;
+    /**This is the id of the second enemy.*/
+    int charID2;
+    /**This is hte id of the third enemy.*/
+    int charID3;
 
-    //This should be read by the GUI for the room
-    //IF IT IS NOT I will personally find you and
-    //ver politely ask you to fix that.
+
+    /**This is the map as an enum tile map.*/
     std::vector<std::vector<DunText::DungeonTile>> roomMap;
-    std::vector<std::shared_ptr<AbstractCharacter>> characters;
 
-
-    //Non-active memory.
-    std::vector<int> characterIDs;
+    /**This is the serialized map of the room.*/
     std::string serialRoomMap;
 
-    //this determines how the room is made.
+    /**This sets if a room has already been generated.*/
     bool alreadyGenerated = false;
 
-    //Door flags
+    /**North room flag.*/
     bool roomNorth;
+    /**east room flag.*/
     bool roomEast;
+    /**West room flag.*/
     bool roomWest;
+    /**South room flag.*/
     bool roomSouth;
     int roomID;
 
@@ -101,6 +212,23 @@ public:
     virtual RoomBuilder& setRoomSouth(bool south) = 0;
     virtual RoomBuilder& setRoomId(int id) = 0;
     virtual RoomBuilder& setGenerated(bool alreadyMade) = 0;
+    /**
+    *  Sets the id of character 1.
+    * @param ID id of the character
+    */
+    virtual RoomBuilder& setChar1ID(int ID) = 0;
+
+    /**
+     *  Sets the id of character 2.
+     * @param ID id of the character
+     */
+    virtual RoomBuilder& setChar2ID(int ID) = 0;
+
+    /**
+     *  Sets the id of character 3.
+     * @param ID id of the character
+     */
+    virtual RoomBuilder& setChar3ID(int ID) = 0;
 
     virtual std::shared_ptr<Room> build() = 0;
 
@@ -115,6 +243,24 @@ public:
     ConcreteRoomBuilder& setRoomSouth(bool south) override;
     ConcreteRoomBuilder& setRoomId(int id) override;
     ConcreteRoomBuilder& setGenerated(bool alreadyMade) override;
+    /**
+   *  Sets the id of character 1.
+   * @param ID id of the character
+   */
+    ConcreteRoomBuilder&  setChar1ID(int ID) override;
+
+    /**
+     *  Sets the id of character 2.
+     * @param ID id of the character
+     */
+    ConcreteRoomBuilder&  setChar2ID(int ID) override;
+
+    /**
+     *  Sets the id of character 3.
+     * @param ID id of the character
+     */
+    ConcreteRoomBuilder& setChar3ID(int ID) override;
+
     std::shared_ptr<Room> build() override;
 
 private:
@@ -123,6 +269,12 @@ private:
     bool roomWest = true;
     bool roomSouth = true;
     bool alreadyGenerated = false;
+    /**This is the id of the first enemy.*/
+    int charID1;
+    /**This is the id of the second enemy.*/
+    int charID2;
+    /**This is hte id of the third enemy.*/
+    int charID3;
 
     int roomID = 0;
 };

@@ -6,7 +6,7 @@
 
 
 
-void Room::generateNonExsistingRoom() {
+void Room::generateNonExistingRoom() {
 
     //Awful algorithm.
     //(row, column) -> (i,j)
@@ -46,17 +46,16 @@ void Room::generateNonExsistingRoom() {
         }
     }
     this->alreadyGenerated = true;
-    //this->generateCharacters();
 }
 
-void Room::generateCharacters() {
 
-    //TODO
+std::vector<int> Room::getCharacters() const {
+    std::vector<int> characters = std::vector<int>();
 
+    characters.push_back(this->charID1);
+    characters.push_back(this->charID2);
+    characters.push_back(this->charID3);
 
-}
-
-std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
     return characters;
 }
 void Room::generateExistingRoom() {
@@ -87,7 +86,7 @@ void Room::initializeRoom() {
         //load data from database here
         this->generateExistingRoom();
     } else {
-        this->generateNonExsistingRoom();
+        this->generateNonExistingRoom();
     }
 }
 
@@ -105,14 +104,26 @@ void Room::serializeRoomMap() {
             else serialRoomMap.append(",");
         }
     }
-
 }
 
+void Room::setChar1ID(const int ID) {
+    charID1 = ID;
+}
+
+void Room::setChar2ID(const int ID) {
+    charID2 = ID;
+}
+
+void Room::setChar3ID(const int ID) {
+    charID3 = ID;
+}
 
 
 int Room::getRoomID() const {
     return roomID;
 }
+
+
 
 bool Room::getNorth() const {
     return roomNorth;
@@ -244,6 +255,20 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
     return *this;
 }
 
+ConcreteRoomBuilder & ConcreteRoomBuilder::setChar1ID(const int ID) {
+    charID1 = ID;
+    return *this;
+}
+
+ConcreteRoomBuilder & ConcreteRoomBuilder::setChar2ID(const int ID) {
+    charID2 = ID;
+    return *this;
+}
+
+ConcreteRoomBuilder & ConcreteRoomBuilder::setChar3ID(const int ID) {
+    charID3 = ID;
+    return *this;
+}
 
 std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 
@@ -255,6 +280,9 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
     room->setSouth(roomSouth);
     room->setRoomID(roomID);
     room->setAlreadyGenerated(alreadyGenerated);
+    room->setChar1ID(charID1);
+    room->setChar2ID(charID2);
+    room->setChar3ID(charID3);
 
     room->initializeRoom();
 
@@ -265,6 +293,10 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
     this->roomSouth = true;
     this->roomID = 0;
     this->alreadyGenerated = false;
+    this->charID1 = 0;
+    this->charID2 = 0;
+    this->charID3 = 0;
+
 
     return room;
 

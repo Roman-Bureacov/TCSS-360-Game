@@ -7,15 +7,22 @@
 
 
 #include <unordered_set>
+#include <vector>
+#include <iostream>
 
 #include "Room.h"
 #include "ObserverPattern.h"
 #include "DatabaseManager.h"
-#include <vector>
-#include <iostream>
+#include "Bitz.h"
 
 
 
+/**
+ * This is the dungeon, it constructs a dungeon, and its rooms.
+ *
+ * @author Riley Hopper
+ * @version July 2025
+ */
 class Dungeon final : public Subject {
 public:
 
@@ -27,9 +34,10 @@ public:
 
     /**
     * Does all the setup for the dungeon.
-    * @param dbManager This is a pointer to the database
+    * @param dbManager This is a pointer to the database.
+    * @param bitz This is a pointer to the engine.
     */
-    void initialize(const std::shared_ptr<DatabaseManager> &dbManager);
+    void initialize(const std::shared_ptr<DatabaseManager> &dbManager, const std::shared_ptr<Bitz> &bitz);
 
     /**
     * Generates the dungeon.
@@ -64,25 +72,33 @@ public:
 
 
 private:
-    /**
-     * Constructs the object.
-     */
+    /**Constructs the object.*/
     Dungeon();
+
+    /**This is the room builder for making rooms.*/
     ConcreteRoomBuilder roomBuilder;
+    /**A smart pointer to the current room the player is within.*/
     std::shared_ptr<Room> currentRoom;
+    /**A map of the dungeon represented as ids.*/
     std::vector<std::vector<int>> idMap;
 
+    /**This is the dungeons instance.*/
     static std::unique_ptr<Dungeon> instance;
+    /**This is the databaseManager object the dungeon will use.*/
     std::shared_ptr<DatabaseManager> databaseManager;
+    /**This is the engine that the dungeon is interaction with.*/
+    std::shared_ptr<Bitz> engine;
 
-    //Could possibly make it some people can choose dungeon size, but Ids.
-    //Would be More complex.
+    /**This is the size of the dungeon, 10 rooms by 10 rooms*/
     const int dungeonSize = 10;
+    /**This is the starting id value*/
     const int dungeonIdRange = 100;
+    /**Rows increase by 100 columns by 1, this will create unique ids for each room.*/
     const int rowIndexMult = 100;
+    /**This is the id of the players spawn room*/
     const int startingRoomId = 100;
 
-    //These are the property changes events
+    /**This is a room changed property changed event*/
     inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
 
 };
