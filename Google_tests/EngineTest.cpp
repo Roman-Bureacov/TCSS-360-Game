@@ -178,7 +178,40 @@ TEST(EngineTest, InteractionTest) {
     delete lever;
 }
 
-TEST(EngineTest, MovementTest) {
+
+TEST(EngineTest, MovementTestNorth) {
+    auto d1 = new Dummy();
+    auto d2 = new Dummy();
+
+    auto hb = new Hitbox(10, 10);
+    d1->setHitbox(*hb);
+    d2->setHitbox(*hb);
+
+    d1->setX(0); d1->setY(0);
+    d2->setX(0); d2->setY(50);
+
+    d1->setDirection(util::NORTH);
+
+    // no collision problems should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 0);
+    EXPECT_EQ(d1->getY(), 25);
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 0);
+    EXPECT_EQ(d1->getY(), 50 - hb->getHeight());
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 50 - hb->getHeight());
+    EXPECT_EQ(d1->getY(), 0);
+}
+
+TEST(EngineTest, MovementTestEast) {
     auto d1 = new Dummy();
     auto d2 = new Dummy();
 
@@ -207,5 +240,70 @@ TEST(EngineTest, MovementTest) {
     Bitz::enqueueMovementEvent(d1, 25);
 
     EXPECT_EQ(d1->getX(), 50 - hb->getWidth());
+    EXPECT_EQ(d1->getY(), 0);
+}
+
+
+TEST(EngineTest, MovementTestSouth) {
+    auto d1 = new Dummy();
+    auto d2 = new Dummy();
+
+    auto hb = new Hitbox(10, 10);
+    d1->setHitbox(*hb);
+    d2->setHitbox(*hb);
+
+    d1->setX(0); d1->setY(50);
+    d2->setX(0); d2->setY(0);
+
+    d1->setDirection(util::SOUTH);
+
+    // no collision problems should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 0);
+    EXPECT_EQ(d1->getY(), 25);
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 0);
+    EXPECT_EQ(d1->getY(), hb->getHeight());
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 0);
+    EXPECT_EQ(d1->getY(), hb->getHeight());
+}
+
+TEST(EngineTest, MovementTestWest) {
+    auto d1 = new Dummy();
+    auto d2 = new Dummy();
+
+    auto hb = new Hitbox(10, 10);
+    d1->setHitbox(*hb);
+    d2->setHitbox(*hb);
+
+    d1->setX(50); d1->setY(0);
+    d2->setX(0); d2->setY(0);
+
+    d1->setDirection(util::WEST);
+
+    // no collision problems should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), 25);
+    EXPECT_EQ(d1->getY(), 0);
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), hb->getWidth());
+    EXPECT_EQ(d1->getY(), 0);
+
+    // a collision problem should occur
+    Bitz::enqueueMovementEvent(d1, 25);
+
+    EXPECT_EQ(d1->getX(), hb->getWidth());
     EXPECT_EQ(d1->getY(), 0);
 }
