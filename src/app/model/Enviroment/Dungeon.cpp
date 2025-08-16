@@ -91,9 +91,6 @@ std::shared_ptr<Room> Dungeon::getCurrentRoom() {
 }
 
 
-Dungeon::Dungeon() {
-    this->generateDungeon();
-
-}
+Dungeon::Dungeon() {}
 
 
