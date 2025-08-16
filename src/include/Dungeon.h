@@ -14,6 +14,7 @@
 #include "ObserverPattern.h"
 #include "DatabaseManager.h"
 #include "Bitz.h"
+#include "NPC.h"
 
 
 

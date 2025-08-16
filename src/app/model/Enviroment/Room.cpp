@@ -48,7 +48,6 @@ void Room::generateNonExistingRoom() {
     this->alreadyGenerated = true;
 }
 
-
 std::vector<int> Room::getCharacters() const {
     std::vector<int> characters = std::vector<int>();
 
@@ -58,6 +57,7 @@ std::vector<int> Room::getCharacters() const {
 
     return characters;
 }
+
 void Room::generateExistingRoom() {
 
     roomMap.clear();
@@ -75,10 +75,7 @@ void Room::generateExistingRoom() {
         if (!row.empty()) roomMap.push_back(row);
     }
 
-
-
 }
-
 
 void Room::initializeRoom() {
 
@@ -106,24 +103,21 @@ void Room::serializeRoomMap() {
     }
 }
 
-void Room::setChar1ID(const int ID) {
+void Room::setChar1ID(const long long ID) {
     charID1 = ID;
 }
 
-void Room::setChar2ID(const int ID) {
+void Room::setChar2ID(const long long ID) {
     charID2 = ID;
 }
 
-void Room::setChar3ID(const int ID) {
+void Room::setChar3ID(const long long ID) {
     charID3 = ID;
 }
-
 
 int Room::getRoomID() const {
     return roomID;
 }
-
-
 
 bool Room::getNorth() const {
     return roomNorth;
@@ -255,17 +249,17 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
     return *this;
 }
 
-ConcreteRoomBuilder & ConcreteRoomBuilder::setChar1ID(const int ID) {
+ConcreteRoomBuilder & ConcreteRoomBuilder::setChar1ID(const long long ID) {
     charID1 = ID;
     return *this;
 }
 
-ConcreteRoomBuilder & ConcreteRoomBuilder::setChar2ID(const int ID) {
+ConcreteRoomBuilder & ConcreteRoomBuilder::setChar2ID(const long long ID) {
     charID2 = ID;
     return *this;
 }
 
-ConcreteRoomBuilder & ConcreteRoomBuilder::setChar3ID(const int ID) {
+ConcreteRoomBuilder & ConcreteRoomBuilder::setChar3ID(const long long ID) {
     charID3 = ID;
     return *this;
 }

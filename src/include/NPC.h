@@ -43,6 +43,10 @@ class Skeleton;
  */
 class NPC : public AbstractCharacter {
 public:
+
+    /** the property name for when the NPCs activity changes */
+    inline static const std::string PROPERTY_ACTIVE_CHANGED = "My activity changed";
+
     /**
      * Factory method to create a Goblin NPC.
      * @return Shared pointer to a new Goblin instance.
@@ -69,6 +73,8 @@ public:
 
     void Update(Subject *theChangedSubject, const std::string &thePropertyName) override;
 
+    void setIsActive(bool isActive);
+    bool getIsActive();
 
 
 
@@ -108,6 +114,9 @@ protected:
      * Direction to look at the player.
      */
     void lookAtPlayer();
+
+    /**This is if the NPC is active*/
+    bool active = false;
 
 
 };

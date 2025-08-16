@@ -10,8 +10,8 @@ NPC::NPC(const std::string& theName, int theMaxHealth, int theMovementSpeed)
 }
 
 void NPC::moveNPCToPlayer() {
-    int xDiff = this->getX() - player->getX();
-    int yDiff = this->getY() - player->getY();
+    const int xDiff = this->getX() - player->getX();
+    const int yDiff = this->getY() - player->getY();
 
     if (std::abs(xDiff) > std::abs(yDiff)) {
         if  (xDiff < 0) {
@@ -51,17 +51,26 @@ void NPC::attackPlayer() {
 
 bool NPC::canAttack() {
 
-    int xDiff = std::abs(this->getX() - player->getX());
-    int yDiff = std::abs(this->getY() - player->getY());
+    const int xDiff = std::abs(this->getX() - player->getX());
+    const int yDiff = std::abs(this->getY() - player->getY());
 
     return xDiff < 5 && yDiff < 5;
 
 }
 
+void NPC::setIsActive(const bool isActive) {
+    active = isActive;
+    notify(PROPERTY_ACTIVE_CHANGED);
+}
+
+bool NPC::getIsActive() {
+    return active;
+}
+
 void NPC::lookAtPlayer() {
 
-    int xDiff = this->getX() - player->getX();
-    int yDiff = this->getY() - player->getY();
+    const int xDiff = this->getX() - player->getX();
+    const int yDiff = this->getY() - player->getY();
 
     if (std::abs(xDiff) > std::abs(yDiff)) {
         if  (xDiff < 0) this->setDirection(util::Direction::EAST);
@@ -73,6 +82,10 @@ void NPC::lookAtPlayer() {
 }
 
 void NPC::takeAction() {
+
+    //If the NPC isn't active it will take no actions.
+    if (!active) return;
+
     if (canAttack()) {
         this->lookAtPlayer();
         attackPlayer();
@@ -107,6 +120,8 @@ Skeleton::Skeleton(
 // =========================
 // TimCapaul
 // =========================
+//TODO
+
 
 TimCapaul::TimCapaul()
     : NPC(TimCapaul::name, TimCapaul::maxHealth, TimCapaul::movementSpeed) {}

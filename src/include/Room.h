@@ -11,8 +11,6 @@
 #include <sstream>
 #include <iostream>
 
-
-#include "AbstractCharacter.h"
 #include "DungeonTextures.h"
 
 
@@ -140,19 +138,19 @@ public:
      *  Sets the id of character 1.
      * @param ID id of the character
      */
-    void setChar1ID(const int ID);
+    void setChar1ID(const long long ID);
 
     /**
      *  Sets the id of character 2.
      * @param ID id of the character
      */
-    void setChar2ID(const int ID);
+    void setChar2ID(const long long ID);
 
     /**
      *  Sets the id of character 3.
      * @param ID id of the character
      */
-    void setChar3ID(const int ID);
+    void setChar3ID(const long long ID);
 
     ~Room() = default;
     Room();
@@ -161,11 +159,11 @@ private:
 
 
     /**This is the id of the first enemy.*/
-    int charID1;
+    long long charID1;
     /**This is the id of the second enemy.*/
-    int charID2;
+    long long charID2;
     /**This is hte id of the third enemy.*/
-    int charID3;
+    long long charID3;
 
 
     /**This is the map as an enum tile map.*/
@@ -216,19 +214,19 @@ public:
     *  Sets the id of character 1.
     * @param ID id of the character
     */
-    virtual RoomBuilder& setChar1ID(int ID) = 0;
+    virtual RoomBuilder& setChar1ID(long long ID) = 0;
 
     /**
      *  Sets the id of character 2.
      * @param ID id of the character
      */
-    virtual RoomBuilder& setChar2ID(int ID) = 0;
+    virtual RoomBuilder& setChar2ID(long long ID) = 0;
 
     /**
      *  Sets the id of character 3.
      * @param ID id of the character
      */
-    virtual RoomBuilder& setChar3ID(int ID) = 0;
+    virtual RoomBuilder& setChar3ID(long long ID) = 0;
 
     virtual std::shared_ptr<Room> build() = 0;
 
@@ -247,19 +245,19 @@ public:
    *  Sets the id of character 1.
    * @param ID id of the character
    */
-    ConcreteRoomBuilder&  setChar1ID(int ID) override;
+    ConcreteRoomBuilder&  setChar1ID(long long ID) override;
 
     /**
      *  Sets the id of character 2.
      * @param ID id of the character
      */
-    ConcreteRoomBuilder&  setChar2ID(int ID) override;
+    ConcreteRoomBuilder&  setChar2ID(long long ID) override;
 
     /**
      *  Sets the id of character 3.
      * @param ID id of the character
      */
-    ConcreteRoomBuilder& setChar3ID(int ID) override;
+    ConcreteRoomBuilder& setChar3ID(long long ID) override;
 
     std::shared_ptr<Room> build() override;
 
@@ -270,11 +268,11 @@ private:
     bool roomSouth = true;
     bool alreadyGenerated = false;
     /**This is the id of the first enemy.*/
-    int charID1;
+    long long charID1;
     /**This is the id of the second enemy.*/
-    int charID2;
+    long long charID2;
     /**This is hte id of the third enemy.*/
-    int charID3;
+    long long charID3;
 
     int roomID = 0;
 };

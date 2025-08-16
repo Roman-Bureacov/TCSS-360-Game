@@ -31,6 +31,10 @@ void Dungeon::initialize(const
 
 void Dungeon::generateDungeon() {
 
+    if (!engine) {
+        throw std::runtime_error
+            ("Bitz is not found");
+    }
     if (!databaseManager) {
         throw std::runtime_error
             ("Database manager is not found");
@@ -48,6 +52,18 @@ void Dungeon::generateDungeon() {
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
             roomBuilder.setGenerated(false);
+
+            const auto char1 = NPC::skeletonFactory().get();
+            const auto char2 = NPC::skeletonFactory().get();
+            const auto char3 = NPC::skeletonFactory().get();
+
+            roomBuilder.setChar1ID(char1->getID());
+            roomBuilder.setChar2ID(char2->getID());
+            roomBuilder.setChar3ID(char3->getID());
+
+            Bitz::registerCharacter(char1);
+            Bitz::registerCharacter(char2);
+            Bitz::registerCharacter(char3);
 
             auto room = roomBuilder.build();
             //This will build the room and throw it in the database.
@@ -71,13 +87,39 @@ void Dungeon::generateDungeon() {
 
 
 void Dungeon::setCharacterRoom(const int roomID) {
+
     currentRoom = databaseManager->loadRoom(roomID);
 
     this->notify(PROPERTY_ROOM_CHANGE);
+
+
 }
 
 void Dungeon::updateRoomEntities(std::unordered_set<AbstractCharacter *> entities) {
-    // TODO: database implementation
+    long long char1 = currentRoom->getCharacters().at(0);
+    long long char2 = currentRoom->getCharacters().at(1);
+    long long char3 = currentRoom->getCharacters().at(2);
+
+    for (auto* c: entities) {
+        if (c) {
+            switch (c->getID()) {
+
+                case char1:
+                    //TODO
+                    break;
+                case char2:
+                    //TODO
+                    break;
+                case char3:
+                    //TODO
+                    break;
+            }
+        }
+    }
+
+
+    //TODO Current thinking is I need to take c make it an NPC and set it active
+    //also make the previous stuff not active.
 }
 
 

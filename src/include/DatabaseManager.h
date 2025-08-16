@@ -8,7 +8,13 @@
 #include <memory>
 #include <string>
 #include <sqlite3.h>
+#include <iostream>
+#include <stdexcept>
+#include <bits/ostream.tcc>
+
 #include "Room.h"
+#include "Bitz.h"
+
 
 /**
  * Class that handles database calls.
