@@ -7,29 +7,47 @@
 #define VIEW_H
 
 #include "SDL3/SDL.h"
+#include "../../include/AbstractCharacter.h"
+#include "../../include/Dungeon.h"
 
-void runWindow();
+/**
+ * This Structure allows View to keep current render information for Sprites
+**/
+struct SpriteData {
+    SDL_GPUTexture *texture;
+    float x, y;
+    float width, height;
+    float rotation;
+    bool visibleOnScreen;
 
-class View {
+    //16 by 16 is most assets in this game
+    SpriteData() : texture (nullptr), x(0), y(0), width(16), height(16), rotation(0), visibleOnScreen(false) {}
+};
+
+
+class View : public Observer {
 private:
-    //The window object
-    SDL_Window* window;
-    //Use the Graphics Device on Machine
-    SDL_GPUDevice* device;
-    //Is the window running?
+    //SDL Window Components
+    SDL_Window* myWindow;
+    SDL_GPUDevice* myDevice;
     bool isRunning;
 
-    // TODO: See if this is necessary
-    /*characterTexture(nullptr), graphicsPipeline(nullptr),
-        vertexBuffer(nullptr),
-        */
+    //Graphic Pipline Components
+    SDL_GPUGraphicsPipeline* myGraphicsPipeline;
+    SDL_GPUBuffer* myVertexBuffer;
+    SDL_GPUBuffer* myIndexBuffer;
+    SDL_GPUSampler* mySampler;
+
+    //Map of textures?
     //SDL_GPUTexture* characterTexture;
-    //SDL_GPUGraphicsPipeline* graphicsPipeline;
-    //SDL_GPUBuffer* vertexBuffer;
+
+    //Needs to track characters and dungeon
+
 
 public:
     //Create View with empty window, GPU device, and declare the window isn't running (false)
-    View() : window(nullptr), device(nullptr), isRunning(false) {}
+    View() : myWindow(nullptr), myDevice(nullptr), isRunning(false), myGraphicsPipeline(nullptr),
+        myVertexBuffer(nullptr), myIndexBuffer(nullptr), mySampler(nullptr) {}
 
     //Window and all GPU resources will close automatically w/ Deconstructor
     ~View() = default;
@@ -57,13 +75,17 @@ public:
     //UPDATE PARAMETERS so that specific sprites can be accessed. May need two IDs, the type of char
     //(i.e. monster, char, item) And the ID number.
     SDL_GPUTexture* loadTextures();
+    void createRenderingPipeline();
 
-    //Will use information given to it to draw the room that character + enemies are in
+    void observeDungeon(Dungeon* theDungeon);
+    void unobserveDungeon(Dungeon* theDungeon);
+    void observeCharacter(AbstractCharacter* theCharacter);
+    void unobserveCharacter(AbstractCharacter* theCharacter);
+
+    void Update(Subject* theChangedSubject, const std::string& thePropertyName);
+
     void drawRoom();
-
-    //Will use the information it knows of models to loadTextures on the screen
-    //Responsible for moving objects and updating sprites
-    void drawSprite(SDL_GPURenderPass* renderPass, SDL_GPUTexture* texture, float x, float y);
+    void drawSprite(SDL_GPURenderPass* theRenderPass, SDL_GPUTexture* theTexture, float theX, float theY);
 };
 
 
