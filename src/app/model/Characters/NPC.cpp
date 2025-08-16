@@ -38,6 +38,11 @@ void NPC::moveNPCToPlayer() {
 
 }
 
+void NPC::Update(Subject *theChangedSubject, const std::string &thePropertyName) {
+    //TODO
+
+}
+
 void NPC::attackPlayer() {
 
     Bitz::enqueueAttackEvent(this);
@@ -80,22 +85,31 @@ void NPC::takeAction() {
 // Goblin
 // =========================
 
-Goblin::Goblin()
-    : NPC(name, maxHealth, movementSpeed) {}
+Goblin::Goblin(
+            const std::string& theName, int theMaxHealth, int theMovementSpeed)
+            : NPC(theName, theMaxHealth, theMovementSpeed) {
+    name = theName;
+    movementSpeed = theMovementSpeed;
+    maxHealth = theMaxHealth;
+}
 
 // =========================
 // Skeleton
 // =========================
 
-Skeleton::Skeleton()
-    : NPC(name, maxHealth, movementSpeed) {}
-
+Skeleton::Skeleton(
+            const std::string& theName, int theMaxHealth, int theMovementSpeed)
+            : NPC(theName, theMaxHealth, theMovementSpeed) {
+    name = theName;
+    movementSpeed = theMovementSpeed;
+    maxHealth = theMaxHealth;
+}
 // =========================
 // TimCapaul
 // =========================
 
 TimCapaul::TimCapaul()
-    : NPC(name, maxHealth, movementSpeed) {}
+    : NPC(TimCapaul::name, TimCapaul::maxHealth, TimCapaul::movementSpeed) {}
 
 void TimCapaul::takeAction() {
     if (canAttack()) {
@@ -120,13 +134,18 @@ bool TimCapaul::canAttack() {
 // =========================
 
 std::shared_ptr<Goblin> NPC::goblinFactory() {
-    return std::make_shared<Goblin>();
+    return std::make_shared<Goblin>(
+        NPCStats::goblinName, NPCStats::goblinMaxHealth
+            , NPCStats::goblinMovementSpeed);
 }
 
+//TODO: Change to be modern Implimentation.
 std::shared_ptr<TimCapaul> NPC::timCapaulFactory() {
     return std::make_shared<TimCapaul>();
 }
 
 std::shared_ptr<Skeleton> NPC::skeletonFactory() {
-    return std::make_shared<Skeleton>();
+    return std::make_shared<Skeleton>(
+        NPCStats::skeletonName, NPCStats::skeletonMaxHealth
+            , NPCStats::skeletonMovementSpeed);
 }

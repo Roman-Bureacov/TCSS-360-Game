@@ -20,8 +20,6 @@
 class Room final {
     friend class ConcreteRoomBuilder;
 public:
-    void generateNonExistingRoom();
-
     void generateNonExsistingRoom();
     void generateCharacters();
 

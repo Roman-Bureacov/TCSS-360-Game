@@ -14,7 +14,7 @@ Dungeon* Dungeon::DungeonInstance() {
 
     //Breaks at this if
     if (instance == nullptr) {
-        instance = std::make_unique<Dungeon>();
+        instance =  std::unique_ptr<Dungeon>(new Dungeon());
     }
 
 
@@ -51,7 +51,7 @@ void Dungeon::generateDungeon() {
             auto room = roomBuilder.build();
             //This will build the room and throw it in the database.
             try {
-                databaseManager->insertRoom(room);
+                databaseManager->insertRoom(*room);
             }catch (std::runtime_error &e) {
                 std::cerr << "Failed to insert room: "
                     << e.what() << std::endl;

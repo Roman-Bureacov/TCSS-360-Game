@@ -87,7 +87,7 @@ void Room::initializeRoom() {
         //load data from database here
         this->generateExistingRoom();
     } else {
-        this->generateNonExistingRoom();
+        this->generateNonExsistingRoom();
     }
 }
 
@@ -247,7 +247,7 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
 
 std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 
-    auto room = std::make_shared<Room>();
+    auto room = std::shared_ptr<Room>(new Room());
 
     room->setNorth(roomNorth);
     room->setEast(roomEast);

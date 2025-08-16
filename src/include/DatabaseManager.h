@@ -23,7 +23,7 @@ public:
     ~DatabaseManager();
 
     //Insert, new member to table.
-    void insertRoom(std::shared_ptr<Room> &room);
+    void insertRoom(Room &room) const;
     void insertCharacter(AbstractCharacter &character);
     void insertCharacterType(AbstractCharacter &character);
 
@@ -47,6 +47,7 @@ public:
      * @return the weapon object associate with the ID
      */
     std::shared_ptr<Weapon> fetchWeapon(int theWeaponID) const;
+
 
 private:
     sqlite3 *db;

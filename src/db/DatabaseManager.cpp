@@ -27,7 +27,7 @@ std::shared_ptr<Weapon> DatabaseManager::fetchWeapon(int theWeaponID) const {
     // TODO: create weapon creation function
 }
 
-void DatabaseManager::insertRoom(Room &room) {
+void DatabaseManager::insertRoom(Room &room) const {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms
                         (id, north, south, east, west, serialMap)
@@ -40,14 +40,14 @@ void DatabaseManager::insertRoom(Room &room) {
         throw std::runtime_error(sqlite3_errmsg(db));
     }
 
-    room->serializeRoomMap();
+    room.serializeRoomMap();
 
-    sqlite3_bind_int(stmt, 1, room->getRoomID());
-    sqlite3_bind_int(stmt, 2, room->getNorth());
-    sqlite3_bind_int(stmt, 3, room->getSouth());
-    sqlite3_bind_int(stmt, 4, room->getEast());
-    sqlite3_bind_int(stmt, 5, room->getWest());
-    sqlite3_bind_text(stmt, 6, room->getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(stmt, 1, room.getRoomID());
+    sqlite3_bind_int(stmt, 2, room.getNorth());
+    sqlite3_bind_int(stmt, 3, room.getSouth());
+    sqlite3_bind_int(stmt, 4, room.getEast());
+    sqlite3_bind_int(stmt, 5, room.getWest());
+    sqlite3_bind_text(stmt, 6, room.getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         throw std::runtime_error(sqlite3_errmsg(db));

@@ -20,6 +20,17 @@ enum class NPCType {
     TimCapaul
 };
 
+struct NPCStats {
+    static const inline std::string goblinName = "Goblin";
+    static const inline int goblinMaxHealth = 50;
+    static const inline int goblinMovementSpeed = 10;
+
+    static const inline std::string skeletonName = "Skeleton";
+    static const inline int skeletonMaxHealth = 100;
+    static const inline int skeletonMovementSpeed = 10;
+
+};
+
 class Goblin;
 class TimCapaul;
 class Skeleton;
@@ -56,6 +67,11 @@ public:
      */
     virtual void takeAction();
 
+    void Update(Subject *theChangedSubject, const std::string &thePropertyName) override;
+
+
+
+
 protected:
     /**
      * Protected constructor used by derived NPCs.
@@ -63,7 +79,8 @@ protected:
      * @param theMaxHealth Maximum health
      * @param theMovementSpeed Base movement speed
      */
-    NPC(const std::string& theName, int theMaxHealth, int theMovementSpeed);
+    NPC(const std::string& theName
+        , int theMaxHealth, int theMovementSpeed);
 
     /**
      * Pointer to the player. Used for NPC decision making.
@@ -101,12 +118,13 @@ protected:
  */
 class Goblin : public NPC {
 public:
-    Goblin();
+    Goblin(const std::string& theName
+        , int theMaxHealth, int theMovementSpeed);
 
 private:
-    static const inline std::string name = "Goblin";
-    static constexpr int maxHealth = 50;
-    static constexpr int movementSpeed = 10;
+    std::string name;
+    int maxHealth;
+    int movementSpeed;
 };
 
 /**
@@ -134,12 +152,14 @@ private:
  */
 class Skeleton : public NPC {
 public:
-    Skeleton();
+    Skeleton(const std::string& theName
+        , int theMaxHealth, int theMovementSpeed);
 
 private:
-    static const inline std::string name = "Skeleton";
-    static constexpr int maxHealth = 100;
-    static constexpr int movementSpeed = 10;
+    std::string name;
+    int maxHealth;
+    int movementSpeed;
+
 };
 
 #endif // NPC_H
