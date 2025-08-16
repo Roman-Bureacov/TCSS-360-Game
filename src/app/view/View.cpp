@@ -2,7 +2,7 @@
 // Created by Kyler on 7/1/2025.
 // The GUI
 
-#include "View.h"
+#include "../../include/View.h"
 
 #include <exception>
 #include <iostream>

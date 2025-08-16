@@ -10,8 +10,8 @@ NPC::NPC(const std::string& theName, int theMaxHealth, int theMovementSpeed)
 }
 
 void NPC::moveNPCToPlayer() {
-    int xDiff = this->getX() - player->getX();
-    int yDiff = this->getY() - player->getY();
+    const int xDiff = this->getX() - player->getX();
+    const int yDiff = this->getY() - player->getY();
 
     if (std::abs(xDiff) > std::abs(yDiff)) {
         if  (xDiff < 0) {
@@ -34,20 +34,22 @@ void NPC::moveNPCToPlayer() {
             this->notify(PROPERTY_DIRECTION_CHANGED);
         }
     }
+    //Could use this or walking animation.
     this->notify(PROPERTY_LOCATION_CHANGED);
 
 }
 
 void NPC::attackPlayer() {
 
+    this->notify(PROPERTY_ATTACK);
     Bitz::enqueueAttackEvent(this);
 
 }
 
-bool NPC::canAttack() {
+bool NPC::canAttack() const {
 
-    int xDiff = std::abs(this->getX() - player->getX());
-    int yDiff = std::abs(this->getY() - player->getY());
+    const int xDiff = std::abs(this->getX() - player->getX());
+    const int yDiff = std::abs(this->getY() - player->getY());
 
     return xDiff < 5 && yDiff < 5;
 
@@ -55,8 +57,8 @@ bool NPC::canAttack() {
 
 void NPC::lookAtPlayer() {
 
-    int xDiff = this->getX() - player->getX();
-    int yDiff = this->getY() - player->getY();
+    const int xDiff = this->getX() - player->getX();
+    const int yDiff = this->getY() - player->getY();
 
     if (std::abs(xDiff) > std::abs(yDiff)) {
         if  (xDiff < 0) this->setDirection(util::Direction::EAST);
@@ -68,12 +70,20 @@ void NPC::lookAtPlayer() {
 }
 
 void NPC::takeAction() {
+    //Makes sure that the pointer points to something.
+    if (!player) return;
+    if (!active) return;
+
     if (canAttack()) {
         this->lookAtPlayer();
         attackPlayer();
     } else {
         moveNPCToPlayer();
     }
+}
+
+void NPC::setActive(const bool act) {
+    active = act;
 }
 
 // =========================
@@ -98,7 +108,7 @@ TimCapaul::TimCapaul()
     : NPC(name, maxHealth, movementSpeed) {}
 
 void TimCapaul::takeAction() {
-    if (canAttack()) {
+    if (this->canAttack()) {
         attackPlayer();
     } else {
         moveNPCToPlayer();
@@ -120,13 +130,19 @@ bool TimCapaul::canAttack() {
 // =========================
 
 std::shared_ptr<Goblin> NPC::goblinFactory() {
-    return std::make_shared<Goblin>();
+    auto goblin =  std::make_shared<Goblin>();
+    Bitz::enqueueAttackEvent(goblin.get());
+    return goblin;
 }
 
 std::shared_ptr<TimCapaul> NPC::timCapaulFactory() {
-    return std::make_shared<TimCapaul>();
+    auto tim = std::make_shared<TimCapaul>();
+    Bitz::enqueueAttackEvent(tim.get());
+    return tim;
 }
 
 std::shared_ptr<Skeleton> NPC::skeletonFactory() {
-    return std::make_shared<Skeleton>();
+    auto skeleton = std::make_shared<Skeleton>();
+    Bitz::registerCharacter(skeleton.get());
+    return skeleton;
 }

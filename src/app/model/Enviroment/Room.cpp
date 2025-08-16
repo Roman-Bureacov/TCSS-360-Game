@@ -46,19 +46,24 @@ void Room::generateNonExsistingRoom() {
         }
     }
     this->alreadyGenerated = true;
-    //this->generateCharacters();
+    this->generateCharacters();
 }
 
 void Room::generateCharacters() {
 
-    //TODO
+    auto char1 = NPC::skeletonFactory();
+    auto char2 = NPC::skeletonFactory();
+    auto char3 = NPC::goblinFactory();
+
+
+    Bitz::registerCharacter(char1.get());
+    Bitz::registerCharacter(char2.get());
+    Bitz::registerCharacter(char3.get());
 
 
 }
 
-std::vector<std::shared_ptr<AbstractCharacter>> Room::getCharacters() const {
-    return characters;
-}
+
 void Room::generateExistingRoom() {
 
     roomMap.clear();
@@ -87,7 +92,7 @@ void Room::initializeRoom() {
         //load data from database here
         this->generateExistingRoom();
     } else {
-        this->generateNonExistingRoom();
+        this->generateNonExsistingRoom();
     }
 }
 
@@ -167,7 +172,9 @@ void Room::setSerialRoomMap(const std::string &map) {
     this->serialRoomMap = map;
 }
 
-Room::Room() {}
+
+Room::Room(Bitz& bitzEngine)
+    : engine(bitzEngine) {}
 
 void Room::printRoomMap() const {
     for (const auto& row : roomMap) {
@@ -212,7 +219,8 @@ std::string Room::DungeonTileToString(const DunText::DungeonTile &tile) const {
 
 }
 
-ConcreteRoomBuilder::ConcreteRoomBuilder() = default;
+ConcreteRoomBuilder::ConcreteRoomBuilder(Bitz& bitzEngine)
+    : engine(bitzEngine) {}
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setGenerated(const bool alreadyMade) {
     alreadyGenerated = alreadyMade;
@@ -247,7 +255,7 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
 
 std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 
-    auto room = std::make_shared<Room>();
+    auto room = std::make_shared<Room>(engine);
 
     room->setNorth(roomNorth);
     room->setEast(roomEast);

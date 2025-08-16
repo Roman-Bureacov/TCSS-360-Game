@@ -34,12 +34,12 @@ add_executable(TCSS-360-Game src/main.cpp
         src/eng/Bitz.cpp
         src/include/Event.h
         src/app/model/Characters/Dummy.h
-        src/app/model/Hitbox.cpp
+        src/app/model/Characters/Weapons/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
-        src/app/model/Characters/Weapons/Weapon.h
+        src/include/Weapon.h
         src/app/model/Enviroment/Interactable.cpp
         src/include/Interactable.h
-        src/app/model/Enviroment/Door.h
+        src/include/Door.h
 )
 
 # static libraries, primarily for testing purposes
@@ -52,7 +52,7 @@ add_library(model STATIC
         src/include/Utils.h
         src/app/model/Characters/AbstractCharacter.cpp
         src/app/model/Characters/Dummy.h # header-only implementation
-        src/app/model/Hitbox.cpp
+        src/app/model/Characters/Weapons/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
         src/include/Weapon.h
         src/app/model/ObserverPattern.cpp
@@ -60,7 +60,7 @@ add_library(model STATIC
         src/app/model/Enviroment/Room.cpp
         src/app/model/Enviroment/Interactable.cpp
         src/include/Interactable.h
-        src/app/model/Enviroment/Door.h
+        src/include/Door.h
 )
 
 target_include_directories(engine PUBLIC

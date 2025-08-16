@@ -20,6 +20,7 @@ enum class NPCType {
     TimCapaul
 };
 
+
 class Goblin;
 class TimCapaul;
 class Skeleton;
@@ -29,6 +30,8 @@ class Skeleton;
  *
  * Handles shared logic such as interaction with player characters,
  * basic combat routines, and event behavior.
+ *
+ * @author Riley Hopper
  */
 class NPC : public AbstractCharacter {
 public:
@@ -55,6 +58,11 @@ public:
      * Must be overridden by derived classes.
      */
     virtual void takeAction();
+
+    /**
+     * Sets if the NPC is active
+     */
+    void setActive(bool act);
 
 protected:
     /**
@@ -84,7 +92,7 @@ protected:
      * Checks if the player is in range to be attacked.
      * @return True if the NPC can attack the player this turn.
      */
-    bool canAttack();
+    bool canAttack() const;
 
     /**
      * This makes tells the NPC to changes its
@@ -92,6 +100,7 @@ protected:
      */
     void lookAtPlayer();
 
+    bool active = false;
 
 };
 

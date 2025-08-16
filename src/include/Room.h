@@ -12,17 +12,22 @@
 #include <iostream>
 
 
-#include "AbstractCharacter.h"
+#include "NPC.h"
 #include "DungeonTextures.h"
+#include "Bitz.h"
 
 
 
+/**
+ * This handles room generation.
+ * @author Riley Hopper
+ * @version July 2025
+ */
 class Room final {
     friend class ConcreteRoomBuilder;
 public:
-    void generateNonExistingRoom();
-
     void generateNonExsistingRoom();
+
     void generateCharacters();
 
 
@@ -40,7 +45,7 @@ public:
     bool getWest() const;
     std::string getSerialRoomMap() const;
     int getRoomSize() const;
-    std::vector<std::shared_ptr<AbstractCharacter>> getCharacters() const;
+
 
     void setRoomID(int roomID);
     void setNorth(bool north);
@@ -50,11 +55,13 @@ public:
     void setAlreadyGenerated(bool alreadyMade);
     void setSerialRoomMap(const std::string &map);
 
+
+
     ~Room() = default;
 
 private:
+    Room(Bitz &bitzEngine);
 
-    Room();
 
     //This should be read by the GUI for the room
     //IF IT IS NOT I will personally find you and
@@ -77,6 +84,14 @@ private:
     bool roomSouth;
     int enemyAmount;
     int roomID;
+
+    //These are the enemies in the room.
+    int enId1;
+    int enId2;
+    int enId3;
+
+    //This is the dungeon
+    Bitz& engine;
 
     //2 blocks for the border, and 13 for the interior.
     //The reason it's an odd number is for the door to be centered.
@@ -111,14 +126,17 @@ public:
 
 class ConcreteRoomBuilder final : public RoomBuilder {
 public:
-    ConcreteRoomBuilder();
     ConcreteRoomBuilder& setRoomNorth(bool north) override;
     ConcreteRoomBuilder& setRoomEast(bool east) override;
     ConcreteRoomBuilder& setRoomWest(bool west) override;
     ConcreteRoomBuilder& setRoomSouth(bool south) override;
     ConcreteRoomBuilder& setRoomId(int id) override;
     ConcreteRoomBuilder& setEnemyAmount(int enAmount) override;
+
+    ConcreteRoomBuilder(Bitz &bitzEngine);
+
     ConcreteRoomBuilder& setGenerated(bool alreadyMade) override;
+
     std::shared_ptr<Room> build() override;
 
 private:
@@ -127,6 +145,7 @@ private:
     bool roomWest = true;
     bool roomSouth = true;
     bool alreadyGenerated = false;
+    Bitz& engine;
 
     int roomID = 0;
     int amount = 0;

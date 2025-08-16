@@ -2,7 +2,7 @@
 // Created by iwant on 8/1/2025.
 //
 
-#include "../../include/Hitbox.h"
+#include "../../../../include/Hitbox.h"
 
 #include <stdexcept>
 

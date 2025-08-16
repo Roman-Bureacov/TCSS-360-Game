@@ -15,7 +15,11 @@
 #include <iostream>
 
 
-
+/**
+ * This handles dungeon generation and room switching.
+ * @author Riley Hopper
+ * @version July 2025
+ */
 class Dungeon final : public Subject {
 public:
 
@@ -61,6 +65,7 @@ public:
      * @param entities the set of entities in this room
      */
     void updateRoomEntities(std::unordered_set<AbstractCharacter*> entities);
+    void setEngine(const Bitz& bitz);
 
 
 private:
@@ -68,6 +73,7 @@ private:
      * Constructs the object.
      */
     Dungeon();
+    Bitz& engine;
     ConcreteRoomBuilder roomBuilder;
     std::shared_ptr<Room> currentRoom;
     std::vector<std::vector<int>> idMap;

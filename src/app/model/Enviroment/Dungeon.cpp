@@ -51,7 +51,7 @@ void Dungeon::generateDungeon() {
             auto room = roomBuilder.build();
             //This will build the room and throw it in the database.
             try {
-                databaseManager->insertRoom(room);
+                databaseManager->insertRoom(*room);
             }catch (std::runtime_error &e) {
                 std::cerr << "Failed to insert room: "
                     << e.what() << std::endl;
@@ -79,6 +79,10 @@ void Dungeon::updateRoomEntities(std::unordered_set<AbstractCharacter *> entitie
     // TODO: database implementation
 }
 
+void Dungeon::setEngine(const Bitz& bitz) {
+    engine = bitz;
+}
+
 
 std::vector<std::vector<int>> Dungeon::getMap() {
     return idMap;
@@ -91,9 +95,6 @@ std::shared_ptr<Room> Dungeon::getCurrentRoom() {
 }
 
 
-Dungeon::Dungeon() {
+Dungeon::Dungeon(): engine() {
     this->generateDungeon();
-
 }
-
-
