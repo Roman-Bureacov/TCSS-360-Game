@@ -115,6 +115,29 @@ bool View::handleEvents() {
 void View::cleanup() {
     std::cout << "Closing Window" << std::endl;
 
+    // Clean up tileset texture
+    if (myTilesetTexture) {
+        SDL_ReleaseGPUTexture(myDevice, myTilesetTexture);
+        myTilesetTexture = nullptr;
+    }
+
+    //Release Pipeline resources
+    if (myGraphicsPipeline) {
+        SDL_ReleaseGPUGraphicsPipeline(myDevice, myGraphicsPipeline);
+    }
+    if (myVertexBuffer) {
+        SDL_ReleaseGPUBuffer(myDevice, myVertexBuffer);
+    }
+    if (myIndexBuffer) {
+        SDL_ReleaseGPUBuffer(myDevice, myIndexBuffer);
+    }
+    if (myUniversalBuffer) {
+        SDL_ReleaseGPUBuffer(myDevice, myUniversalBuffer);
+    }
+    if (mySampler) {
+        SDL_ReleaseGPUSampler(myDevice, mySampler);
+    }
+
     //Free the window and GPU
     SDL_ReleaseWindowFromGPUDevice(myDevice, myWindow);
 
@@ -130,13 +153,159 @@ void View::cleanup() {
     std::cout << "Window Destroyed" << std::endl;
 }
 
+//CLAUDE
 
 void View::createRenderingPipeline() {
 
+    // Query which shader formats the device supports
+    const SDL_GPUShaderFormat supportedFormats = SDL_GetGPUShaderFormats(myDevice);
+
+    // Determine which shader format to use (in order of preference)
+    SDL_GPUShaderFormat chosenFormat;
+    unsigned char* vertexShaderData = nullptr;
+    size_t vertexShaderSize = 0;
+    unsigned char* fragmentShaderData = nullptr;
+    size_t fragmentShaderSize = 0;
+
+    if (supportedFormats & SDL_GPU_SHADERFORMAT_SPIRV) {
+        // Vulkan backend
+        chosenFormat = SDL_GPU_SHADERFORMAT_SPIRV;
+        vertexShaderData = vertexShaderSPIRV;
+        vertexShaderSize = vertexShaderSPIRVSize;
+        fragmentShaderData = fragmentShaderSPIRV;
+        fragmentShaderSize = fragmentShaderSPIRVSize;
+        std::cout << "Using SPIRV shaders (Vulkan backend)" << std::endl;
+    }
+    else if (supportedFormats & SDL_GPU_SHADERFORMAT_DXIL) {
+        // Direct3D 12 backend
+        chosenFormat = SDL_GPU_SHADERFORMAT_DXIL;
+        vertexShaderData = vertexShaderDXIL;
+        vertexShaderSize = vertexShaderDXILSize;
+        fragmentShaderData = fragmentShaderDXIL;
+        fragmentShaderSize = fragmentShaderDXILSize;
+        std::cout << "Using DXIL shaders (Direct3D 12 backend)" << std::endl;
+    }
+    else if (supportedFormats & SDL_GPU_SHADERFORMAT_MSL) {
+        // Metal backend
+        chosenFormat = SDL_GPU_SHADERFORMAT_MSL;
+        vertexShaderData = vertexShaderMSL;
+        vertexShaderSize = vertexShaderMSLSize;
+        fragmentShaderData = fragmentShaderMSL;
+        fragmentShaderSize = fragmentShaderMSLSize;
+        std::cout << "Using MSL shaders (Metal backend)" << std::endl;
+    }
+    else {
+        throw SDLException("No supported shader formats available");
+    }
 
     //TODO: Shaders
 
 }
+
+//END OF CLAUDE
+
+
+SDL_GPUTexture* View::loadTextureFromFile(const std::string& theFilename) {
+
+
+}
+
+
+//CLAUDE
+
+//This method gets the tilemap png ready to be used
+void View::loadTilesetTexture(const std::string& theFilename) {
+    int channels;
+    unsigned char* data = stbi_load(theFilename.c_str(), &myTilesetWidth, &myTilesetHeight, &channels, STBI_rgb_alpha);
+
+    if (!data) {
+        throw SDLException("Failed to load tileset: " + theFilename);
+    }
+
+    // Create texture create info
+    SDL_GPUTextureCreateInfo createInfo = {};
+    createInfo.type = SDL_GPU_TEXTURETYPE_2D;
+    createInfo.format = SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
+    createInfo.width = myTilesetWidth;
+    createInfo.height = myTilesetHeight;
+    createInfo.layer_count_or_depth = 1;
+    createInfo.num_levels = 1;
+    createInfo.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER;
+
+    myTilesetTexture = SDL_CreateGPUTexture(myDevice, &createInfo);
+    if (!myTilesetTexture) {
+        stbi_image_free(data);
+        throw SDLException("Failed to create tileset GPU texture");
+    }
+
+    // Upload the image data
+    SDL_GPUCommandBuffer* uploadBuffer = SDL_AcquireGPUCommandBuffer(myDevice);
+    SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadBuffer);
+
+    SDL_GPUTextureTransferInfo transferInfo = {};
+    transferInfo.transfer_buffer = nullptr;
+    transferInfo.offset = 0;
+
+    SDL_GPUTextureRegion region = {};
+    region.texture = myTilesetTexture;
+    region.mip_level = 0;
+    region.layer = 0;
+    region.x = 0;
+    region.y = 0;
+    region.z = 0;
+    region.w = myTilesetWidth;
+    region.h = myTilesetHeight;
+    region.d = 1;
+
+    SDL_UploadToGPUTexture(copyPass, &transferInfo, &region, false);
+
+    SDL_EndGPUCopyPass(copyPass);
+    SDL_SubmitGPUCommandBuffer(uploadBuffer);
+
+    stbi_image_free(data);
+
+}
+
+
+//This method maps each tile in the tilemap png to simple TileUV coords
+void View::initializeTileMapping() {
+    // Calculate how many tiles fit in the tileset
+    // Assuming 16x16 pixel tiles
+    const int tilesX = myTilesetWidth / TILE_SIZE;
+    const int tilesY = myTilesetHeight / TILE_SIZE;
+
+    std::cout << "Tileset contains " << tilesX << "x" << tilesY << " tiles" << std::endl;
+
+    // Map tile types to their UV coordinates in the tileset
+    // This assumes your tileset is organized in a grid
+    // Adjust these mappings based on your actual tileset layout
+
+    // Example mapping (you'll need to adjust these based on your tileset)
+    myTileUVMap[DunText::DungeonTile::NorthWestCorner] = {0, 0};
+    myTileUVMap[DunText::DungeonTile::NorthEastCorner] = {1, 0};
+    myTileUVMap[DunText::DungeonTile::VerticalWall] = {2, 0};
+    myTileUVMap[DunText::DungeonTile::SouthWestCorner] = {0, 1};
+    myTileUVMap[DunText::DungeonTile::SouthEastCorner] = {1, 1};
+    myTileUVMap[DunText::DungeonTile::HorizontalWall] = {2, 1};
+    myTileUVMap[DunText::DungeonTile::Floor] = {3, 1};
+    myTileUVMap[DunText::DungeonTile::HorizontalDoor] = {0, 2};
+    myTileUVMap[DunText::DungeonTile::Blank] = {1, 2};
+    myTileUVMap[DunText::DungeonTile::VerticalDoor] = {0, 3};
+
+}
+
+
+//This getter method returns the coords to the texture in tilemap png
+TileUV View::getTileUV(const DunText::DungeonTile& theTile) {
+    auto it = myTileUVMap.find(theTile);
+    if (it != myTileUVMap.end()) {
+        return it->second;
+    }
+    // Return empty/default tile if not found
+    return myTileUVMap[DunText::DungeonTile::Blank];
+}
+
+//END OF CLAUDE
 
 
 void View::observeDungeon(Dungeon* theDungeon) {

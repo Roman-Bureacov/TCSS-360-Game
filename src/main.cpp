@@ -12,6 +12,9 @@
 
 #include "app/model/Characters/Dummy.h"
 
+#include "include/Room.h"
+#include "include/Dungeon.h"
+
 #include "app/view/View.h"
 
 #include "include/Bitz.h"
@@ -100,6 +103,8 @@ void userPolling() {
         },
         *d1
     ));
+
+    char ch;
 
     while (true) {
         std::cin.get(ch);
