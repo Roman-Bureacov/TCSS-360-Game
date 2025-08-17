@@ -96,6 +96,12 @@ public:
     std::vector<int> getCharacters() const;
 
     /**
+     *
+     * @return This returns if the room has already been generated.
+     */
+    bool getAlreadyGenerated() const;
+
+    /**
      * Sets the rooms ID.
      * @param roomID ID of this room
      */
@@ -138,19 +144,19 @@ public:
      *  Sets the id of character 1.
      * @param ID id of the character
      */
-    void setChar1ID(const long long ID);
+    void setChar1ID(long long ID);
 
     /**
      *  Sets the id of character 2.
      * @param ID id of the character
      */
-    void setChar2ID(const long long ID);
+    void setChar2ID(long long ID);
 
     /**
      *  Sets the id of character 3.
      * @param ID id of the character
      */
-    void setChar3ID(const long long ID);
+    void setChar3ID(long long ID);
 
     ~Room() = default;
     Room();
@@ -170,7 +176,7 @@ private:
     std::vector<std::vector<DunText::DungeonTile>> roomMap;
 
     /**This is the serialized map of the room.*/
-    std::string serialRoomMap;
+    std::string serialRoomMap = "";
 
     /**This sets if a room has already been generated.*/
     bool alreadyGenerated = false;
@@ -209,7 +215,6 @@ public:
     virtual RoomBuilder& setRoomWest(bool west) = 0;
     virtual RoomBuilder& setRoomSouth(bool south) = 0;
     virtual RoomBuilder& setRoomId(int id) = 0;
-    virtual RoomBuilder& setGenerated(bool alreadyMade) = 0;
     /**
     *  Sets the id of character 1.
     * @param ID id of the character
@@ -240,7 +245,6 @@ public:
     ConcreteRoomBuilder& setRoomWest(bool west) override;
     ConcreteRoomBuilder& setRoomSouth(bool south) override;
     ConcreteRoomBuilder& setRoomId(int id) override;
-    ConcreteRoomBuilder& setGenerated(bool alreadyMade) override;
     /**
    *  Sets the id of character 1.
    * @param ID id of the character
@@ -266,7 +270,6 @@ private:
     bool roomEast = true;
     bool roomWest = true;
     bool roomSouth = true;
-    bool alreadyGenerated = false;
     /**This is the id of the first enemy.*/
     long long charID1;
     /**This is the id of the second enemy.*/

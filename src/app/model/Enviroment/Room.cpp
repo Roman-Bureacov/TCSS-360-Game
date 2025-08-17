@@ -46,6 +46,7 @@ void Room::generateNonExistingRoom() {
         }
     }
     this->alreadyGenerated = true;
+
 }
 
 std::vector<int> Room::getCharacters() const {
@@ -89,6 +90,8 @@ void Room::initializeRoom() {
 
 void Room::serializeRoomMap() {
 
+    if (roomMap.size() != roomSize) return;
+
     serialRoomMap.clear();
     //(row, column) -> (i,j)
     for (int i = 0; i < roomSize; i++) {
@@ -109,6 +112,10 @@ void Room::setChar1ID(const long long ID) {
 
 void Room::setChar2ID(const long long ID) {
     charID2 = ID;
+}
+
+bool Room::getAlreadyGenerated() const {
+    return this->alreadyGenerated;
 }
 
 void Room::setChar3ID(const long long ID) {
@@ -169,6 +176,9 @@ void Room::setAlreadyGenerated(const bool alreadyMade) {
 }
 
 void Room::setSerialRoomMap(const std::string &map) {
+    if (this == nullptr) {
+        throw std::runtime_error("setSerialRoomMap called on null Room");
+    }
     this->serialRoomMap = map;
 }
 
@@ -219,10 +229,6 @@ std::string Room::DungeonTileToString(const DunText::DungeonTile &tile) const {
 
 ConcreteRoomBuilder::ConcreteRoomBuilder() = default;
 
-ConcreteRoomBuilder& ConcreteRoomBuilder::setGenerated(const bool alreadyMade) {
-    alreadyGenerated = alreadyMade;
-    return *this;
-}
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomNorth(const bool north) {
     roomNorth = north;
@@ -273,7 +279,7 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
     room->setWest(roomWest);
     room->setSouth(roomSouth);
     room->setRoomID(roomID);
-    room->setAlreadyGenerated(alreadyGenerated);
+    room->setAlreadyGenerated(false);
     room->setChar1ID(charID1);
     room->setChar2ID(charID2);
     room->setChar3ID(charID3);
@@ -286,13 +292,13 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
     this->roomWest = true;
     this->roomSouth = true;
     this->roomID = 0;
-    this->alreadyGenerated = false;
     this->charID1 = 0;
     this->charID2 = 0;
     this->charID3 = 0;
 
 
     return room;
+
 
 }
 

@@ -37,7 +37,7 @@ void DatabaseManager::insertRoom(Room &room) const {
         , &stmt, nullptr) != SQLITE_OK) {
         throw std::runtime_error(sqlite3_errmsg(db));
     }
-
+    //First run through this will do nothing
     room.serializeRoomMap();
 
     sqlite3_bind_int(stmt, 1, room.getRoomID());
@@ -116,14 +116,15 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
         long long char2 = sqlite3_column_int64(stmt, 6);
         long long char3 = sqlite3_column_int64(stmt, 7);
 
+
         room = std::make_shared<Room>();
+        room->setAlreadyGenerated(true);
         room->setRoomID(id);
         room->setNorth(north);
         room->setSouth(south);
         room->setEast(east);
         room->setWest(west);
         room->setSerialRoomMap(mapStr ? mapStr : "");
-        room->setAlreadyGenerated(true);
         room->setChar1ID(char1);
         room->setChar2ID(char2);
         room->setChar3ID(char3);

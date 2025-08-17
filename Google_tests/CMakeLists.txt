@@ -12,6 +12,9 @@ add_executable(
         ObserverTest.cpp
         ../src/app/model/Characters/NPC.cpp
         ../src/include/NPC.h
+        DungeonRoomTest.cpp
+        NPCTest.cpp
+
 )
 
 target_link_libraries(

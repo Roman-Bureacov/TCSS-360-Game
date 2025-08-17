@@ -38,7 +38,7 @@ public:
     * @param dbManager This is a pointer to the database.
     * @param bitz This is a pointer to the engine.
     */
-    void initialize(const std::shared_ptr<DatabaseManager> &dbManager, const std::shared_ptr<Bitz> &bitz);
+    void initialize(const std::shared_ptr<DatabaseManager> &dbManager);
 
     /**
     * Generates the dungeon.
@@ -87,8 +87,6 @@ private:
     static std::unique_ptr<Dungeon> instance;
     /**This is the databaseManager object the dungeon will use.*/
     std::shared_ptr<DatabaseManager> databaseManager;
-    /**This is the engine that the dungeon is interaction with.*/
-    std::shared_ptr<Bitz> engine;
 
     /**This is the size of the dungeon, 10 rooms by 10 rooms*/
     const int dungeonSize = 10;

@@ -24,40 +24,38 @@ Dungeon* Dungeon::DungeonInstance() {
 }
 
 
-void Dungeon::initialize(const
-    std::shared_ptr<DatabaseManager> &dbManager, const std::shared_ptr<Bitz> &bitz) {
+void Dungeon::initialize(const std::shared_ptr<DatabaseManager> &dbManager) {
     databaseManager = dbManager;
-    engine = bitz;
+    this->currentRoom = roomBuilder.build();
     this->generateDungeon();
 }
 
 void Dungeon::generateDungeon() {
 
-    if (!engine) {
-        throw std::runtime_error
-            ("Bitz is not found");
-    }
     if (!databaseManager) {
         throw std::runtime_error
             ("Database manager is not found");
     }
 
+    idMap.clear();
+
+
     //(row, column) -> (i,j)
     for (int i = 0; i < dungeonSize; i++) {
         std::vector<int> idRow;
         for (int j = 0; j < dungeonSize; j++) {
-            //Sets the row id somewhere in the hundreds.
+
+            //Sets the row id somewhere in the thousands.
             int id = dungeonIdRange + i * rowIndexMult + j;
             roomBuilder.setRoomId(id);
             if (i == 0) roomBuilder.setRoomNorth(false);
             if (i == dungeonSize - 1) roomBuilder.setRoomSouth(false);
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
-            roomBuilder.setGenerated(false);
 
-            const auto char1 = NPC::skeletonFactory().get();
-            const auto char2 = NPC::skeletonFactory().get();
-            const auto char3 = NPC::skeletonFactory().get();
+            auto char1 = NPC::skeletonFactory().get();
+            auto char2 = NPC::skeletonFactory().get();
+            auto char3 = NPC::skeletonFactory().get();
 
             roomBuilder.setChar1ID(char1->getID());
             roomBuilder.setChar2ID(char2->getID());
@@ -68,6 +66,7 @@ void Dungeon::generateDungeon() {
             Bitz::registerCharacter(char3);
 
             auto room = roomBuilder.build();
+
             //This will build the room and throw it in the database.
             try {
                 databaseManager->insertRoom(*room);
@@ -75,14 +74,15 @@ void Dungeon::generateDungeon() {
                 std::cerr << "Failed to insert room: "
                     << e.what() << std::endl;
             }
+
             idRow.push_back(id);
+
         }
         idMap.push_back(idRow);
     }
 
     //Its 100, just so you don't have to look.
-    setCharacterRoom(startingRoomId);
-
+    //setCharacterRoom(startingRoomId);
 
 }
 
@@ -90,7 +90,9 @@ void Dungeon::generateDungeon() {
 
 void Dungeon::setCharacterRoom(const int roomID) {
 
+    currentRoom->setSerialRoomMap("");
     currentRoom = databaseManager->loadRoom(roomID);
+    currentRoom->generateExistingRoom();
 
     this->notify(PROPERTY_ROOM_CHANGE);
 

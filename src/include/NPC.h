@@ -10,7 +10,6 @@
 #include "AbstractCharacter.h"
 #include "../include/Bitz.h"
 
-
 /**
  * Enumeration of all supported NPC types.
  */
