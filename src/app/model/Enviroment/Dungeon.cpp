@@ -14,7 +14,6 @@ std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
 
 Dungeon* Dungeon::DungeonInstance() {
 
-    //Breaks at this if
     if (instance == nullptr) {
         instance =  std::unique_ptr<Dungeon>(new Dungeon());
     }

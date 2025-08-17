@@ -2,11 +2,17 @@
 // Created by riley on 8/10/25.
 //
 
+#include <utility>
+
 #include "../../../include/NPC.h"
 
 NPC::NPC(const std::string& theName, int theMaxHealth, int theMovementSpeed)
     : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {
 
+}
+
+void NPC::setPlayer(std::shared_ptr<AbstractCharacter> thePlayer) {
+    player = std::move(thePlayer);
 }
 
 void NPC::moveNPCToPlayer() {
@@ -34,8 +40,6 @@ void NPC::moveNPCToPlayer() {
             this->notify(PROPERTY_DIRECTION_CHANGED);
         }
     }
-    this->notify(PROPERTY_LOCATION_CHANGED);
-
 }
 
 void NPC::Update(Subject *theChangedSubject, const std::string &thePropertyName) {

@@ -35,10 +35,14 @@ class TimCapaul;
 class Skeleton;
 
 /**
+ *
  * Base class for all NPC types. Inherits from AbstractCharacter.
  *
  * Handles shared logic such as interaction with player characters,
  * basic combat routines, and event behavior.
+ *
+ * @author Riley Hopper
+ * @version 2025 August
  */
 class NPC : public AbstractCharacter {
 public:
@@ -84,13 +88,19 @@ public:
     NPC(const std::string& theName
         , int theMaxHealth, int theMovementSpeed);
 
+    /**
+     * sets the player pointer
+     * @param thePlayer This is a pointer to the player.
+     */
+    void setPlayer(std::shared_ptr<AbstractCharacter> thePlayer);
+
 
 
 protected:
 
 
     /**
-     * Pointer to the player. Used for NPC decision making.
+     * Pointer to the player. Used for NPC decision-making.
      */
     std::shared_ptr<AbstractCharacter> player;
 

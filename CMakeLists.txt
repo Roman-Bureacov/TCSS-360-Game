@@ -28,6 +28,8 @@ add_executable(TCSS-360-Game src/main.cpp
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
         src/app/model/Enviroment/Interactable.cpp
+        src/app/model/Characters/Player.cpp
+        src/include/Player.h
 )
 
 # static libraries, primarily for testing purposes
@@ -46,6 +48,8 @@ add_library(model STATIC
         src/app/model/Enviroment/Interactable.cpp
         src/db/DatabaseManager.cpp
         ${SQLITE_ROOT}/lib/sqlite3.c
+        src/app/model/Characters/Player.cpp
+        src/include/Player.h
 
 
 )
