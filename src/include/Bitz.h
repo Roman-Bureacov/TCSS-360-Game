@@ -11,14 +11,19 @@
 
 #include "Event.h"
 #include "AbstractCharacter.h"
-#include "Dungeon.h"
 #include "Interactable.h"
 
+
+/**These are forward declarations to stop circular
+ * Dependencies.
+ */
+class Dungeon;
+class Room;
 
 /**
  * Bitz, the engine of the game. Static class that handles when real-time events should occur
  *
- * @author Roman Bureacov
+ * @author Roman Bureacov, Riley Hopper
  * @version July 2025
  */
 class Bitz final {
@@ -117,7 +122,7 @@ public:
 
     /**
      * loads the dungeon room into the engine.
-     * @param theRoomID the new room to load and its entities
+     * @param theRoomID the new room to load.
      */
     static void loadDungeonRoom(int theRoomID);
 

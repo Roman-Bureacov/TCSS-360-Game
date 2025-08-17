@@ -251,10 +251,10 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     eventProcessQueue.clear();
 
     // cleanup entities, store their information in the database
-    entities.erase(player);
-    dungeonGenerator.updateRoomEntities(entities);
-    entities.clear();
-    entities.insert(player);
+    //entities.erase(player);
+    //dungeonGenerator.updateRoomEntities(entities);
+    //entities.clear();
+    //entities.insert(player);
 
     for (auto i : interactables) delete i;
     interactables.clear();
@@ -313,8 +313,8 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     }
 
     // position others
-    for (const auto& character : currentRoom->getCharacters())
-        registerCharacter(character.get());
+    //for (const auto& character : currentRoom->getCharacters())
+    //    registerCharacter(character.get());
 }
 
 const std::unordered_set<AbstractCharacter *> & Bitz::getEntities() {

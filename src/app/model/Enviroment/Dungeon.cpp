@@ -3,8 +3,10 @@
 //
 
 #include "../../../include/Dungeon.h"
+#include "../../../include/NPC.h"
 
-#include <unordered_set>
+
+
 
 std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
 
@@ -100,26 +102,16 @@ void Dungeon::updateRoomEntities(std::unordered_set<AbstractCharacter *> entitie
     long long char2 = currentRoom->getCharacters().at(1);
     long long char3 = currentRoom->getCharacters().at(2);
 
+    //This should, set all the npcs in the current room active
+    //and deactivate all non-active NPCs.
     for (auto* c: entities) {
-        if (c) {
-            switch (c->getID()) {
-
-                case char1:
-                    //TODO
-                    break;
-                case char2:
-                    //TODO
-                    break;
-                case char3:
-                    //TODO
-                    break;
-            }
+        if (NPC* npc = dynamic_cast<NPC*>(c)) {
+            if (npc->getID() == char1) npc->setIsActive(true);
+            else if (npc->getID() == char2) npc->setIsActive(true);
+            else if (npc->getID() == char3) npc->setIsActive(true);
+            else npc->setIsActive(false);
         }
     }
-
-
-    //TODO Current thinking is I need to take c make it an NPC and set it active
-    //also make the previous stuff not active.
 }
 
 

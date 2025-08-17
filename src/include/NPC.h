@@ -76,9 +76,6 @@ public:
     void setIsActive(bool isActive);
     bool getIsActive();
 
-
-
-protected:
     /**
      * Protected constructor used by derived NPCs.
      * @param theName NPC's display name
@@ -87,6 +84,11 @@ protected:
      */
     NPC(const std::string& theName
         , int theMaxHealth, int theMovementSpeed);
+
+
+
+protected:
+
 
     /**
      * Pointer to the player. Used for NPC decision making.
