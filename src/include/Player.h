@@ -25,7 +25,7 @@ public:
      * This returns the player to users
      * @return A pointer to the player
      */
-    static Player* playerInstance();
+    static std::shared_ptr<Player> playerInstance();
 
     /**
      * This will see what key the user has inputted.
@@ -67,7 +67,7 @@ private:
 
 
     /**This is the instance of the player.*/
-    static std::unique_ptr<Player> instance;
+    static std::shared_ptr<Player> instance;
 
 
     static inline const std::string name = "John programmer";
@@ -82,6 +82,8 @@ private:
 
     /**This is for if the player is currently rolling.*/
     bool rolling = false;
+    /**HitBox size*/
+    const int hitBoxSize = 10;
 
 };
 

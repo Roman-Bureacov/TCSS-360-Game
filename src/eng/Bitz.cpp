@@ -16,7 +16,6 @@ std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventProcessQueue;
 std::mutex Bitz::eventQueueMutex;
 Dungeon& Bitz::dungeonGenerator = *Dungeon::DungeonInstance();
 Room* Bitz::currentRoom;
-int Bitz::roomSize;
 
 void Bitz::processEvents() {
     std::lock_guard lock(eventQueueMutex);
@@ -119,36 +118,45 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
             int projHeight;
             int projX = theCharacter->getX();
             int projY = theCharacter->getY();
+
+            int desiredForward = std::abs(theDesiredForward);
+
             const util::Direction d = theCharacter->getDirection();
+
+
             switch (d) {
                 case util::NORTH:
                     projWidth = theCharacter->getHitbox().getWidth();
-                    projHeight = theDesiredForward;
+                    projHeight = desiredForward;
                     break;
                 case util::EAST:
-                    projWidth = theDesiredForward;
+                    projWidth = desiredForward;
                     projHeight = theCharacter->getHitbox().getHeight();
                     break;
                 case util::SOUTH:
                     projY -= theDesiredForward;
                     projWidth = theCharacter->getHitbox().getWidth();
-                    projHeight = theDesiredForward;
+                    projHeight = desiredForward;
                     break;
                 case util::WEST:
                     projX -= theDesiredForward;
-                    projWidth = theDesiredForward;
+                    projWidth = desiredForward;
                     projHeight = theCharacter->getHitbox().getHeight();
                     break;
                 default: throw new std::logic_error("Unknown direction enum");
             }
 
+
             // adjust parameters to fit the room
-            projX = std::min(0, projX);
-            projY = std::min(0, projY);
-            projWidth = std::min(roomSize - projX, projWidth);
-            projHeight = std::min(roomSize - projY, projHeight);
+            projX = std::max(0, projX);
+            projY = std::max(0, projY);
+            projWidth = std::min(Room::roomSize * Room::tileSize - projX, projWidth);
+            projHeight = std::min(Room::roomSize * Room::tileSize - projY, projHeight);
             // create the projection
+
+            std::cout << projX << ' ' << projY << ' ' << projWidth << ' ' << projHeight <<   std::endl;
             Hitbox* projection = new Hitbox(projX, projY, projWidth, projHeight);
+            std::cout << "Here"<< std::endl;
 
             // find the minimum possible distance to travel
             // find the intersections
@@ -228,13 +236,15 @@ void Bitz::setMin(const Hitbox* theProjection, const Hitbox &theIntersection, co
 }
 
 void Bitz::registerCharacter(std::shared_ptr<AbstractCharacter> theCharacter) {
+    auto npc = std::dynamic_pointer_cast<NPC>(theCharacter);
+    if (npc) {
+        npc->setPlayer(player);
+    }
     entities.insert(theCharacter);
+
 }
 
 void Bitz::registerPlayer(std::shared_ptr<AbstractCharacter> theCharacter) {
-    if (entities.contains(player)) entities.erase(player);
-
-    registerCharacter(theCharacter);
     player = theCharacter;
 }
 
@@ -270,22 +280,21 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     // next room
     dungeonGenerator.setCharacterRoom(theRoomID);
     currentRoom = dungeonGenerator.getCurrentRoom().get();
-    roomSize = (currentRoom->getRoomSize() - 2) * tileSize;
 
     // position NESW doors
     // each room is made of tiles, with 2 tiles serving as walls on both ends
-    const int doorWidth = tileSize;
-    const int doorDepth = tileSize / 2;
-    const int centeredPos = (roomSize - doorWidth)/2;
+    const int doorWidth = Room::tileSize;
+    const int doorDepth = Room::tileSize / 2;
+    const int centeredPos = (Room::roomSize - doorWidth)/2;
     const int doorInsetPos = (doorDepth / 2);
     if (currentRoom->getNorth())
         registerInteractable(new Door(
-            Hitbox(centeredPos, roomSize - doorInsetPos, doorWidth, doorDepth),
+            Hitbox(centeredPos, Room::roomSize - doorInsetPos, doorWidth, doorDepth),
             theRoomID - 10
             ));
     if (currentRoom->getEast())
         registerInteractable(   new Door(
-            Hitbox(roomSize - doorInsetPos, centeredPos, doorDepth, doorWidth),
+            Hitbox(Room::roomSize - doorInsetPos, centeredPos, doorDepth, doorWidth),
             theRoomID + 1));
     if (currentRoom->getSouth())
         registerInteractable(new Door(
@@ -297,16 +306,16 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
             theRoomID - 1));
 
     // position player
-    const int centeredPlayerX = (roomSize - player->getHitbox().getWidth()) / 2;
-    const int centeredPlayerY = (roomSize - player->getHitbox().getHeight()) / 2;
+    const int centeredPlayerX = (Room::roomSize - player->getHitbox().getWidth()) / 2;
+    const int centeredPlayerY = (Room::roomSize - player->getHitbox().getHeight()) / 2;
     constexpr int doorOffset = 50;
     switch (comingFrom) {
         case util::NORTH:
             player->setX(centeredPlayerX);
-            player->setY(roomSize - doorInsetPos - doorOffset);
+            player->setY(Room::roomSize - doorInsetPos - doorOffset);
             break;
         case util::EAST:
-            player->setX(roomSize - doorInsetPos - doorOffset);
+            player->setX(Room::roomSize - doorInsetPos - doorOffset);
             player->setY(centeredPlayerY);
             break;
         case util::SOUTH:

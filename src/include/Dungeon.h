@@ -15,6 +15,7 @@
 #include "DatabaseManager.h"
 #include "Bitz.h"
 #include "NPC.h"
+#include "Player.h"
 
 
 
@@ -95,6 +96,8 @@ private:
     const int rowIndexMult = 100;
     /**This is the id of the players spawn room*/
     const int startingRoomId = 100;
+    /**HitBox size*/
+    const int hitBoxSize = 10;
 
     /**This is a room changed property changed event*/
     inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";

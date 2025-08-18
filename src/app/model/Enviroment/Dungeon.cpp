@@ -35,6 +35,7 @@ void Dungeon::generateDungeon() {
         throw std::runtime_error
             ("Database manager is not found");
     }
+    Bitz::registerPlayer(Player::playerInstance());
 
     idMap.clear();
 
@@ -59,6 +60,10 @@ void Dungeon::generateDungeon() {
             roomBuilder.setChar1ID(char1->getID());
             roomBuilder.setChar2ID(char2->getID());
             roomBuilder.setChar3ID(char3->getID());
+
+            char1->setHitbox( hitBoxSize, hitBoxSize);
+            char2->setHitbox( hitBoxSize, hitBoxSize);
+            char3->setHitbox( hitBoxSize, hitBoxSize);
 
             Bitz::registerCharacter(char1);
             Bitz::registerCharacter(char2);

@@ -14,6 +14,7 @@
 #include "Interactable.h"
 
 
+
 /**These are forward declarations to stop circular
  * Dependencies.
  */
@@ -46,10 +47,7 @@ private:
     static std::shared_ptr<AbstractCharacter> player;
     /** the current room instance. */
     static Room* currentRoom;
-    /** The units per tile from the dungeon. */
-    static constexpr int tileSize = 100;
-    /** The side length of the room. */
-    static int roomSize;
+
 
     /**
      * Processes the enqueued single events and persistent events.
@@ -104,6 +102,7 @@ public:
     /**
      * Registers a character with the engine to make it aware of said
      * character when it comes to hitbox detection.
+     * It also tells the character who the player is.
      * @param theCharacter the character that the engine should be aware of
      */
     static void registerCharacter(std::shared_ptr<AbstractCharacter> theCharacter);

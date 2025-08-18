@@ -84,13 +84,13 @@ void NPC::lookAtPlayer() {
 
 void NPC::takeAction() {
 
-    //If the NPC isn't active it will take no actions.
     if (!active) return;
 
     if (canAttack()) {
         this->lookAtPlayer();
         attackPlayer();
     } else {
+        std::cout << "Moving" << std::endl;
         moveNPCToPlayer();
     }
 }
@@ -128,6 +128,9 @@ TimCapaul::TimCapaul()
     : NPC(TimCapaul::name, TimCapaul::maxHealth, TimCapaul::movementSpeed) {}
 
 void TimCapaul::takeAction() {
+
+
+
     if (canAttack()) {
         attackPlayer();
     } else {

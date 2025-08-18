@@ -4,24 +4,29 @@
 
 #include "../../../include/Player.h"
 
+#include <future>
+
 #include "../../../include/Bitz.h"
 
-std::unique_ptr<Player> Player::instance = nullptr;
+std::shared_ptr<Player> Player::instance = nullptr;
 
-Player * Player::playerInstance() {
+std::shared_ptr<Player> Player::playerInstance() {
 
     if (instance == nullptr) {
-        instance =  std::unique_ptr<Player>(new Player(name,
+        instance =  std::shared_ptr<Player>(new Player(name,
             startingHealth, movementSpeed));
     }
 
 
-    return instance.get();
+    return instance;
 }
 
 Player::Player(const std::string &theName
         , int theMaxHealth, int theMovementSpeed)
-            : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {}
+            : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {
+
+    setHitbox(hitBoxSize, hitBoxSize);
+}
 
 void Player::Update(Subject *theChangedSubject
         , const std::string &thePropertyName) {}
