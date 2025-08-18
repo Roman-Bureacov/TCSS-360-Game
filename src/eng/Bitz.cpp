@@ -103,6 +103,28 @@ void Bitz::enqueueInteractEvent(AbstractCharacter *theCharacter) {
 }
 
 void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredForward) {
+    if (theDesiredForward < 0) {
+        util::Direction originalDirection = theCharacter->getDirection();
+        switch (originalDirection) {
+            case util::NORTH:
+                theCharacter->setDirection(util::SOUTH);
+                break;
+            case util::EAST:
+                theCharacter->setDirection(util::WEST);
+                break;
+            case util::SOUTH:
+                theCharacter->setDirection(util::NORTH);
+                break;
+            case util::WEST:
+                theCharacter->setDirection(util::EAST);
+                break;
+            default: throw new std::logic_error("Unknown direction enum");
+        }
+        enqueueMovementEvent(theCharacter, -theDesiredForward);
+        theCharacter->setDirection(originalDirection);
+        return;
+    }
+
     enqueueEvent(new Event(
         1,
         [theCharacter, theDesiredForward]() -> void {
