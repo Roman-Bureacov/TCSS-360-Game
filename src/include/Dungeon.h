@@ -68,7 +68,7 @@ public:
      * to set in persistent storage.
      * @param entities the set of entities in this room
      */
-    void updateRoomEntities(std::unordered_set<AbstractCharacter*> entities);
+    void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>>);
 
 
 private:

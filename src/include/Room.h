@@ -93,7 +93,7 @@ public:
      * Returns the ids of the characters in the room.
      * @return A vector of character ids
      */
-    std::vector<int> getCharacters() const;
+    std::vector<long long> getCharacters() const;
 
     /**
      *

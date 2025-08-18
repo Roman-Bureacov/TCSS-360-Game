@@ -49,8 +49,8 @@ void Room::generateNonExistingRoom() {
 
 }
 
-std::vector<int> Room::getCharacters() const {
-    std::vector<int> characters = std::vector<int>();
+std::vector<long long> Room::getCharacters() const {
+    std::vector<long long> characters = std::vector<long long>();
 
     characters.push_back(this->charID1);
     characters.push_back(this->charID2);

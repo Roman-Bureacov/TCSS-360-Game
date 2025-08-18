@@ -53,3 +53,35 @@ TEST(NPCTEST,DungeonSpawnsNPCTest) {
 
 
 }
+
+TEST(NPCTEST, ActiveNPCs) {
+
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    //Changing rooms an random number of times.
+    dungeon->setCharacterRoom(309);
+    dungeon->setCharacterRoom(303);
+    dungeon->setCharacterRoom(304);
+    dungeon->setCharacterRoom(305);
+    dungeon->setCharacterRoom(306);
+    dungeon->setCharacterRoom(307);
+    dungeon->setCharacterRoom(308);
+
+    auto room = dungeon->getCurrentRoom();
+
+    std::vector<std::shared_ptr<NPC>> allNPCs;
+
+    for (auto character : Bitz::getEntities()) {
+
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
+        }
+    }
+    ASSERT_EQ(allNPCs.size(), 3);
+
+}
