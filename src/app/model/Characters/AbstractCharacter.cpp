@@ -179,6 +179,22 @@ void AbstractCharacter::setInteractionHitbox(const int theWidth, const int theHe
     myInteractionHitbox = Hitbox(theWidth, theHeight);
 }
 
+void AbstractCharacter::setRandomPosition(const std::shared_ptr<AbstractCharacter> &character) {
+
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    //This should set a random position within in the dungeon.
+    std::uniform_int_distribution<> xDist(Room::tileSize * 2
+        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 2));
+    std::uniform_int_distribution<> yDist(Room::tileSize * 2
+        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 2));
+
+    character->setX(xDist(gen));
+    character->setY(yDist(gen));
+
+}
+
 const Hitbox& AbstractCharacter::getInteractionHitbox() const {
     myHitbox.project(myInteractionHitbox, myDirection);
     return myInteractionHitbox;

@@ -50,6 +50,11 @@ public:
      */
     void endRoll();
 
+    /**
+     * This method makes the player attack
+     */
+    void attack();
+
 
 
 

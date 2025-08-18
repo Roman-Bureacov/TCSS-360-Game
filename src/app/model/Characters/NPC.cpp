@@ -22,22 +22,19 @@ void NPC::moveNPCToPlayer() {
     if (std::abs(xDiff) > std::abs(yDiff)) {
         if  (xDiff < 0) {
             this->setDirection(util::Direction::EAST);
-            this->setX(this->getX() + this->getMovementSpeed());
-            this->notify(PROPERTY_DIRECTION_CHANGED);
+            Bitz::enqueueMovementEvent(this,this->getMovementSpeed());
         }else {
             this->setDirection(util::Direction::WEST);
-            this->setX(this->getX() - this->getMovementSpeed());
-            this->notify(PROPERTY_DIRECTION_CHANGED);
+            Bitz::enqueueMovementEvent(this, -this->getMovementSpeed());
         }
     } else {
         if (yDiff < 0) {
             this->setDirection(util::Direction::SOUTH);
-            this->setY(this->getY() + this->getMovementSpeed());
-            this->notify(PROPERTY_DIRECTION_CHANGED);
+            Bitz::enqueueMovementEvent(this,this->getMovementSpeed());
         } else {
             this->setDirection(util::Direction::NORTH);
-            this->setY(this->getY() - this->getMovementSpeed());
-            this->notify(PROPERTY_DIRECTION_CHANGED);
+            Bitz::enqueueMovementEvent(this, -this->getMovementSpeed());
+
         }
     }
 }
@@ -153,9 +150,16 @@ bool TimCapaul::canAttack() {
 // =========================
 
 std::shared_ptr<Goblin> NPC::goblinFactory() {
-    return std::make_shared<Goblin>(
-        NPCStats::goblinName, NPCStats::goblinMaxHealth
-            , NPCStats::goblinMovementSpeed);
+    auto goblin = std::make_shared<Goblin>(
+        NPCStats::goblinName,
+        NPCStats::goblinMaxHealth,
+        NPCStats::goblinMovementSpeed
+    );
+
+    //Should randomize spawn position.
+    setRandomPosition(goblin);
+    return goblin;
+
 }
 
 //TODO: Change to be modern Implimentation.
@@ -164,7 +168,11 @@ std::shared_ptr<TimCapaul> NPC::timCapaulFactory() {
 }
 
 std::shared_ptr<Skeleton> NPC::skeletonFactory() {
-    return std::make_shared<Skeleton>(
-        NPCStats::skeletonName, NPCStats::skeletonMaxHealth
-            , NPCStats::skeletonMovementSpeed);
+    auto skeleton = std::make_shared<Skeleton>(
+        NPCStats::skeletonName,
+        NPCStats::skeletonMaxHealth,
+        NPCStats::skeletonMovementSpeed
+    );
+    setRandomPosition(skeleton);
+    return skeleton;
 }

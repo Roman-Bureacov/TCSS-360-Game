@@ -4,6 +4,8 @@
 
 #include "../../../include/Player.h"
 
+#include "../../../include/Bitz.h"
+
 std::unique_ptr<Player> Player::instance = nullptr;
 
 Player * Player::playerInstance() {
@@ -27,30 +29,49 @@ void Player::Update(Subject *theChangedSubject
 void Player::userInput(SDL_Event &event) {
     if (event.type == SDL_EVENT_KEY_DOWN) {
         switch (event.key.key) {
-            case SDLK_W: setY(getY() - movementSpeed);setDirection(util::NORTH); break;
-            case SDLK_S: setY(getY() + movementSpeed);setDirection(util::SOUTH); break;
-            case SDLK_A: setX(getX() - movementSpeed);setDirection(util::WEST); break;
-            case SDLK_D: setX(getX() + movementSpeed);setDirection(util::EAST); break;
-            case SDLK_SPACE: roll(); break;
+            case SDLK_W:
+                setDirection(util::NORTH);
+                Bitz::enqueueMovementEvent(this,-movementSpeed);
+                break;
+            case SDLK_S:
+                setDirection(util::SOUTH);
+                Bitz::enqueueMovementEvent(this,movementSpeed);
+                break;
+            case SDLK_A:
+                setDirection(util::WEST);
+                Bitz::enqueueMovementEvent(this,-movementSpeed);
+                break;
+            case SDLK_D:
+                setDirection(util::EAST);
+                Bitz::enqueueMovementEvent(this,movementSpeed);
+                break;
+            case SDLK_SPACE:
+                attack();
+                break;
+            case SDLK_LSHIFT:
+                roll();
+                break;
             default: break;
         }
     }
 }
 
 void Player::roll() {
-    util::Direction dir = getDirection();
-
-    if (dir == util::NORTH) {
-        setY(getY() + rollDisplacement);
-
-    } else if (dir == util::SOUTH) {
-        setY(getY() - rollDisplacement);
-    } else if (dir == util::WEST) {
-        setX(getX() - rollDisplacement);
-    } else if (dir == util::EAST) {
-        setX(getX() + rollDisplacement);
-    } else {
-        //throw an exception
+    switch (getDirection()) {
+        case util::NORTH:
+            Bitz::enqueueMovementEvent(this,getY() - rollDisplacement);
+        break;
+        case util::EAST:
+            Bitz::enqueueMovementEvent(this,getX() + rollDisplacement);
+        break;
+        case util::SOUTH:
+            Bitz::enqueueMovementEvent(this,getY() + rollDisplacement);
+        break;
+        case util::WEST:
+            Bitz::enqueueMovementEvent(this,getX() - rollDisplacement);
+        break;
+        default:
+            throw new std::logic_error("Unknown direction enum");
     }
 
     //So where this needs to become false again.
@@ -64,4 +85,8 @@ bool Player::isRolling() {
 
 void Player::endRoll() {
     rolling = false;
+}
+
+void Player::attack() {
+    Bitz::enqueueAttackEvent(this);
 }

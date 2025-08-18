@@ -43,8 +43,5 @@ namespace util {
             x = theNewX, y = theNewY;
         }
     };
-
-
-
 }
 #endif //UTILS_H

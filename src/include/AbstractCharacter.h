@@ -4,11 +4,14 @@
 
 #ifndef ABSTRACTCHARACTER_H
 #define ABSTRACTCHARACTER_H
+
 #include <string>
+#include <random>
 
 #include "Hitbox.h"
 #include "ObserverPattern.h"
 #include "Weapon.h"
+#include "Room.h"
 
 
 /**
@@ -231,6 +234,12 @@ public:
      * @param theHeight the new height for the interaction hitbox
      */
     void setInteractionHitbox(int theWidth, int theHeight);
+
+    /**
+     * This will randomize the characters position, should be used at spawn.
+     * @param character This is a pointer to the character.
+     */
+    static void setRandomPosition(const std::shared_ptr<AbstractCharacter> &character);
 };
 
 

@@ -158,12 +158,16 @@ public:
      */
     void setChar3ID(long long ID);
 
+    //It should always be a smart pointer
     ~Room() = default;
     Room();
-
+    /**This is the amount of tiles in the room roomSize X roomSize*/
+    static constexpr int roomSize = 15;
+    /**Position of the room tile*/
+    static constexpr int doorLocation = (roomSize - 1) / 2;
+    /**This is the actually size of each tile in rendering*/
+    static constexpr int tileSize = 100;//TODO change if needed.
 private:
-
-
     /**This is the id of the first enemy.*/
     long long charID1;
     /**This is the id of the second enemy.*/
@@ -191,10 +195,8 @@ private:
     bool roomSouth;
     int roomID;
 
-    //2 blocks for the border, and 13 for the interior.
-    //The reason it's an odd number is for the door to be centered.
-    static constexpr int roomSize = 15;
-    static constexpr int doorLocation = (roomSize - 1) / 2;
+
+
 
     //For testing
     void printRoomMap() const;
