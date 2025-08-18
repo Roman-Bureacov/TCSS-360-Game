@@ -4,13 +4,15 @@
 
 #include "../../include/Hitbox.h"
 
+#include <iostream>
 #include <stdexcept>
+#include <bits/ostream.tcc>
 
 Hitbox::Hitbox(const util::Point& theOrigin, const int theWidth, const int theHeight)
     : myOrigin(theOrigin), myWidth(theWidth), myHeight(theHeight){
 
-    if (theWidth < 0) throw std::logic_error("width must be zero or greater");
-    if (theHeight < 0) throw std::logic_error("height must be zero or greater");
+   if (theWidth < 0) throw std::logic_error("width must be zero or greater");
+   if (theHeight < 0) throw std::logic_error("height must be zero or greater");
 }
 
 Hitbox::Hitbox(const int theX, const int theY, const int theWidth, const int theHeight)
@@ -87,8 +89,8 @@ void Hitbox::project(Hitbox& theOtherHitbox, util::Direction theDirection) const
 
     int xOffset;
     int yOffset;
-    const int h = getHeight();
-    const int w = getWidth();
+    const int h = std::abs(getHeight());
+    const int w = std::abs(getWidth());
 
     // myDimension - (myDimension + otherDimension)/2
     // simplified to (myDimension - otherDimension)/2
@@ -112,6 +114,7 @@ void Hitbox::project(Hitbox& theOtherHitbox, util::Direction theDirection) const
         default: throw new std::logic_error("Bad direction in getAttackHitbox");
     }
 
+    std::cout << xOffset << " " << yOffset << std::endl;
     theOtherHitbox.setOrigin(
             myOrigin.x + xOffset,
             myOrigin.y + yOffset

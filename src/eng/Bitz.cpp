@@ -176,9 +176,8 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
             projHeight = std::min(Room::roomSize * Room::tileSize - projY, projHeight);
             // create the projection
 
-            std::cout << projX << ' ' << projY << ' ' << projWidth << ' ' << projHeight <<   std::endl;
             Hitbox* projection = new Hitbox(projX, projY, projWidth, projHeight);
-            std::cout << "Here"<< std::endl;
+
 
             // find the minimum possible distance to travel
             // find the intersections
@@ -192,8 +191,9 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
                     setMin(projection, i->getHitbox(), d);
                 }
             }
-
             // position character appropriately
+
+            std::cout << "1";
             switch (d) {
                 case util::NORTH:
                     theCharacter->setY(
@@ -215,6 +215,7 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
                     break;
                 default: throw new std::logic_error("Unknown direction enum");
             }
+            std::cout << "2";
 
             // cleanup
             delete projection;

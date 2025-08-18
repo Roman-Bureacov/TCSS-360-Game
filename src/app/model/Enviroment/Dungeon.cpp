@@ -36,6 +36,8 @@ void Dungeon::generateDungeon() {
             ("Database manager is not found");
     }
     Bitz::registerPlayer(Player::playerInstance());
+    Player::playerInstance()->setX((Room::roomSize * Room::tileSize)/2);
+    Player::playerInstance()->setY((Room::roomSize * Room::tileSize)/2);
 
     idMap.clear();
 

@@ -48,7 +48,8 @@ void Clock::runClock() {
 
 
         //This will stop the clock for testing.
-        if (testingStopTime != 0 && testingStopTime < tickCount) {
+        if (testingStopTime != 0 && testingStopTime > tickCount) {
+
             break;
         }
 

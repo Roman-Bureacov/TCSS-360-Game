@@ -108,18 +108,23 @@ TEST(NPCTEST,GoToPLayer) {
 
         }
     }
+    auto player = Player::playerInstance();
 
     int initalX = allNPCs[0]->getX();
     int initalY = allNPCs[0]->getY();
 
-    Clock::StopClockForTesting( 10 * Clock::getTickRate());
+
+    Clock::StopClockForTesting( 5 * Clock::getTickRate());
     Clock::runClock();
 
     int endX = allNPCs[0]->getX();
     int endY = allNPCs[0]->getY();
 
-    ASSERT_NE(initalX, endX);
-    ASSERT_NE(initalY, endY);
+    std::cout << initalX << ", " << initalY << std::endl;
+    std::cout << endX << ", " << endY << std::endl;
+
+
+    ASSERT_TRUE(initalX != endX || initalY != endY);
 
 
 

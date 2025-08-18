@@ -185,10 +185,10 @@ void AbstractCharacter::setRandomPosition(const std::shared_ptr<AbstractCharacte
     static std::mt19937 gen(rd());
 
     //This should set a random position within in the dungeon.
-    std::uniform_int_distribution<> xDist(Room::tileSize * 2
-        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 2));
-    std::uniform_int_distribution<> yDist(Room::tileSize * 2
-        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 2));
+    std::uniform_int_distribution<> xDist(Room::tileSize * 3
+        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 3));
+    std::uniform_int_distribution<> yDist(Room::tileSize * 3
+        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 3));
 
     character->setX(xDist(gen));
     character->setY(yDist(gen));
