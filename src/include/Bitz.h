@@ -32,7 +32,7 @@ class Bitz final {
     Bitz() = delete;
 private:
     /** The list of characters active. */
-    static std::unordered_set<AbstractCharacter*> entities;
+    static std::unordered_set<std::shared_ptr<AbstractCharacter>> entities;
     static std::unordered_set<Interactable*> interactables;
     /** The queue representing the events to be put into the process queue. */
     static std::unordered_map<const AbstractCharacter*, Event*> eventQueue;
@@ -43,7 +43,7 @@ private:
     /** The dungeon generator. */
     static Dungeon& dungeonGenerator;
     /** The player character. */
-    static AbstractCharacter* player;
+    static std::shared_ptr<AbstractCharacter> player;
     /** the current room instance. */
     static Room* currentRoom;
     /** The units per tile from the dungeon. */
@@ -106,13 +106,13 @@ public:
      * character when it comes to hitbox detection.
      * @param theCharacter the character that the engine should be aware of
      */
-    static void registerCharacter(AbstractCharacter* theCharacter);
+    static void registerCharacter(std::shared_ptr<AbstractCharacter> theCharacter);
 
     /**
      * Registers a character as the main player into the engine.
      * @param theCharacter the character that will act as the player
      */
-    static void registerPlayer(AbstractCharacter* theCharacter);
+    static void registerPlayer(std::shared_ptr<AbstractCharacter> theCharacter);
 
     /**
      * Registers an interactable that may be used in events.
@@ -130,7 +130,7 @@ public:
      * Retrieves characters that have been registered with the engine.
      * @return the set of character entities registered with the engine
      */
-    static const std::unordered_set<AbstractCharacter*>& getEntities();
+    static const std::unordered_set<std::shared_ptr<AbstractCharacter>>& getEntities();
 
     /**
      * Retrieves interactable objects that have been registered with the engine.

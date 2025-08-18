@@ -52,9 +52,9 @@ void Dungeon::generateDungeon() {
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
 
-            auto char1 = NPC::skeletonFactory().get();
-            auto char2 = NPC::skeletonFactory().get();
-            auto char3 = NPC::skeletonFactory().get();
+            auto char1 = NPC::skeletonFactory();
+            auto char2 = NPC::skeletonFactory();
+            auto char3 = NPC::skeletonFactory();
 
             roomBuilder.setChar1ID(char1->getID());
             roomBuilder.setChar2ID(char2->getID());

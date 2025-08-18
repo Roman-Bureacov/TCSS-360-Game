@@ -8,8 +8,8 @@
 #include "../include/Dungeon.h"
 
 
-AbstractCharacter* Bitz::player = nullptr;
-std::unordered_set<AbstractCharacter*> Bitz::entities;
+std::shared_ptr<AbstractCharacter> Bitz::player = nullptr;
+std::unordered_set<std::shared_ptr<AbstractCharacter>> Bitz::entities;
 std::unordered_set<Interactable*> Bitz::interactables;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventQueue;
 std::unordered_map<const AbstractCharacter*, Event*> Bitz::eventProcessQueue;
@@ -72,7 +72,15 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
     enqueueEvent(new Event(
         theCharacter->getWeapon().attackTicks,
         [theCharacter]() -> void {
-            auto c = entities.extract(theCharacter);
+            auto it = std::find_if(entities.begin(), entities.end(),
+                [theCharacter](const std::shared_ptr<AbstractCharacter>& ptr) {
+                    return ptr.get() == theCharacter;
+                });
+
+            if (it == entities.end()) return;
+
+            auto c = entities.extract(it);
+
             const Weapon w = theCharacter->getWeapon();
             const Hitbox h = theCharacter->getAttackHitbox();
 
@@ -144,7 +152,7 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
 
             // find the minimum possible distance to travel
             // find the intersections
-            for (const AbstractCharacter* c : entities) {
+            for (const std::shared_ptr<AbstractCharacter> c : entities) {
                 if (projection->intersects(c->getHitbox())) {
                     setMin(projection, c->getHitbox(), d);
                 }
@@ -219,13 +227,13 @@ void Bitz::setMin(const Hitbox* theProjection, const Hitbox &theIntersection, co
     theProjection = new Hitbox(minX, minY, minWidth, minHeight);
 }
 
-void Bitz::registerCharacter(AbstractCharacter* theCharacter) {
+void Bitz::registerCharacter(std::shared_ptr<AbstractCharacter> theCharacter) {
     entities.insert(theCharacter);
 }
 
-void Bitz::registerPlayer(AbstractCharacter *theCharacter) {
+void Bitz::registerPlayer(std::shared_ptr<AbstractCharacter> theCharacter) {
     if (entities.contains(player)) entities.erase(player);
-    delete player;
+
     registerCharacter(theCharacter);
     player = theCharacter;
 }
@@ -317,7 +325,7 @@ void Bitz::loadDungeonRoom(const int theRoomID) {
     //    registerCharacter(character.get());
 }
 
-const std::unordered_set<AbstractCharacter *> & Bitz::getEntities() {
+const std::unordered_set<std::shared_ptr<AbstractCharacter>> & Bitz::getEntities() {
     return entities;
 }
 

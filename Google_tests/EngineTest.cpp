@@ -16,7 +16,7 @@ int modifyThis;
 TEST(EngineTest, EnqueueOnlyOneEvent) {
     auto d = new Dummy();
     modifyThis = 0;
-    Bitz::registerCharacter(d);
+    Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d));
 
     // events to enqueue
     Bitz::enqueueEvent(new Event(
@@ -114,8 +114,8 @@ TEST(EngineTest, AttackingInRange) {
     d2->setX(15);
     d2->setHealth(10);
 
-    Bitz::registerCharacter(d1);
-    Bitz::registerCharacter(d2);
+    Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d1));
+    Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d2));
 
     // attack
     Clock::setActive(true);
@@ -159,7 +159,7 @@ TEST(EngineTest, InteractionTest) {
     lever->myEvent = event;
 
     Bitz::registerInteractable(lever);
-    Bitz::registerCharacter(d);
+    Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d));
 
     Bitz::enqueueInteractEvent(d);
     auto clockEnder = new Dummy();

@@ -36,7 +36,6 @@ public:
     /**
     * Does all the setup for the dungeon.
     * @param dbManager This is a pointer to the database.
-    * @param bitz This is a pointer to the engine.
     */
     void initialize(const std::shared_ptr<DatabaseManager> &dbManager);
 

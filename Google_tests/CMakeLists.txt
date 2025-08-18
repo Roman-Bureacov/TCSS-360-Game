@@ -14,6 +14,7 @@ add_executable(
         ../src/include/NPC.h
         DungeonRoomTest.cpp
         NPCTest.cpp
+        PlayerTest.cpp
 
 )
 
