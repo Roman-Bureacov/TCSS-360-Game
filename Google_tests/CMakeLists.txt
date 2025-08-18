@@ -15,6 +15,8 @@ add_executable(
         DungeonRoomTest.cpp
         NPCTest.cpp
         PlayerTest.cpp
+        EngineMovementTest.cpp
+
 
 )
 
