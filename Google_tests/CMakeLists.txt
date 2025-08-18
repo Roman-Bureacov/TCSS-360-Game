@@ -12,6 +12,7 @@ add_executable(
         ObserverTest.cpp
         ../src/app/model/Characters/NPC.cpp
         ../src/include/NPC.h
+        EngineMovementTest.cpp
 )
 
 target_link_libraries(
