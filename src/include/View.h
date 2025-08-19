@@ -10,9 +10,8 @@
 #include "unordered_map"
 #include "RenderConfig.h"
 #include "GPURenderer.h"
-#include "../../include/AbstractCharacter.h"
-#include "../../include/Dungeon.h"
-
+#include "Dungeon.h"
+#include "AbstractCharacter.h";
 
 /**
  * This Structure allows View to keep current render information for Sprites

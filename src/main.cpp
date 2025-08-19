@@ -15,7 +15,6 @@
 #include "include/Room.h"
 #include "include/Dungeon.h"
 
-#include "app/view/View.h"
 #include "include/View.h"
 
 #include "include/Bitz.h"

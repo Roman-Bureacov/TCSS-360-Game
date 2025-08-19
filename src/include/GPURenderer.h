@@ -5,8 +5,8 @@
 #ifndef GPU_RENDERER_H
 #define GPU_RENDERER_H
 
-#include "../../include/Dungeon.h"
-#include "../../include/AbstractCharacter.h"
+#include "Dungeon.h"
+#include "AbstractCharacter.h"
 
 class GPURenderer {
 private:
