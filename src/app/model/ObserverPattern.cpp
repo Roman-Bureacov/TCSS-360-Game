@@ -23,7 +23,6 @@ void Subject::notify(const std::string& thePropertyName) {
     for (auto it = _observers.begin()
         ; it != _observers.end(); ++it) {
         (*it)->Update(this, thePropertyName);
-    }
+        }
 }
-
 

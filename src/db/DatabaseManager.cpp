@@ -200,6 +200,7 @@ void DatabaseManager::createRoomTableIfNotExists() {
 
     char *errmsg = nullptr;
     if (sqlite3_exec(db, sql, nullptr, nullptr, &errmsg) != SQLITE_OK) {
+        throw std::runtime_error(sqlite3_errmsg(db));
         sqlite3_free(errmsg);
         throw std::runtime_error(sqlite3_errmsg(db));
     }

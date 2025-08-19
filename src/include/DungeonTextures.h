@@ -18,7 +18,7 @@ namespace DunText {
         SouthEastCorner,
         HorizontalDoor,
         VerticalDoor,
-
+        Blank
     };
 
 

@@ -12,15 +12,19 @@
 
 #include "app/model/Characters/Dummy.h"
 
+#include "include/Room.h"
+#include "include/Dungeon.h"
+
+#include "app/view/View.h"
 #include "include/View.h"
 
 #include "include/Bitz.h"
 #include "include/Clock.h"
 
-void runGame();
-int runTest();
-int showWindow();
-void userPolling();
+//void runGame();
+//int runTest();
+//int showWindow();
+//void userPolling();
 
 int main(int argc, char* argv[]) {
 
@@ -41,6 +45,11 @@ int main(int argc, char* argv[]) {
     //While window is open and running...
     while (userView.isWindowRunning()) {
         //Check if window has been closed
+
+        SDL_Delay(1000);
+
+        userView.render();
+
         if (!userView.handleEvents()) {
             break;
         }
@@ -53,11 +62,12 @@ int main(int argc, char* argv[]) {
     userView.cleanup();
     //VIEW TEST ENDS
 
-    runGame();
+    //runGame();
 
     return 0;
 }
 
+/*
 void runGame() {
     std::cout << "Running clock..." << std::endl;
     Clock::setActive(true);
@@ -82,6 +92,7 @@ void runGame() {
     std::cout << "Goodbye!" << std::endl;
 }
 
+
 void userPolling() {
     Dummy* d1 = new Dummy();
     Dummy* d2 = new Dummy();
@@ -102,6 +113,8 @@ void userPolling() {
         },
         *d1
     ));
+
+    char ch;
 
     while (true) {
         std::cin.get(ch);
@@ -131,5 +144,5 @@ void userPolling() {
         }
 
     }
-    */
 }
+*/

@@ -33,8 +33,9 @@ add_executable(TCSS-360-Game
         src/app/model/Characters/NPC.cpp
         src/eng/Bitz.cpp
         src/eng/Clock.cpp
-)
+        src/app/view/View.cpp
 
+)
 
 # static libraries, primarily for testing purposes
 add_library(engine STATIC
@@ -43,9 +44,12 @@ add_library(engine STATIC
 )
 
 add_library(model STATIC
+        src/include/Utils.h
         src/app/model/Characters/AbstractCharacter.cpp
+        src/app/model/Characters/Dummy.h # header-only implementation
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
+        src/include/Weapon.h
         src/app/model/ObserverPattern.cpp
         src/app/model/Enviroment/Dungeon.cpp
         src/app/model/Enviroment/Room.cpp
@@ -68,6 +72,17 @@ target_include_directories(model PUBLIC
 
 target_include_directories(engine PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        src/db/sqlite_test.cpp
+        "${SQLITE_ROOT}/lib/sqlite3.c"
+        src/app/model/Enviroment/Dungeon.cpp
+        src/include/Dungeon.h
+        src/app/model/Enviroment/Room.cpp
+        src/include/Room.h
+        src/include/DungeonTextures.h
+        src/db/DatabaseManager.cpp
+        src/include/DatabaseManager.h
+        src/app/model/ObserverPattern.cpp
+        src/test/TestMain.cpp
 )
 
 # adds tests to their own separate ecosystem.
@@ -98,6 +113,18 @@ add_custom_command(TARGET TCSS-360-Game POST_BUILD
         "${SDL3_ROOT}/lib/x64/SDL3.dll"
         $<TARGET_FILE_DIR:TCSS-360-Game>)
 
+#Include Path to Shaders
+add_custom_command(TARGET TCSS-360-Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/src/shaders"
+        $<TARGET_FILE_DIR:TCSS-360-Game>/shaders)
+
+# Copy PNG assets into the build output directory
+add_custom_command(TARGET TCSS-360-Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/src/assets"
+        $<TARGET_FILE_DIR:TCSS-360-Game>/assets
+)
 
 
 add_subdirectory(Google_tests)

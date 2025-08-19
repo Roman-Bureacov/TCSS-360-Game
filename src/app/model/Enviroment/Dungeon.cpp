@@ -14,6 +14,7 @@ std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
 
 Dungeon* Dungeon::DungeonInstance() {
 
+    //Breaks at this if
     if (instance == nullptr) {
         instance =  std::unique_ptr<Dungeon>(new Dungeon());
     }
@@ -89,6 +90,7 @@ void Dungeon::generateDungeon() {
 
     //Its 100, just so you don't have to look.
     setCharacterRoom(startingRoomId);
+
 
 }
 
