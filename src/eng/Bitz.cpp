@@ -141,28 +141,31 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
             int projX = theCharacter->getX();
             int projY = theCharacter->getY();
 
-            int desiredForward = std::abs(theDesiredForward);
 
             const util::Direction d = theCharacter->getDirection();
 
 
             switch (d) {
                 case util::NORTH:
+                    // define deltaY
+                    projY = theCharacter->getY() + theCharacter->getHitbox().getHeight();
                     projWidth = theCharacter->getHitbox().getWidth();
-                    projHeight = desiredForward;
+                    projHeight = theDesiredForward;
                     break;
                 case util::EAST:
-                    projWidth = desiredForward;
+                    // define deltaX
+                    projX = theCharacter->getX() + theCharacter->getHitbox().getWidth();
+                    projWidth = theDesiredForward;
                     projHeight = theCharacter->getHitbox().getHeight();
                     break;
                 case util::SOUTH:
                     projY -= theDesiredForward;
                     projWidth = theCharacter->getHitbox().getWidth();
-                    projHeight = desiredForward;
+                    projHeight = theDesiredForward;
                     break;
                 case util::WEST:
                     projX -= theDesiredForward;
-                    projWidth = desiredForward;
+                    projWidth = theDesiredForward;
                     projHeight = theCharacter->getHitbox().getHeight();
                     break;
                 default: throw new std::logic_error("Unknown direction enum");
@@ -181,6 +184,16 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
 
             // find the minimum possible distance to travel
             // find the intersections
+            // first extract the entity (it shouldn't collide with itself)
+            auto benchedCharacter = [theCharacter] {
+                auto it = std::find_if(entities.begin(), entities.end(),
+                [theCharacter](const std::shared_ptr<AbstractCharacter>& ptr) {
+                    return ptr.get() == theCharacter;
+                });
+
+                return entities.extract(it);
+            }(); // immediately invoke lambda
+
             for (const std::shared_ptr<AbstractCharacter> c : entities) {
                 if (projection->intersects(c->getHitbox())) {
                     setMin(projection, c->getHitbox(), d);
@@ -191,21 +204,18 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
                     setMin(projection, i->getHitbox(), d);
                 }
             }
-            // position character appropriately
 
-            std::cout << "1";
+            entities.insert(std::move(benchedCharacter));
+
+            // position character appropriately
             switch (d) {
                 case util::NORTH:
-                    theCharacter->setY(
-                        projection->getOrigin().y
-                        + theCharacter->getHitbox().getHeight() - projection->getHeight()
-                    );
+                    // the projection height is a deltaY
+                    theCharacter->setY(theCharacter->getY() + projection->getHeight());
                     break;
                 case util::EAST:
-                    theCharacter->setX(
-                        projection->getOrigin().x
-                        + theCharacter->getHitbox().getWidth() - projection->getWidth()
-                    );
+                    // the projection width is a deltaX
+                    theCharacter->setX(theCharacter->getX() + projection->getWidth());
                     break;
                 case util::SOUTH:
                     theCharacter->setY(projection->getOrigin().y);
@@ -215,7 +225,6 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
                     break;
                 default: throw new std::logic_error("Unknown direction enum");
             }
-            std::cout << "2";
 
             // cleanup
             delete projection;
@@ -224,7 +233,7 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
     ));
 }
 
-void Bitz::setMin(const Hitbox* theProjection, const Hitbox &theIntersection, const util::Direction theDirection) {
+void Bitz::setMin(Hitbox*& theProjection, const Hitbox &theIntersection, const util::Direction theDirection) {
     int minX = theProjection->getOrigin().x;
     int minY = theProjection->getOrigin().y;
     int minHeight = theProjection->getHeight();
@@ -236,10 +245,10 @@ void Bitz::setMin(const Hitbox* theProjection, const Hitbox &theIntersection, co
     int intersectH;
     switch (theDirection) {
         case util::NORTH:
-            minHeight = minY - theIntersection.getOrigin().y;
+            minHeight = theIntersection.getOrigin().y - minY;
             break;
         case util::EAST:
-            minWidth = minX - theIntersection.getOrigin().x;
+            minWidth = theIntersection.getOrigin().x - minX;
             break;
         case util::SOUTH:
             intersectY = theIntersection.getOrigin().y;
@@ -255,6 +264,8 @@ void Bitz::setMin(const Hitbox* theProjection, const Hitbox &theIntersection, co
             break;
         default: throw new std::logic_error("Unknown direction enum");
     }
+
+    delete theProjection;
     theProjection = new Hitbox(minX, minY, minWidth, minHeight);
 }
 

@@ -20,6 +20,9 @@ protected:
         hb = new Hitbox(10, 10);
         d1->setHitbox(*hb);
         d2->setHitbox(*hb);
+
+        Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d1));
+        Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d2));
     }
 
     /**
@@ -67,8 +70,8 @@ TEST_F(EngineMovementTest, MovementTestNorth) {
     Bitz::enqueueEvent(getStopClockEvent());
     Clock::runClock();
 
-    EXPECT_EQ(d1->getX(), 50 - hb->getHeight());
-    EXPECT_EQ(d1->getY(), 0);
+    EXPECT_EQ(d1->getX(), 0);
+    EXPECT_EQ(d1->getY(), 50 - hb->getHeight());
 }
 
 TEST_F(EngineMovementTest, MovementTestEast) {

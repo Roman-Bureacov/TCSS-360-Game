@@ -29,14 +29,13 @@ void Clock::tick() {
 }
 
 void Clock::runClock() {
-    toggleActive();
     while (isActive()) {
 
         //Placeholder for now, till we have a better way
         //To poke the active NPCs
         for (auto character : Bitz::getEntities()) {
             auto npc = std::dynamic_pointer_cast<NPC>(character);
-            if (npc->getIsActive()) {
+            if (npc && npc->getIsActive()) {
                 npc->takeAction();
             }
         }

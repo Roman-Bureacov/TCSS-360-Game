@@ -60,7 +60,7 @@ private:
      * @param theIntersection the intersecting hitbox to resize with respect to
      * @param theDirection the direction to resize towards
      */
-    static void setMin(const Hitbox* theProjection, const Hitbox& theIntersection, util::Direction theDirection);
+    static void setMin(Hitbox*& theProjection, const Hitbox& theIntersection, util::Direction theDirection);
 public:
 
 
