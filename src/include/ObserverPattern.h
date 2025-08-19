@@ -35,8 +35,8 @@ protected:
 class Subject {
 public:
     virtual ~Subject();
-    virtual void attach(std::unique_ptr<Observer> theObserver);
-    virtual void detach(std::unique_ptr<Observer> theObserver);
+    virtual void attach(std::shared_ptr<Observer> theObserver);
+    virtual void detach(std::shared_ptr<Observer> theObserver);
     virtual void notify(const std::string& thePropertyName);
 protected:
     Subject();
