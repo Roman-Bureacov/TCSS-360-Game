@@ -34,6 +34,8 @@ add_executable(TCSS-360-Game
         src/eng/Bitz.cpp
         src/eng/Clock.cpp
         src/app/view/View.cpp
+        src/app/view/GUINOW.cpp
+        src/include/GUINOW.h
 
 )
 

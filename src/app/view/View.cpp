@@ -131,7 +131,7 @@ bool View::handleEvents() {
                 break;
 
             case SDL_EVENT_KEY_DOWN:
-                handleKeyDown(event.key.key);
+                //handleKeyDown(event.key.key);
                 break;
 
             default:
