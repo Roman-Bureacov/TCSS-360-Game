@@ -73,7 +73,10 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
         [theCharacter]() -> void {
             auto it = std::find_if(entities.begin(), entities.end(),
                 [theCharacter](const std::shared_ptr<AbstractCharacter>& ptr) {
-                    return ptr.get() == theCharacter;
+                    if (ptr && theCharacter) {
+                        return ptr.get() == theCharacter;
+                    }
+
                 });
 
             if (it == entities.end()) return;

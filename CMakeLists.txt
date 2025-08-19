@@ -62,6 +62,7 @@ add_library(model STATIC
 target_include_directories(model PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${SQLITE_ROOT}/include
+        ${SDL3_ROOT}/include
 )
 
 
@@ -81,6 +82,8 @@ add_executable(TCSS-360-Tests
         "${SQLITE_ROOT}/lib/sqlite3.c"
         src/test/TestEnviroment/TestRoom.cpp
         src/test/TestEnviroment/TestDungeon.cpp
+        src/eng/Bitz.cpp
+        src/eng/Clock.cpp
 )
 
 #Adds the test ecosystem

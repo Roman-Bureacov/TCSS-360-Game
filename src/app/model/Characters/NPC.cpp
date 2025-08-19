@@ -53,7 +53,6 @@ void NPC::Update(Subject *theChangedSubject, const std::string &thePropertyName)
 void NPC::attackPlayer() {
 
     Bitz::enqueueAttackEvent(this);
-    std::cout << player->getHealth() << std::endl;
 }
 
 bool NPC::canAttack() {

@@ -122,7 +122,7 @@ TEST(NPCTEST,GoToPLayer) {
     int initalY3 = allNPCs[2]->getY();
 
 
-   Clock::StopClockForTesting( 5);
+    Clock::StopClockForTesting( 5);
     Clock::runClock();
 
     int endX1 = allNPCs[0]->getX();

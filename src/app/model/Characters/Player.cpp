@@ -27,12 +27,16 @@ Player::Player(const std::string &theName
             : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {
 
     setHitbox(hitBoxSize, hitBoxSize);
+    Weapon* PlayerWeapon =
+        new Weapon(10, 10, std::move(PlayerWeaponHitbox));
+    this->giveWeapon(PlayerWeapon);
 }
 
 void Player::Update(Subject *theChangedSubject
         , const std::string &thePropertyName) {}
 
 void Player::userInput(SDL_Event &event) {
+    std::cout << "Player position: " << getX() << " " << getY() << std::endl;
     if (event.type == SDL_EVENT_KEY_DOWN) {
         switch (event.key.scancode) {
             case SDL_SCANCODE_W:
@@ -94,5 +98,8 @@ void Player::endRoll() {
 }
 
 void Player::attack() {
-    Bitz::enqueueAttackEvent(this);
+    if (instance) {
+        Bitz::enqueueAttackEvent(instance.get());
+    }
+
 }

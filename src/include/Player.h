@@ -86,6 +86,9 @@ private:
     /**HitBox size*/
     const int hitBoxSize = 10;
 
+    /**Just a basic hitbox for the weapon.*/
+    Hitbox PlayerWeaponHitbox = Hitbox(10, 10);
+
 };
 
 

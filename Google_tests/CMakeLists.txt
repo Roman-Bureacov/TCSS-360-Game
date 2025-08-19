@@ -1,6 +1,8 @@
 project(Google_tests)
 add_subdirectory(lib)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${SDL3_ROOT}/include)
+link_directories(${SDL3_ROOT}/lib/x64)
 
 # adding the Google_Tests_run target
 add_executable(
@@ -26,4 +28,5 @@ target_link_libraries(
         model
         gtest
         gtest_main
+        SDL3
 )
