@@ -167,14 +167,12 @@ TEST(NPCTEST, AttackPLayer) {
 
 
     auto player = Player::playerInstance();
-    allNPCs[0]->setX(700);
-    allNPCs[0]->setY(700);
     allNPCs[1]->setIsActive(false);
     allNPCs[2]->setIsActive(false);
 
     int playerHealth = player->getHealth();
 
-    Clock::StopClockForTesting( 50 );
+    Clock::StopClockForTesting( 25);
     Clock::runClock();
 
     ASSERT_NE(playerHealth, player->getHealth());

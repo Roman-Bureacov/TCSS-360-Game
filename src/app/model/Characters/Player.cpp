@@ -36,7 +36,7 @@ void Player::userInput(SDL_Event &event) {
         switch (event.key.key) {
             case SDLK_W:
                 setDirection(util::NORTH);
-                Bitz::enqueueMovementEvent(this,-movementSpeed);
+                Bitz::enqueueMovementEvent(this,movementSpeed);
                 break;
             case SDLK_S:
                 setDirection(util::SOUTH);
@@ -44,7 +44,7 @@ void Player::userInput(SDL_Event &event) {
                 break;
             case SDLK_A:
                 setDirection(util::WEST);
-                Bitz::enqueueMovementEvent(this,-movementSpeed);
+                Bitz::enqueueMovementEvent(this,movementSpeed);
                 break;
             case SDLK_D:
                 setDirection(util::EAST);
@@ -64,16 +64,16 @@ void Player::userInput(SDL_Event &event) {
 void Player::roll() {
     switch (getDirection()) {
         case util::NORTH:
-            Bitz::enqueueMovementEvent(this,getY() - rollDisplacement);
+            Bitz::enqueueMovementEvent(this, rollDisplacement);
         break;
         case util::EAST:
-            Bitz::enqueueMovementEvent(this,getX() + rollDisplacement);
+            Bitz::enqueueMovementEvent(this, rollDisplacement);
         break;
         case util::SOUTH:
-            Bitz::enqueueMovementEvent(this,getY() + rollDisplacement);
+            Bitz::enqueueMovementEvent(this, rollDisplacement);
         break;
         case util::WEST:
-            Bitz::enqueueMovementEvent(this,getX() - rollDisplacement);
+            Bitz::enqueueMovementEvent(this, rollDisplacement);
         break;
         default:
             throw new std::logic_error("Unknown direction enum");

@@ -72,7 +72,7 @@ private:
 
     static inline const std::string name = "John programmer";
     static inline const int startingHealth = 100;
-    static inline const int movementSpeed = 5;
+    static inline const int movementSpeed = 75;
 
 
     /**This the amount of clock ticks the player won't take damage.*/
