@@ -17,7 +17,6 @@ Dungeon* Dungeon::DungeonInstance() {
         instance = std::make_unique<Dungeon>();
     }
 
-
     return instance.get();
 }
 
@@ -25,6 +24,9 @@ Dungeon* Dungeon::DungeonInstance() {
 void Dungeon::initialize(const
     std::shared_ptr<DatabaseManager> &dbManager) {
     databaseManager = dbManager;
+    if (!databaseManager) {
+        throw std::runtime_error("Database manager, ahhhhhh!");
+    }
     this->generateDungeon();
 }
 
@@ -32,7 +34,7 @@ void Dungeon::generateDungeon() {
 
     if (!databaseManager) {
         throw std::runtime_error
-            ("Database manager is not found");
+            ("Database manager booooo!");
     }
 
     //(row, column) -> (i,j)
@@ -92,7 +94,8 @@ std::shared_ptr<Room> Dungeon::getCurrentRoom() {
 
 
 Dungeon::Dungeon() {
-    this->generateDungeon();
+    //this->initialize(databaseManager);
+    //this->generateDungeon();
 
 }
 

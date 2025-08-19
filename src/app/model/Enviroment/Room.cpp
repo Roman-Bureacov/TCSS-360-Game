@@ -87,7 +87,7 @@ void Room::initializeRoom() {
         //load data from database here
         this->generateExistingRoom();
     } else {
-        this->generateNonExistingRoom();
+        this->generateNonExsistingRoom();
     }
 }
 
@@ -244,6 +244,9 @@ ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int id) {
     return *this;
 }
 
+ConcreteRoomBuilder& ConcreteRoomBuilder::setEnemyAmount(const int theNumber) {
+    return *this;
+}
 
 std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 

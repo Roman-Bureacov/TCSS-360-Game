@@ -19,28 +19,21 @@ link_directories("${SDL3_ROOT}/lib/x64")
 
 # Add source files
 add_executable(TCSS-360-Game src/main.cpp
+        src/main.cpp
+        ${SQLITE_ROOT}/lib/sqlite3.c
         src/app/model/ObserverPattern.cpp
         src/app/control/control.cpp
         src/app/model/model.cpp
         src/app/view/View.cpp
-        src/include/Clock.h
         src/eng/Clock.cpp
-        src/include/AbstractCharacter.h
-        src/include/Utils.h
         src/app/model/Hitbox.cpp
-        src/include/Hitbox.h
         src/app/model/Characters/AbstractCharacter.cpp
-        src/include/Bitz.h
         src/eng/Bitz.cpp
-        src/include/Event.h
-        src/app/model/Characters/Dummy.h
-        src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
-        src/include/Weapon.h
+        src/db/DatabaseManager.cpp
         src/app/model/Enviroment/Interactable.cpp
-        src/include/Interactable.h
-        src/app/model/Enviroment/Door.h
-
+        src/app/model/Enviroment/Dungeon.cpp
+        src/app/model/Enviroment/Room.cpp
 )
 
 # static libraries, primarily for testing purposes
@@ -55,25 +48,19 @@ add_library(model STATIC
         src/app/model/Characters/Dummy.h # header-only implementation
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
-        src/include/Weapon.h
         src/app/model/ObserverPattern.cpp
         src/app/model/Enviroment/Dungeon.cpp
         src/app/model/Enviroment/Room.cpp
         src/app/model/Enviroment/Interactable.cpp
-        src/include/Interactable.h
         src/app/model/Enviroment/Door.h
 )
 
 target_include_directories(engine PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        src/db/sqlite_test.cpp
         "${SQLITE_ROOT}/lib/sqlite3.c"
-        src/app/model/Enviroment/Dungeon.cpp
         src/include/Dungeon.h
-        src/app/model/Enviroment/Room.cpp
         src/include/Room.h
         src/include/DungeonTextures.h
-        src/db/DatabaseManager.cpp
         src/include/DatabaseManager.h
         src/app/model/ObserverPattern.cpp
         src/test/TestMain.cpp
@@ -84,20 +71,14 @@ target_include_directories(engine PUBLIC
 # a different place.
 add_executable(TCSS-360-Tests
         src/app/model/Enviroment/Dungeon.cpp
-        src/include/Dungeon.h
         src/app/model/Enviroment/Room.cpp
-        src/include/Room.h
         src/include/DungeonTextures.h
         src/db/DatabaseManager.cpp
-        src/include/DatabaseManager.h
-        src/include/ObserverPattern.h
         src/app/model/ObserverPattern.cpp
         src/test/TestMain.cpp
         "${SQLITE_ROOT}/lib/sqlite3.c"
         src/test/TestEnviroment/TestRoom.cpp
-        src/include/TestRoom.h
         src/test/TestEnviroment/TestDungeon.cpp
-        src/include/TestDungeon.h
 )
 
 #Adds the test ecosystem
@@ -112,5 +93,17 @@ add_custom_command(TARGET TCSS-360-Game POST_BUILD
         "${SDL3_ROOT}/lib/x64/SDL3.dll"
         $<TARGET_FILE_DIR:TCSS-360-Game>)
 
+#Include Path to Shaders
+add_custom_command(TARGET TCSS-360-Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/src/shaders"
+        $<TARGET_FILE_DIR:TCSS-360-Game>/shaders)
+
+# Copy PNG assets into the build output directory
+add_custom_command(TARGET TCSS-360-Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/src/assets"
+        $<TARGET_FILE_DIR:TCSS-360-Game>/assets
+)
 
 add_subdirectory(Google_tests)

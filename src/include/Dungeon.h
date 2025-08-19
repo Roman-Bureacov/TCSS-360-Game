@@ -63,11 +63,13 @@ public:
     void updateRoomEntities(std::unordered_set<AbstractCharacter*> entities);
 
 
+    Dungeon();
+
 private:
     /**
      * Constructs the object.
      */
-    Dungeon();
+
     ConcreteRoomBuilder roomBuilder;
     std::shared_ptr<Room> currentRoom;
     std::vector<std::vector<int>> idMap;

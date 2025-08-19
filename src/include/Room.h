@@ -15,7 +15,7 @@
 #include "AbstractCharacter.h"
 #include "DungeonTextures.h"
 
-
+class ConcreteRoomBuilder;
 
 class Room final {
     friend class ConcreteRoomBuilder;
@@ -50,11 +50,12 @@ public:
     void setAlreadyGenerated(bool alreadyMade);
     void setSerialRoomMap(const std::string &map);
 
+    Room();
     ~Room() = default;
 
 private:
 
-    Room();
+
 
     //This should be read by the GUI for the room
     //IF IT IS NOT I will personally find you and

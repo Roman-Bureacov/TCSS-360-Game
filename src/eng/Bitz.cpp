@@ -3,7 +3,6 @@
 //
 
 #include "../include/Bitz.h"
-
 #include "../app/model/Enviroment/Door.h"
 #include "../include/Dungeon.h"
 

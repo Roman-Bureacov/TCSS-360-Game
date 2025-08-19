@@ -20,10 +20,10 @@
 #include "include/Bitz.h"
 #include "include/Clock.h"
 
-void runGame();
-int runTest();
-int showWindow();
-void userPolling();
+//void runGame();
+//int runTest();
+//int showWindow();
+//void userPolling();
 
 int main(int argc, char* argv[]) {
 
@@ -54,11 +54,12 @@ int main(int argc, char* argv[]) {
     userView.cleanup();
     //VIEW TEST ENDS
 
-    runGame();
+    //runGame();
 
     return 0;
 }
 
+/*
 void runGame() {
     std::cout << "Running clock..." << std::endl;
     Clock::setActive(true);
@@ -82,6 +83,7 @@ void runGame() {
     clockThread.join();
     std::cout << "Goodbye!" << std::endl;
 }
+
 
 void userPolling() {
     Dummy* d1 = new Dummy();
@@ -135,3 +137,4 @@ void userPolling() {
 
     }
 }
+*/
