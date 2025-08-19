@@ -18,19 +18,23 @@ include_directories("${CMAKE_SOURCE_DIR}/include")
 link_directories("${SDL3_ROOT}/lib/x64")
 
 # Add source files
-add_executable(TCSS-360-Game src/main.cpp
-        src/app/model/ObserverPattern.cpp
-        src/app/control/control.cpp
-        src/app/model/model.cpp
-        src/app/view/View.cpp
-        src/eng/Clock.cpp
+add_executable(TCSS-360-Game
+        src/main.cpp
         src/app/model/Characters/AbstractCharacter.cpp
         src/app/model/Hitbox.cpp
         src/app/model/Characters/Weapons/Weapon.cpp
+        src/app/model/ObserverPattern.cpp
+        src/app/model/Enviroment/Dungeon.cpp
+        src/app/model/Enviroment/Room.cpp
         src/app/model/Enviroment/Interactable.cpp
+        src/db/DatabaseManager.cpp
+        ${SQLITE_ROOT}/lib/sqlite3.c
         src/app/model/Characters/Player.cpp
-        src/include/Player.h
+        src/app/model/Characters/NPC.cpp
+        src/eng/Bitz.cpp
+        src/eng/Clock.cpp
 )
+
 
 # static libraries, primarily for testing purposes
 add_library(engine STATIC
@@ -49,6 +53,7 @@ add_library(model STATIC
         src/db/DatabaseManager.cpp
         ${SQLITE_ROOT}/lib/sqlite3.c
         src/app/model/Characters/Player.cpp
+        src/app/model/Characters/NPC.cpp
         src/include/Player.h
 
 
@@ -89,6 +94,7 @@ add_custom_command(TARGET TCSS-360-Game POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${SDL3_ROOT}/lib/x64/SDL3.dll"
         $<TARGET_FILE_DIR:TCSS-360-Game>)
+
 
 
 add_subdirectory(Google_tests)

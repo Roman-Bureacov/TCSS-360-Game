@@ -356,7 +356,7 @@ typedef struct SDL_KeyboardEvent
     SDL_WindowID windowID;  /**< The window with keyboard focus, if any */
     SDL_KeyboardID which;   /**< The keyboard instance id, or 0 if unknown or virtual */
     SDL_Scancode scancode;  /**< SDL physical key code */
-    SDL_Keycode key;        /**< SDL virtual key code */
+    SDL_Keycode SDL_Keycodekey;        /**< SDL virtual key code */
     SDL_Keymod mod;         /**< current key modifiers */
     Uint16 raw;             /**< The platform dependent scancode for this event */
     bool down;              /**< true if the key is pressed */

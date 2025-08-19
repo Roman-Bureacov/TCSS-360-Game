@@ -5,6 +5,18 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
+
+
+#include "../include/Bitz.h"
+#include "../include/NPC.h"
+#include "../include/Bitz.h"
+
+#include <chrono>
+#include <iostream>
+#include <thread>
+
+#include "SDL3/SDL.h"
+
 /**
  * Static class that handles timekeeping and ticks the engine at specific intervals
  * to process events.

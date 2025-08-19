@@ -2,14 +2,10 @@
 // Created by iwant on 7/26/2025.
 //
 
+
 #include "../include/Clock.h"
-#include "../include/Bitz.h"
-#include "../include/NPC.h"
 
-#include <chrono>
-#include <iostream>
-#include <thread>
-
+class Bitz;
 
 long Clock::getTickRate() {
     return tickRate;
@@ -34,6 +30,20 @@ void Clock::runClock() {
         //This will stop the clock for testing.
         if (testingStopTick != 0 && testingStopTick <= tickCount) break;
 
+
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            // Handle quit event
+            if (event.type == SDL_EVENT_QUIT) {
+                setActive(false);
+                break;
+            }
+            //Handel user input.
+            if (auto player = Player::playerInstance()) {
+                player->userInput(event);
+            }
+        }
+
         //Placeholder for now, till we have a better way
         //To poke the active NPCs
         for (auto character : Bitz::getEntities()) {
@@ -47,10 +57,6 @@ void Clock::runClock() {
         tickCount++;
 
         std::this_thread::sleep_for(std::chrono::milliseconds(tickRate));
-
-
-
-
     }
 }
 

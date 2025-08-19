@@ -79,7 +79,7 @@ TEST(NPCTEST, ActiveNPCs) {
 
         auto npc = std::dynamic_pointer_cast<NPC>(character);
 
-        if (npc->getIsActive()) {
+        if (npc && npc->getIsActive()) {
             allNPCs.push_back(npc);
 
         }
@@ -122,7 +122,7 @@ TEST(NPCTEST,GoToPLayer) {
     int initalY3 = allNPCs[2]->getY();
 
 
-   Clock::StopClockForTesting( 50);
+   Clock::StopClockForTesting( 5);
     Clock::runClock();
 
     int endX1 = allNPCs[0]->getX();
@@ -176,6 +176,40 @@ TEST(NPCTEST, AttackPLayer) {
     Clock::runClock();
 
     ASSERT_NE(playerHealth, player->getHealth());
+
+
+}
+
+TEST(NPCTEST, NPCDEATH) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->setCharacterRoom(300);
+
+    auto room = dungeon->getCurrentRoom();
+
+    std::vector<std::shared_ptr<NPC>> allNPCs;
+
+    for (auto character : Bitz::getEntities()) {
+
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
+        }
+    }
+    allNPCs[0]->setHealth(0);
+    allNPCs[1]->setHealth(-1);
+
+    Clock::StopClockForTesting(5);
+    Clock::runClock();
+
+    ASSERT_FALSE(allNPCs[0]->getIsActive());
+    ASSERT_FALSE(allNPCs[1]->getIsActive());
+    ASSERT_TRUE(allNPCs[2]->getIsActive());
+
 
 
 }

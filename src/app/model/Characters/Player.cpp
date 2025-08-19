@@ -3,10 +3,11 @@
 //
 
 #include "../../../include/Player.h"
+#include "../../../include/Bitz.h"
 
 #include <future>
 
-#include "../../../include/Bitz.h"
+
 
 std::shared_ptr<Player> Player::instance = nullptr;
 
@@ -33,27 +34,27 @@ void Player::Update(Subject *theChangedSubject
 
 void Player::userInput(SDL_Event &event) {
     if (event.type == SDL_EVENT_KEY_DOWN) {
-        switch (event.key.key) {
-            case SDLK_W:
+        switch (event.key.scancode) {
+            case SDL_SCANCODE_W:
                 setDirection(util::NORTH);
                 Bitz::enqueueMovementEvent(this,movementSpeed);
                 break;
-            case SDLK_S:
+            case SDL_SCANCODE_S:
                 setDirection(util::SOUTH);
                 Bitz::enqueueMovementEvent(this,movementSpeed);
                 break;
-            case SDLK_A:
+            case SDL_SCANCODE_A:
                 setDirection(util::WEST);
                 Bitz::enqueueMovementEvent(this,movementSpeed);
                 break;
-            case SDLK_D:
+            case SDL_SCANCODE_D:
                 setDirection(util::EAST);
                 Bitz::enqueueMovementEvent(this,movementSpeed);
                 break;
-            case SDLK_SPACE:
+            case SDL_SCANCODE_SPACE:
                 attack();
                 break;
-            case SDLK_LSHIFT:
+            case SDL_SCANCODE_LSHIFT:
                 roll();
                 break;
             default: break;

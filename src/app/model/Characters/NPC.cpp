@@ -95,11 +95,13 @@ void NPC::takeAction() {
 
     if (!active) return;
 
-
-
-    std::cout << getY() << ", " << getX() << std::endl;
+    //Kills the NPC
+    if (!isAlive()) {
+        setIsActive(false);
+        return;
+    }
     if (canAttack()) {
-        this->lookAtPlayer();
+        lookAtPlayer();
         attackPlayer();
     } else {
         moveNPCToPlayer();
