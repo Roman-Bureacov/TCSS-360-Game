@@ -18,25 +18,31 @@ void NPC::setPlayer(std::shared_ptr<AbstractCharacter> thePlayer) {
 void NPC::moveNPCToPlayer() {
     const int xDiff = this->getX() - player->getX();
     const int yDiff = this->getY() - player->getY();
+    int step;
+
+    if (xDiff == 0 && yDiff == 0) return;
+
+
 
     if (std::abs(xDiff) > std::abs(yDiff)) {
         if  (xDiff < 0) {
             this->setDirection(util::Direction::EAST);
-            Bitz::enqueueMovementEvent(this,this->getMovementSpeed());
         }else {
             this->setDirection(util::Direction::WEST);
-            Bitz::enqueueMovementEvent(this, -this->getMovementSpeed());
         }
+        step = std::min(std::abs(xDiff), this->getMovementSpeed());
+
     } else {
-        if (yDiff < 0) {
+        if (yDiff > 0) {
             this->setDirection(util::Direction::SOUTH);
-            Bitz::enqueueMovementEvent(this,this->getMovementSpeed());
         } else {
             this->setDirection(util::Direction::NORTH);
-            Bitz::enqueueMovementEvent(this, -this->getMovementSpeed());
-
         }
+        step = std::min(std::abs(yDiff), this->getMovementSpeed());
     }
+    Bitz::enqueueMovementEvent(this, step);
+
+
 }
 
 void NPC::Update(Subject *theChangedSubject, const std::string &thePropertyName) {
@@ -47,7 +53,7 @@ void NPC::Update(Subject *theChangedSubject, const std::string &thePropertyName)
 void NPC::attackPlayer() {
 
     Bitz::enqueueAttackEvent(this);
-
+    std::cout << player->getHealth() << std::endl;
 }
 
 bool NPC::canAttack() {
@@ -70,14 +76,17 @@ bool NPC::getIsActive() {
 
 void NPC::lookAtPlayer() {
 
+
     const int xDiff = this->getX() - player->getX();
     const int yDiff = this->getY() - player->getY();
+
+    if (xDiff == 0 && yDiff == 0) return;
 
     if (std::abs(xDiff) > std::abs(yDiff)) {
         if  (xDiff < 0) this->setDirection(util::Direction::EAST);
         else this->setDirection(util::Direction::WEST);
     } else {
-        if (yDiff < 0) this->setDirection(util::Direction::SOUTH);
+        if (yDiff > 0) this->setDirection(util::Direction::SOUTH);
         else this->setDirection(util::Direction::NORTH);
     }
 }
@@ -86,11 +95,13 @@ void NPC::takeAction() {
 
     if (!active) return;
 
+
+
+    std::cout << getY() << ", " << getX() << std::endl;
     if (canAttack()) {
         this->lookAtPlayer();
         attackPlayer();
     } else {
-        std::cout << "Moving" << std::endl;
         moveNPCToPlayer();
     }
 }
@@ -102,6 +113,9 @@ void NPC::takeAction() {
 Goblin::Goblin(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
+    Weapon* npcWeapon =
+        new Weapon(10, 10, std::move(NPCWeaponHitbox));
+    this->giveWeapon(npcWeapon);
     name = theName;
     movementSpeed = theMovementSpeed;
     maxHealth = theMaxHealth;
@@ -114,6 +128,9 @@ Goblin::Goblin(
 Skeleton::Skeleton(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
+    Weapon* npcWeapon =
+        new Weapon(10, 10, std::move(NPCWeaponHitbox));
+    this->giveWeapon(npcWeapon);
     name = theName;
     movementSpeed = theMovementSpeed;
     maxHealth = theMaxHealth;

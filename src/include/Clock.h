@@ -17,7 +17,7 @@ private:
     inline static bool isEnabled = false;
     inline static long tickRate = 1000;
     inline static long tickCount = 0;
-    inline static long testingStopTime = 0;
+    inline static long testingStopTick = 0;
 
     static void tick();
 
@@ -60,10 +60,11 @@ public:
     static void toggleActive();
 
     /**
-     * This stops the clock at the inputed time for testing.
-     * @param stopTime This is the time in millisecond the clock will stop at.
+     * This stops the clock at the inputted tick for testing,
+     * if 0 clock will not stop.
+     * @param stopTick The tick you want the clock to end at
      */
-    static void StopClockForTesting(long stopTime);
+    static void StopClockForTesting(long stopTick);
 };
 
 #endif //CLOCK_H

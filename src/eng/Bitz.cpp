@@ -83,10 +83,20 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
             const Weapon w = theCharacter->getWeapon();
             const Hitbox h = theCharacter->getAttackHitbox();
 
+            std::cout << w.getModifiedDamage() << std::endl;
+
             // check for any and all intersections
             for (const auto character : entities) {
-                if (h.intersects(character->getHitbox()))
+                //Checking if the character is a player or NPC
+                auto npc = std::dynamic_pointer_cast<NPC>(character);
+                auto player = std::dynamic_pointer_cast<Player>(character);
+
+                if (player && h.intersects(character->getHitbox())) {
                     character->damage(w.getModifiedDamage());
+                } if (npc && npc->getIsActive()
+                    && h.intersects(character->getHitbox())) {
+                    character->damage(w.getModifiedDamage());
+                }
             }
             entities.insert(std::move(c));
         },
@@ -169,6 +179,8 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
                     projHeight = theCharacter->getHitbox().getHeight();
                     break;
                 default: throw new std::logic_error("Unknown direction enum");
+
+
             }
 
 
@@ -195,10 +207,12 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
             }(); // immediately invoke lambda
 
             for (const std::shared_ptr<AbstractCharacter> c : entities) {
-                if (projection->intersects(c->getHitbox())) {
+                auto npc = std::dynamic_pointer_cast<NPC>(c);
+                if (npc && npc->getIsActive() && projection->intersects(c->getHitbox())) {
                     setMin(projection, c->getHitbox(), d);
                 }
             }
+
             for (const Interactable* i : interactables) {
                 if (projection->intersects((i->getHitbox()))) {
                     setMin(projection, i->getHitbox(), d);
@@ -243,12 +257,14 @@ void Bitz::setMin(Hitbox*& theProjection, const Hitbox &theIntersection, const u
     int intersectY;
     int intersectW;
     int intersectH;
+
     switch (theDirection) {
         case util::NORTH:
             minHeight = theIntersection.getOrigin().y - minY;
             break;
         case util::EAST:
             minWidth = theIntersection.getOrigin().x - minX;
+
             break;
         case util::SOUTH:
             intersectY = theIntersection.getOrigin().y;
@@ -260,7 +276,6 @@ void Bitz::setMin(Hitbox*& theProjection, const Hitbox &theIntersection, const u
             intersectX = theIntersection.getOrigin().x;
             intersectW = theIntersection.getWidth();
             minWidth = minWidth - (intersectX + intersectW - minX);
-            minX = intersectX + intersectW;
             break;
         default: throw new std::logic_error("Unknown direction enum");
     }
@@ -280,6 +295,7 @@ void Bitz::registerCharacter(std::shared_ptr<AbstractCharacter> theCharacter) {
 
 void Bitz::registerPlayer(std::shared_ptr<AbstractCharacter> theCharacter) {
     player = theCharacter;
+    entities.insert(theCharacter);
 }
 
 void Bitz::registerInteractable(Interactable *theInteractable) {

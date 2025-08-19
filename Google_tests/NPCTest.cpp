@@ -49,7 +49,8 @@ TEST(NPCTEST,DungeonSpawnsNPCTest) {
 
     auto room = dungeon->getCurrentRoom();
 
-    ASSERT_EQ(Bitz::getEntities().size(), 300);
+    //300 npcs and 1 player.
+    ASSERT_EQ(Bitz::getEntities().size(), 301);
 
 
 
@@ -103,31 +104,80 @@ TEST(NPCTEST,GoToPLayer) {
 
         auto npc = std::dynamic_pointer_cast<NPC>(character);
 
-        if (npc->getIsActive()) {
+        if ( npc && npc->getIsActive()) {
             allNPCs.push_back(npc);
 
         }
     }
     auto player = Player::playerInstance();
 
-    int initalX = allNPCs[0]->getX();
-    int initalY = allNPCs[0]->getY();
+
+    int initalX1 = allNPCs[0]->getX();
+    int initalY1 = allNPCs[0]->getY();
+
+    int initalX2 = allNPCs[1]->getX();
+    int initalY2 = allNPCs[1]->getY();
+
+    int initalX3 = allNPCs[2]->getX();
+    int initalY3 = allNPCs[2]->getY();
 
 
-    Clock::StopClockForTesting( 5 * Clock::getTickRate());
+   Clock::StopClockForTesting( 50);
     Clock::runClock();
 
-    int endX = allNPCs[0]->getX();
-    int endY = allNPCs[0]->getY();
+    int endX1 = allNPCs[0]->getX();
+    int endY1 = allNPCs[0]->getY();
 
-    std::cout << initalX << ", " << initalY << std::endl;
-    std::cout << endX << ", " << endY << std::endl;
+    int endX2 = allNPCs[1]->getX();
+    int endY2 = allNPCs[1]->getY();
+
+    int endX3 = allNPCs[2]->getX();
+    int endY3 = allNPCs[2]->getY();
+
+    ASSERT_TRUE(initalX1 != endX1 || initalY1 != endY1);
+    ASSERT_TRUE(initalX2 != endX2 || initalY2 != endY2);
+    ASSERT_TRUE(initalX3 != endX3 || initalY3 != endY3);
 
 
-    ASSERT_TRUE(initalX != endX || initalY != endY);
 
 
 
+}
+
+TEST(NPCTEST, AttackPLayer) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->setCharacterRoom(300);
+
+    auto room = dungeon->getCurrentRoom();
+
+    std::vector<std::shared_ptr<NPC>> allNPCs;
+
+    for (auto character : Bitz::getEntities()) {
+
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
+        }
+    }
+
+
+    auto player = Player::playerInstance();
+    allNPCs[0]->setX(700);
+    allNPCs[0]->setY(700);
+    allNPCs[1]->setIsActive(false);
+    allNPCs[2]->setIsActive(false);
+
+    int playerHealth = player->getHealth();
+
+    Clock::StopClockForTesting( 50 );
+    Clock::runClock();
+
+    ASSERT_NE(playerHealth, player->getHealth());
 
 
 }

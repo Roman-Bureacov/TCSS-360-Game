@@ -129,6 +129,8 @@ protected:
     /**This is if the NPC is active*/
     bool active = false;
 
+    /**Just a basic hitbox for the weapon.*/
+    Hitbox NPCWeaponHitbox = Hitbox(10, 10);
 
 };
 

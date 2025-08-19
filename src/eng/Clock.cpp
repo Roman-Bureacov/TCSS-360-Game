@@ -31,6 +31,8 @@ void Clock::tick() {
 void Clock::runClock() {
     setActive(true);
     while (isActive()) {
+        //This will stop the clock for testing.
+        if (testingStopTick != 0 && testingStopTick <= tickCount) break;
 
         //Placeholder for now, till we have a better way
         //To poke the active NPCs
@@ -47,11 +49,7 @@ void Clock::runClock() {
         std::this_thread::sleep_for(std::chrono::milliseconds(tickRate));
 
 
-        //This will stop the clock for testing.
-        if (testingStopTime != 0 && testingStopTime > tickCount) {
 
-            break;
-        }
 
     }
 }
@@ -68,6 +66,6 @@ void Clock::toggleActive() {
     isEnabled = !isEnabled;
 }
 
-void Clock::StopClockForTesting(long stopTime) {
-    testingStopTime = Clock::getTimestamp() + stopTime;
+void Clock::StopClockForTesting( const long stopTick) {
+    testingStopTick = stopTick + getCurrentTick();
 }

@@ -26,11 +26,15 @@ class Room final {
 public:
     /**
      * This generates a room that doesn't already exist
+     * It generates the serial map of the dungeon, this should
+     * Be used when the room is first being generated.
      */
     void generateNonExistingRoom();
 
     /**
-     * This generates a room from the database.
+     * This generates a room from the database, it
+     * Takes the inputted serial map and then set up
+     * the dungeon tile map.
      */
     void generateExistingRoom();
 
@@ -158,6 +162,12 @@ public:
      */
     void setChar3ID(long long ID);
 
+    /**
+     * This returns the dungeons tile map to the caller.
+     * @return This is a 2D vector representing the dungeon.
+     */
+    std::vector<std::vector<DunText::DungeonTile>> getRoomTiles() const;
+
     //It should always be a smart pointer
     ~Room() = default;
     Room();
@@ -167,6 +177,8 @@ public:
     static constexpr int doorLocation = (roomSize - 1) / 2;
     /**This is the actually size of each tile in rendering*/
     static constexpr int tileSize = 100;//TODO change if needed.
+
+
 private:
     /**This is the id of the first enemy.*/
     long long charID1;
