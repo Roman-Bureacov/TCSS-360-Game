@@ -30,3 +30,9 @@ target_link_libraries(
         gtest_main
         SDL3
 )
+
+add_custom_command(TARGET Google_Tests_run POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${SDL3_ROOT}/lib/x64/SDL3.dll"
+        $<TARGET_FILE_DIR:Google_Tests_run>
+)

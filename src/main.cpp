@@ -23,6 +23,8 @@ int showWindow();
 void userPolling();
 
 int main(int argc, char* argv[]) {
+
+    std::cout << "Hello World!" << std::endl;
 /*
     std::cout << "Hello Console, we're opening window..." << std::endl;
 
