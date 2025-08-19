@@ -19,10 +19,12 @@ DatabaseManager::~DatabaseManager() {
 
 std::shared_ptr<AbstractCharacter> DatabaseManager::fetchCharacter(int theCharacterID) const {
     // TODO: create character function
+    return 0;
 }
 
 std::shared_ptr<Weapon> DatabaseManager::fetchWeapon(int theWeaponID) const {
     // TODO: create weapon creation function
+    return 0;
 }
 
 void DatabaseManager::insertRoom(Room &room) const {
@@ -66,9 +68,11 @@ void DatabaseManager::insertCharacterType(AbstractCharacter &character) {
 }
 
 std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int roomId) {
+    return 0;
 }
 
 std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int charType) {
+    return 0;
 }
 
 void DatabaseManager::createActiveCharacterTableIfNotExists() {

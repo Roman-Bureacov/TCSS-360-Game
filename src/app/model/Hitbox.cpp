@@ -6,7 +6,6 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <bits/ostream.tcc>
 
 Hitbox::Hitbox(const util::Point& theOrigin, const int theWidth, const int theHeight)
     : myOrigin(theOrigin), myWidth(theWidth), myHeight(theHeight){
