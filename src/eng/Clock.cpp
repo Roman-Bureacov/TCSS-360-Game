@@ -29,6 +29,7 @@ void Clock::tick() {
 }
 
 void Clock::runClock() {
+    setActive(true);
     while (isActive()) {
 
         //Placeholder for now, till we have a better way
