@@ -19,6 +19,9 @@ enum class NPCType {
     TimCapaul
 };
 
+/**
+ * This struct holds the stats of basic NPCS
+ */
 struct NPCStats {
     static const inline std::string goblinName = "Goblin";
     static const inline int goblinMaxHealth = 50;
@@ -76,7 +79,16 @@ public:
 
     void Update(Subject *theChangedSubject, const std::string &thePropertyName) override;
 
+    /**
+     * Sets the characters activity level.
+     * @param isActive This is the truthy value it will be set to.
+     */
     void setIsActive(bool isActive);
+
+    /**
+     *
+     * @return The truthy value on if the character is active.
+     */
     bool getIsActive();
 
     /**
@@ -140,12 +152,20 @@ protected:
  */
 class Goblin : public NPC {
 public:
-    Goblin(const std::string& theName
-        , int theMaxHealth, int theMovementSpeed);
+    /**
+     * Constructs a Goblin NPC.
+     * @param theName The name of the goblin.
+     * @param theMaxHealth The maximum health value.
+     * @param theMovementSpeed The movement speed value.
+     */
+    Goblin(const std::string& theName, int theMaxHealth, int theMovementSpeed);
 
 private:
+    /** The name of the goblin. */
     std::string name;
+    /** The maximum health of the goblin. */
     int maxHealth;
+    /** The movement speed of the goblin. */
     int movementSpeed;
 };
 
@@ -155,16 +175,43 @@ private:
  */
 class TimCapaul : public NPC {
 public:
+    /**
+     * Constructs the Tim Capaul boss NPC.
+     * Initializes with predefined stats and name.
+     */
     TimCapaul();
+
+    /**
+     * Executes Tim Capaul's custom behavior each tick.
+     * Overrides base NPC action logic.
+     */
     void takeAction() override;
 
 private:
+    /** The name of the boss character. */
     static const inline std::string name = "DarkLord Capual";
+    /** The maximum health of Tim Capaul. */
     static constexpr int maxHealth = 1000;
+    /** The movement speed of Tim Capaul. */
     static constexpr int movementSpeed = 10;
 
+    /**
+     * Moves Tim Capaul toward the player.
+     * Used as part of his AI behavior.
+     */
     void moveNPCToPlayer();
+
+    /**
+     * Executes an attack on the player.
+     * Called when within range and conditions are met.
+     */
     void attackPlayer();
+
+    /**
+     * Determines if Tim Capaul can attack.
+     * Based on proximity and cooldown logic.
+     * @return True if attack is possible, false otherwise.
+     */
     bool canAttack();
 };
 
@@ -174,14 +221,22 @@ private:
  */
 class Skeleton : public NPC {
 public:
-    Skeleton(const std::string& theName
-        , int theMaxHealth, int theMovementSpeed);
+    /**
+     * Constructs a Skeleton NPC.
+     * @param theName The name of the skeleton.
+     * @param theMaxHealth The maximum health value.
+     * @param theMovementSpeed The movement speed value.
+     */
+    Skeleton(const std::string& theName, int theMaxHealth, int theMovementSpeed);
 
 private:
+    /** The name of the skeleton. */
     std::string name;
+    /** The maximum health of the skeleton. */
     int maxHealth;
+    /** The movement speed of the skeleton. */
     int movementSpeed;
-
 };
 
 #endif // NPC_H
+

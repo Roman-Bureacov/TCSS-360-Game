@@ -18,91 +18,98 @@
 #include "Player.h"
 
 
-
 /**
- * This is the dungeon, it constructs a dungeon, and its rooms.
+ * Represents the dungeon system in the game.
+ * Manages room generation, navigation, and entity persistence.
+ * Implements the singleton pattern and observer notifications.
  *
  * @author Riley Hopper
  * @version July 2025
  */
 class Dungeon final : public Subject {
 public:
-
     /**
-     * This controls the amount of dungeons, for the singleton pattern.
-     * @return Returns a pointer to the dungeon instance.
+     * Retrieves the singleton instance of the dungeon.
+     * @return Pointer to the Dungeon instance.
      */
     static Dungeon* DungeonInstance();
 
     /**
-    * Does all the setup for the dungeon.
-    * @param dbManager This is a pointer to the database.
-    */
-    void initialize(const std::shared_ptr<DatabaseManager> &dbManager);
+     * Initializes the dungeon with a database manager.
+     * Sets up internal state and prepares room generation.
+     * @param dbManager Shared pointer to the database manager.
+     */
+    void initialize(const std::shared_ptr<DatabaseManager>& dbManager);
 
     /**
-    * Generates the dungeon.
-    */
+     * Generates the dungeon layout and rooms.
+     * Populates the internal ID map.
+     */
     void generateDungeon();
 
     /**
-     * This returns a map of the ids from the dungeon.
-     * @return 2D vector of the dungeons ids.
+     * Retrieves the dungeon's room ID map.
+     * @return 2D vector of room IDs.
      */
     std::vector<std::vector<int>> getMap();
 
     /**
-     * This will return the current room on the screen.
-     * @return The current room on the screen.
+     * Gets the current room the player is in.
+     * @return Shared pointer to the current room.
      */
     std::shared_ptr<Room> getCurrentRoom();
 
     /**
-     * This changes the current room on screen.
-    * Fires "Room Changed" event.
-    * @param roomID room to change to.
-    */
+     * Changes the current room based on room ID.
+     * Triggers a "Room Changed" event.
+     * @param roomID ID of the room to switch to.
+     */
     void setCharacterRoom(int roomID);
 
     /**
-     * Updates the state of this room with the new set of entities
-     * to set in persistent storage.
-     * @param entities the set of entities in this room
+     * Updates persistent storage with the current room's entities.
+     * @param entities Set of characters present in the room.
      */
-    void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>>);
-
+    void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> entities);
 
 private:
-    /**Constructs the object.*/
+    /** Constructs the Dungeon object. Private for singleton enforcement. */
     Dungeon();
 
-    /**This is the room builder for making rooms.*/
+    /** Builder used to construct rooms. */
     ConcreteRoomBuilder roomBuilder;
-    /**A smart pointer to the current room the player is within.*/
+
+    /** Pointer to the current room the player occupies. */
     std::shared_ptr<Room> currentRoom;
-    /**A map of the dungeon represented as ids.*/
+
+    /** 2D map of room IDs representing the dungeon layout. */
     std::vector<std::vector<int>> idMap;
 
-    /**This is the dungeons instance.*/
+    /** Singleton instance of the dungeon. */
     static std::unique_ptr<Dungeon> instance;
-    /**This is the databaseManager object the dungeon will use.*/
+
+    /** Database manager used for persistence and loading. */
     std::shared_ptr<DatabaseManager> databaseManager;
 
-    /**This is the size of the dungeon, 10 rooms by 10 rooms*/
+    /** Size of the dungeon grid (10x10 rooms). */
     const int dungeonSize = 10;
-    /**This is the starting id value*/
+
+    /** Starting ID value for room generation. */
     const int dungeonIdRange = 100;
-    /**Rows increase by 100 columns by 1, this will create unique ids for each room.*/
+
+    /** Multiplier used to calculate unique room IDs by row. */
     const int rowIndexMult = 100;
-    /**This is the id of the players spawn room*/
+
+    /** ID of the room where the player spawns. */
     const int startingRoomId = 100;
-    /**HitBox size*/
+
+    /** Size of the hitbox used for collision detection. */
     const int hitBoxSize = 10;
 
-    /**This is a room changed property changed event*/
+    /** Property name used to signal room change events. */
     inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
-
 };
+
 
 
 

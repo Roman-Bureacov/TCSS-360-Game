@@ -59,42 +59,55 @@ void DatabaseManager::insertRoom(Room &room) const {
     sqlite3_finalize(stmt);
 }
 
-//TODO:
 
 void DatabaseManager::insertCharacter(AbstractCharacter &character) {
+    //TODO
+
 }
 
 void DatabaseManager::insertCharacterType(AbstractCharacter &character) {
+    //TODO
+
 }
 
 std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int roomId) {
+    //TODO
+
     return 0;
 }
 
 std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int charType) {
+    //TODO
+
     return 0;
 }
 
 void DatabaseManager::createActiveCharacterTableIfNotExists() {
+    //TODO
+
 }
 
 void DatabaseManager::createTypeTableIfNotExists() {
+    //TODO
+
 }
 
 void DatabaseManager::saveRoomTable() {
+    //TODO
+
 }
 
 void DatabaseManager::saveActiveCharacter() {
+    //TODO
+
 }
 
 void DatabaseManager::saveTypeTable() {
+    //TODO
+
 }
 
-/**
- * This loads a room from the database.
- * @param id this is the id of the room to be loaded.
- * @return This is a smart pointer to the room.
- */
+
 std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
     const char *sql = R"(SELECT north, south, east
                         , west, serialMap, char1
