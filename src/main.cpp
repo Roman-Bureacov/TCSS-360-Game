@@ -34,25 +34,25 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Hello World!" << std::endl;
 
-    const View* gameView = new View();
+    View* gameView = new View();
 
     //Loading Image
     SDL_Texture *charTexture = IMG_LoadTexture(gameView->getRenderer(),
         "assets/Kinght_Of_The_Pointer.png");
     SDL_SetTextureScaleMode(charTexture, SDL_SCALEMODE_NEAREST);
 
+    //setup Game Data
+    float playerX {150.0}, playerY {150.0};
+    const float charSize {16.0};
+
     //Game Loop
     bool gameRunning = true;
-    while (gameRunning) {
-        SDL_Event event { 0 };
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_EVENT_QUIT: {
-                    gameRunning = false;
-                    break;
-                }
-                default: break;
-            }
+    do {
+        SDL_Event gameEvent { 0 };
+        gameView->handleEvent(gameEvent);
+
+        if (!gameView->getRunning()) {
+            gameRunning = false;
         }
 
         //Perform Draw Commands
@@ -62,15 +62,15 @@ int main(int argc, char* argv[]) {
         SDL_FRect charSizeRect{
             .x = 0,
             .y = 0,
-            .w = 16,
-            .h = 16
+            .w = charSize,
+            .h = charSize
         };
 
         SDL_FRect charLocRect{
-            .x = 0,
-            .y = 0,
-            .w = 96,
-            .h = 96
+            .x = playerX,
+            .y = playerY,
+            .w = charSize*3,
+            .h = charSize*3
         };
 
         SDL_RenderTexture(gameView->getRenderer(), charTexture, &charSizeRect,
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
         //Swap buffers and present screen
         SDL_RenderPresent(gameView->getRenderer());
 
-    }
+    } while (gameRunning);
 
     std::cout << "The window is created, hit X when done..." << std::endl;
 

@@ -34,7 +34,33 @@ void View::initialize() {
 
     SDL_SetRenderLogicalPresentation(myItems.renderer, myItems.logiWidth, myItems.logiHeight,
         SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+    isRunning = true;
 }
+
+
+bool View::handleEvent(SDL_Event theEvent) {
+    while (SDL_PollEvent(&theEvent)) {
+        switch (theEvent.type) {
+
+            case SDL_EVENT_QUIT: {
+                isRunning = false;
+                return false;
+                break;
+            }
+            case SDL_EVENT_WINDOW_RESIZED: {
+                myItems.initHeight = theEvent.window.data1;
+                myItems.initWidth = theEvent.window.data2;
+                break;
+            }
+
+
+            default: return false;
+        }
+    }
+    return true;
+}
+
 
 
 void View::Update(Subject* theChangedSubject, const std::string& thePropertyName) {
