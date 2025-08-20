@@ -135,6 +135,7 @@ void View::handleKeyDown(const SDL_Scancode theKey) {
             break;
         default:
             Player::playerInstance()->userInput(theKey);
+            break;
     }
 }
 
@@ -142,6 +143,7 @@ void View::handleKeyDown(const SDL_Scancode theKey) {
 void View::Update(Subject* theChangedSubject, const std::string& thePropertyName) {
 
     if (NPC* npc = dynamic_cast<NPC*>(theChangedSubject)) {
+
         if (thePropertyName == NPC::PROPERTY_LOCATION_CHANGED) {
             //Animation goes here
 

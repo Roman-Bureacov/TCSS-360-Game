@@ -29,7 +29,7 @@ struct NPCStats {
 
     static const inline std::string skeletonName = "Skeleton";
     static const inline int skeletonMaxHealth = 100;
-    static const inline int skeletonMovementSpeed = 50;
+    static const inline int skeletonMovementSpeed = 25;
 
 };
 

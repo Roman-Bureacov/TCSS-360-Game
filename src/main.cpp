@@ -24,46 +24,40 @@ void runGame();
 
 int main(int argc, char* argv[]) {
 
-    std::cout << "Hello World!" << std::endl;
-
+    //Make instance.
     View* gameView = View::guiInstance().get();
 
-    std::cout << "Making Player..." << std::endl;
+    //Make player.
     Player* player = Player::playerInstance().get();
     player->attach(View::guiInstance());
 
-    //Dungeon* dungeon = Dungeon::DungeonInstance();
-    //NPC* npc = NPC::goblinFactory().get();
-    //npc->attach(View::guiInstance());
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");//TODO change this to the actuall database file.
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
 
-    player->setX(1050.0);
-    player->setY(1050.0);
-    std::cout << "Player made..." << std::endl;
+    std::vector<std::shared_ptr<NPC>> allNPCs;
 
-    //Game Loop
-    bool gameRunning = true;
-    do {
-        //std::cout << "Started loop..." << std::endl;
-        SDL_Event gameEvent { 0 };
-        gameView->handleEvent(gameEvent);
+    for (auto character : Bitz::getEntities()) {
 
-        if (!gameView->getRunning()) {
-            gameRunning = false;
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
         }
+    }
 
-        SDL_Delay(100);
-    } while (gameRunning);
+    //allNPCs[0]->setIsActive(false);
+    Clock::runClock();
 
-    std::cout << "The window is created, hit X when done..." << std::endl;
+
+
 
     return 0;
 }
 
 
 void runGame() {
-    //auto dbManager = std::make_shared<DatabaseManager>(":memory:");//TODO change this to the actuall database file.
-    //Dungeon* dungeon = Dungeon::DungeonInstance();
-    //dungeon->initialize(dbManager);
-    Clock::runClock();
+
 
 }

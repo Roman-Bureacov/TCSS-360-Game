@@ -36,32 +36,38 @@ Player::Player(const std::string &theName
 void Player::Update(Subject *theChangedSubject
         , const std::string &thePropertyName) {}
 
-void Player::userInput(SDL_Scancode keyEvent) {
-        switch (keyEvent) {
-            case SDL_SCANCODE_W:
-                setDirection(util::NORTH);
-                Bitz::enqueueMovementEvent(this,movementSpeed);
-                break;
-            case SDL_SCANCODE_S:
-                setDirection(util::SOUTH);
-                Bitz::enqueueMovementEvent(this,movementSpeed);
-                break;
-            case SDL_SCANCODE_A:
-                setDirection(util::WEST);
-                Bitz::enqueueMovementEvent(this,movementSpeed);
-                break;
-            case SDL_SCANCODE_D:
-                setDirection(util::EAST);
-                Bitz::enqueueMovementEvent(this,movementSpeed);
-                break;
-            case SDL_SCANCODE_SPACE:
-                attack();
-                break;
-            //case SDL_SCANCODE_LSHIFT:
-                //roll();
-                //break;
-            default: break;
+void Player::userInput(int code) {
+    if (!isAlive()) return;
+    switch (code) {
+        case SDL_SCANCODE_W:
+            setDirection(util::SOUTH);
+            std::cout << "w";
+            Bitz::enqueueMovementEvent(this,movementSpeed);
+            break;
+        case SDL_SCANCODE_S:
+            setDirection(util::NORTH);
+            std::cout << "s";
+            Bitz::enqueueMovementEvent(this,movementSpeed);
+            break;
+        case SDL_SCANCODE_A:
+            setDirection(util::WEST);
+            std::cout << "a";
+            Bitz::enqueueMovementEvent(this,movementSpeed);
+            break;
+        case SDL_SCANCODE_D:
+            setDirection(util::EAST);
+            std::cout << "d";
+            Bitz::enqueueMovementEvent(this,movementSpeed);
+            break;
+        case SDL_SCANCODE_SPACE:
+            attack();
+            break;
+        //case SDL_SCANCODE_LSHIFT:
+            //roll();
+            //break;
+        default: break;
         }
+    }
 }
 
 void Player::roll() {
