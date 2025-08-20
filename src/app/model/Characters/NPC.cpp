@@ -116,7 +116,7 @@ Goblin::Goblin(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(10, 10, std::move(NPCWeaponHitbox));
+        new Weapon(1, 10, std::move(NPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
     name = theName;
     movementSpeed = theMovementSpeed;
