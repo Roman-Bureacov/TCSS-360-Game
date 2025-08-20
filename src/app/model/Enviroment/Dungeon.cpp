@@ -108,6 +108,8 @@ void Dungeon::setCharacterRoom(const int roomID) {
     currentRoom->generateExistingRoom();
     updateRoomEntities(Bitz::getEntities());
 
+
+
     this->notify(PROPERTY_ROOM_CHANGE);
 
 
@@ -115,8 +117,8 @@ void Dungeon::setCharacterRoom(const int roomID) {
 
 void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> entities) {
     long long char1 = currentRoom->getCharacters().at(0);
-    long long char2 = currentRoom->getCharacters().at(1);
-    long long char3 = currentRoom->getCharacters().at(2);
+    //long long char2 = currentRoom->getCharacters().at(1);
+    //long long char3 = currentRoom->getCharacters().at(2);
 
 
 
@@ -124,12 +126,18 @@ void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractChar
     //and deactivate all non-active NPCs.
     for (auto c: entities) {
         if (std::shared_ptr<NPC> npc = std::dynamic_pointer_cast<NPC>(c)) {
-            if (npc->getID() == char1) npc->setIsActive(true);
-            else if (npc->getID() == char2) npc->setIsActive(true);
-            else if (npc->getID() == char3) npc->setIsActive(true);
+            if (npc->getID() == char1) {
+                npc->setIsActive(true);
+                activeCharaceter = npc;
+            }
+            //else if (npc->getID() == char2) npc->setIsActive(true);
+            //else if (npc->getID() == char3) npc->setIsActive(true);
             else npc->setIsActive(false);
         }
     }
+
+
+
 }
 
 
@@ -143,6 +151,10 @@ std::shared_ptr<Room> Dungeon::getCurrentRoom() {
     return currentRoom;
 }
 
+
+std::shared_ptr<AbstractCharacter> Dungeon::getActiveCharacter() {
+    return activeCharaceter;
+}
 
 Dungeon::Dungeon() {}
 

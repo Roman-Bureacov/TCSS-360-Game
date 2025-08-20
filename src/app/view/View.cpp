@@ -154,7 +154,7 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
         } else if (thePropertyName == NPC::PROPERTY_DIRECTION_CHANGED) {
             util::Direction direction = npc->getDirection();
             switch (direction) {
-                case util::NORTH: {
+                case util::SOUTH: {
                     myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
                     myItems.npcTilemapY = 3.0f * mySprites.spriteSize;
                     break;
@@ -169,7 +169,7 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
                     myItems.npcTilemapY = 1.0f * mySprites.spriteSize;
                     break;
                 }
-                case util::SOUTH: {
+                case util::NORTH: {
                     myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
                     myItems.npcTilemapY = 2.0f * mySprites.spriteSize;
                     break;
@@ -193,7 +193,7 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
         } else if (thePropertyName == Player::PROPERTY_DIRECTION_CHANGED) {
             util::Direction direction = player->getDirection();
             switch (direction) {
-                case util::NORTH: {
+                case util::SOUTH: {
                     myItems.charTilemapX = 0.0f * mySprites.spriteSize;
                     myItems.charTilemapY = 3.0f * mySprites.spriteSize;
                     break;
@@ -208,7 +208,7 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
                     myItems.charTilemapY = 1.0f * mySprites.spriteSize;
                     break;
                 }
-                case util::SOUTH: {
+                case util::NORTH: {
                     myItems.charTilemapX = 0.0f * mySprites.spriteSize;
                     myItems.charTilemapY = 2.0f * mySprites.spriteSize;
                     break;

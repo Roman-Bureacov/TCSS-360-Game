@@ -77,6 +77,12 @@ public:
     /** Property name used to signal room change events. */
     inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
 
+    /**
+     *
+     * @return Gets the active character within the room.
+     */
+    std::shared_ptr<AbstractCharacter> getActiveCharacter();
+
 private:
     /** Constructs the Dungeon object. Private for singleton enforcement. */
     Dungeon();
@@ -110,6 +116,9 @@ private:
 
     /** Size of the hitbox used for collision detection. */
     const int hitBoxSize = 10;
+
+    /**This is the active character.*/
+    std::shared_ptr<AbstractCharacter> activeCharaceter;
 
 
 };

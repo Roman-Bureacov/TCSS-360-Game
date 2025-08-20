@@ -86,7 +86,7 @@ private:
     /** Starting health value for the player. */
     static inline const int startingHealth = 100;
     /** Movement speed value for the player. */
-    static inline const int movementSpeed = 75;
+    static inline const int movementSpeed = 35;
 
     /** Number of ticks the player remains invincible during a roll. */
     const int invincibilityFrames = 3;
@@ -100,7 +100,7 @@ private:
     const int hitBoxSize = 10;
 
     /** Hitbox used for the player's weapon during attacks. */
-    Hitbox PlayerWeaponHitbox = Hitbox(50, 50);
+    Hitbox PlayerWeaponHitbox = Hitbox(75, 75);
 };
 
 #endif // PLAYER_H
