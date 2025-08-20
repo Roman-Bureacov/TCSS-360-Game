@@ -100,7 +100,7 @@ private:
     const int hitBoxSize = 10;
 
     /** Hitbox used for the player's weapon during attacks. */
-    Hitbox PlayerWeaponHitbox = Hitbox(10, 10);
+    Hitbox PlayerWeaponHitbox = Hitbox(50, 50);
 };
 
 #endif // PLAYER_H
