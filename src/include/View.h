@@ -7,6 +7,7 @@
 #define VIEW_H
 
 #include "SDL3/SDL.h"
+#include <SDL3/SDL_ttf.h>
 #include "SDL3_image/SDL_image.h"
 #include "ObserverPattern.h"
 #include "Player.h"
@@ -19,10 +20,12 @@
 struct SDLItems {
     SDL_Window* window {nullptr};
     SDL_Renderer* renderer {nullptr};
+    TTF_Font* font {nullptr};
     int initWidth {1500}, initHeight {1500}, logiWidth {1500}, logiHeight {1500};
 
     //Different Structure probably
     //Character Sprite Handler
+    int killCount {0};
     float charTilemapX {0.0f}, charTilemapY {16.0f};
     float npcTilemapX {0.0f}, npcTilemapY {16.0f};
     std::set<long long> activeSpritesIDs;
@@ -102,7 +105,7 @@ public:
 
     void endProcess() const;
     void Update(Subject* theChangedSubject, const std::string &thePropertyName);
-    void renderSprite(SDL_Texture *theCharTexture, AbstractCharacter &theCharacter);
+    void renderSprite();
 
 
 

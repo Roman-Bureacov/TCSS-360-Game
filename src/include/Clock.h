@@ -27,7 +27,7 @@
 class Clock {
 private:
     inline static bool isEnabled = false;
-    inline static long tickRate = 25;
+    inline static long tickRate = 50;
     inline static long tickCount = 0;
     inline static long testingStopTick = 0;
 

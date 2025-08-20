@@ -54,8 +54,7 @@ int main(int argc, char* argv[]) {
     //allNPCs[0]->setIsActive(false);
     Clock::runClock();
 
-
-
+    gameView->endProcess();
 
     return 0;
 }

@@ -1,5 +1,6 @@
 
 #include "../../include/View.h"
+#include "../../include/Clock.h"
 #include "../../include/Utils.h"
 
 std::shared_ptr<View> View::instance = nullptr;
@@ -131,6 +132,7 @@ bool View::handleEvent(SDL_Event theEvent) {
             case SDL_EVENT_WINDOW_RESIZED: {
                 myItems.initHeight = theEvent.window.data1;
                 myItems.initWidth = theEvent.window.data2;
+                renderSprite();
                 break;
             }
             case SDL_EVENT_KEY_DOWN: {
@@ -168,9 +170,9 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
             //Animation goes here
 
         } else if (thePropertyName == NPC::PROPERTY_KILLED) {
-            myItems.npcTilemapX = 5.0f * mySprites.spriteSize;
-            myItems.npcTilemapY = 3.0f * mySprites.spriteSize;
-
+            //myItems.npcTilemapX = 5.0f * mySprites.spriteSize;
+            //myItems.npcTilemapY = 3.0f * mySprites.spriteSize;
+            loadActiveSprites();
         } else if (thePropertyName == NPC::PROPERTY_DIRECTION_CHANGED) {
             util::Direction direction = npc->getDirection();
             switch (direction) {
@@ -196,11 +198,10 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
                 }
             }
         } else if (thePropertyName == NPC::PROPERTY_I_ATTACKED) {
-
-
+            std::cout << "I ATTACK MWAHAHAHAHAHAA" << std::endl;
         }
 
-        renderSprite(mySprites.skeleTexture, *npc);
+        renderSprite();
     }
     else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
         if (thePropertyName == Player::PROPERTY_LOCATION_CHANGED) {
@@ -237,11 +238,12 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
         } else if (thePropertyName == Player::PROPERTY_I_ATTACKED) {
             //Animation from Walking?
+            std::cout << "Player::PROPERTY_I_ATTACKED" << std::endl;
             myItems.charTilemapX = 5.0f * mySprites.spriteSize;
             //myItems.charTilemapY = 2.0 * mySprites.spriteSize;
         }
 
-    renderSprite(mySprites.charTexture, *player);
+    renderSprite();
 
     }
     else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
@@ -257,7 +259,7 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
 }
 
-void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter &theCharacter) {
+void View::renderSprite() {
 
     //Perform Draw Commands - Clear Screen
     SDL_SetRenderDrawColor(myItems.renderer, 5, 255, 255, 255);
@@ -277,7 +279,6 @@ void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter &theChara
     float posX, posY, scaleX, scaleY;
 
     for (auto sprite : mySprites.characters) {
-        std::cout << sprite->getName() << std::endl;
         SDL_Texture* spriteTex = mySprites.grabTexture(sprite);
         posX = sprite->getX();
         posY = sprite->getY();
