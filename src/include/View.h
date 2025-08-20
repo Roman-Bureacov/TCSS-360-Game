@@ -13,7 +13,7 @@
 struct SDLItems {
     SDL_Window* window {nullptr};
     SDL_Renderer* renderer {nullptr};
-    int initWidth {800}, initHeight {600}, logiWidth {1800}, logiHeight {1080};
+    int initWidth {800}, initHeight {600}, logiWidth {800}, logiHeight {800};
 };
 
 /**
@@ -25,11 +25,11 @@ struct SDLItems {
 class View : public Observer {
 private:
     SDLItems myItems;
-    bool isRunning;
+    bool isRunning {false};
 
     static void cleanup(const SDLItems &theItems);
 
-    View() : isRunning(false) { initialize(); };
+    View() { initialize(); };
 
     static std::shared_ptr<View> instance;
 
@@ -43,8 +43,13 @@ public:
 
     void initialize();
 
+    bool handleEvent(SDL_Event theEvent);
+
+
     SDL_Window* getWindow() const { return myItems.window; }
     SDL_Renderer* getRenderer() const { return myItems.renderer; }
+    bool getRunning() const { return isRunning; }
+
     void endProcess() const;
     void Update(Subject* theChangedSubject, const std::string& thePropertyName);
 
