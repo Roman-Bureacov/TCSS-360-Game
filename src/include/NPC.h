@@ -142,7 +142,7 @@ protected:
     bool active = false;
 
     /**Just a basic hitbox for the weapon.*/
-    Hitbox NPCWeaponHitbox = Hitbox(50, 50);
+    Hitbox NPCWeaponHitbox = Hitbox(75, 75);
 
 };
 
