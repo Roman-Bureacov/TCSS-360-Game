@@ -2,7 +2,6 @@
 #include "../../include/View.h"
 #include "../../include/Utils.h"
 
-
 std::shared_ptr<View> View::instance = nullptr;
 
 
@@ -42,10 +41,22 @@ void View::initialize() {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
         cleanup(myItems);
     }
-
+    //SDL_SetRenderVSync(myItems.renderer, 1); //Possible
 
     SDL_SetRenderLogicalPresentation(myItems.renderer, myItems.logiWidth, myItems.logiHeight,
         SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+
+    // initialize the SDL_mixer library
+    /*
+    if (!Mix_OpenAudio(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr))
+    {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating audio device", state.window);
+        cleanup(state);
+        initSuccess = false;
+    }
+    */
+
 
     isRunning = true;
     std::cout << "The window is created" << std::endl;
@@ -124,7 +135,6 @@ void View::handleKeyDown(const SDL_Scancode theKey) {
             break;
         default:
             Player::playerInstance()->userInput(theKey);
-            break;
     }
 }
 
@@ -132,64 +142,84 @@ void View::handleKeyDown(const SDL_Scancode theKey) {
 void View::Update(Subject* theChangedSubject, const std::string& thePropertyName) {
 
     if (NPC* npc = dynamic_cast<NPC*>(theChangedSubject)) {
-
         if (thePropertyName == NPC::PROPERTY_LOCATION_CHANGED) {
-
+            //Animation goes here
 
         } else if (thePropertyName == NPC::PROPERTY_KILLED) {
-
+            myItems.npcTilemapX = 5.0f * mySprites.spriteSize;
+            myItems.npcTilemapY = 3.0f * mySprites.spriteSize;
 
         } else if (thePropertyName == NPC::PROPERTY_DIRECTION_CHANGED) {
-
-
+            util::Direction direction = npc->getDirection();
+            switch (direction) {
+                case util::NORTH: {
+                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.npcTilemapY = 3.0f * mySprites.spriteSize;
+                    break;
+                }
+                case util::EAST: {
+                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.npcTilemapY = 0.0f * mySprites.spriteSize;
+                    break;
+                }
+                case util::WEST: {
+                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.npcTilemapY = 1.0f * mySprites.spriteSize;
+                    break;
+                }
+                case util::SOUTH: {
+                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.npcTilemapY = 2.0f * mySprites.spriteSize;
+                    break;
+                }
+            }
         } else if (thePropertyName == NPC::PROPERTY_I_ATTACKED) {
 
 
         }
 
+        renderSprite(mySprites.skeleTexture, static_cast<AbstractCharacter*>(theChangedSubject));
     }
     else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
         if (thePropertyName == Player::PROPERTY_LOCATION_CHANGED) {
             //Animate Walking?????????
 
         } else if (thePropertyName == Player::PROPERTY_KILLED) {
-            myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
-            myItems.charTilemapY = 4.0 * mySprites.charSpriteSize;
+            myItems.charTilemapX = 0.0f * mySprites.spriteSize;
+            myItems.charTilemapY = 4.0f * mySprites.spriteSize;
 
         } else if (thePropertyName == Player::PROPERTY_DIRECTION_CHANGED) {
             util::Direction direction = player->getDirection();
             switch (direction) {
                 case util::NORTH: {
-                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
-                    myItems.charTilemapY = 3.0 * mySprites.charSpriteSize;
+                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.charTilemapY = 3.0f * mySprites.spriteSize;
                     break;
                 }
                 case util::EAST: {
-                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
-                    myItems.charTilemapY = 0.0 * mySprites.charSpriteSize;
+                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.charTilemapY = 0.0f * mySprites.spriteSize;
                     break;
                 }
                 case util::WEST: {
-                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
-                    myItems.charTilemapY = 1.0 * mySprites.charSpriteSize;
+                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.charTilemapY = 1.0f * mySprites.spriteSize;
                     break;
                 }
                 case util::SOUTH: {
-                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
-                    //std::cout << myItems.charTilemapX << std::endl;
-                    myItems.charTilemapY = 2.0 * mySprites.charSpriteSize;
-                    //std::cout << myItems.charTilemapY << std::endl;
+                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
+                    myItems.charTilemapY = 2.0f * mySprites.spriteSize;
                     break;
                 }
             }
 
         } else if (thePropertyName == Player::PROPERTY_I_ATTACKED) {
             //Animation from Walking?
-            myItems.charTilemapX = 5.0 * mySprites.charSpriteSize;
-            //myItems.charTilemapY = 2.0 * mySprites.charSpriteSize;
+            myItems.charTilemapX = 5.0f * mySprites.spriteSize;
+            //myItems.charTilemapY = 2.0 * mySprites.spriteSize;
         }
 
-    renderSprite(mySprites.charTexture);
+    renderSprite(mySprites.charTexture, static_cast<AbstractCharacter*>(theChangedSubject));
 
     }
     else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
@@ -205,30 +235,37 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
 }
 
-void View::renderSprite(SDL_Texture* theCharTexture) {
+void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter* theCharacter) {
 
-    //std::cout << "Drawing Sprite..." << std::endl;
+//skeleton
 
-    const float playerX = Player::playerInstance()->getX() * 1.0;
-    const float playerY = Player::playerInstance()->getY() * 1.0;
-
+    float posX = theCharacter->getX();
+    float posY = theCharacter->getY();
+    float scaleX, scaleY;
+    if (theCharacter->getName() != "John programmer") {
+        scaleX = myItems.npcTilemapX;
+        scaleY = myItems.npcTilemapY;
+    } else {
+        scaleX = myItems.charTilemapX;
+        scaleY = myItems.charTilemapY;
+    }
 
     //Perform Draw Commands
     SDL_SetRenderDrawColor(myItems.renderer, 5, 255, 255, 255);
     SDL_RenderClear(myItems.renderer);
 
     SDL_FRect charSizeRect{
-        .x = myItems.charTilemapX,
-        .y = myItems.charTilemapY,
-        .w = mySprites.charSpriteSize,
-        .h = mySprites.charSpriteSize
+        .x = scaleX,
+        .y = scaleY,
+        .w = mySprites.spriteSize,
+        .h = mySprites.spriteSize
     };
 
     SDL_FRect charLocRect{
-        .x = playerX,
-        .y = playerY,
-        .w = mySprites.charSpriteSize*10,//160 px x 160px
-        .h = mySprites.charSpriteSize*10 //160 px x 160px
+        .x = posX,
+        .y = posY,
+        .w = mySprites.spriteSize*10,//160 px x 160px
+        .h = mySprites.spriteSize*10 //160 px x 160px
     };
 
     SDL_RenderTexture(myItems.renderer, theCharTexture, &charSizeRect,

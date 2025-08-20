@@ -67,6 +67,7 @@ void Player::userInput(int code) {
             //break;
         default: break;
         }
+    }
 }
 
 void Player::roll() {

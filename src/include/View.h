@@ -12,7 +12,7 @@
 #include "Dungeon.h"
 #include "NPC.h"
 
-
+//SDL State
 struct SDLItems {
     SDL_Window* window {nullptr};
     SDL_Renderer* renderer {nullptr};
@@ -21,12 +21,13 @@ struct SDLItems {
     //Different Structure probably
     //Character Sprite Handler
     float charTilemapX {0.0f}, charTilemapY {16.0f};
+    float npcTilemapX {0.0f}, npcTilemapY {16.0f};
 };
 
 
 struct SpriteTextures {
     //Size of Sprite on Tile Maps
-    const float charSpriteSize {16.0};
+    const float spriteSize {16.0};
 
     SDL_Texture* charTexture {nullptr};
     SDL_Texture* timTexture {nullptr};
@@ -34,14 +35,14 @@ struct SpriteTextures {
     SDL_Texture* goblinTexture {nullptr};
     SDL_Texture* roomTexture {nullptr};
 
-    /*
+
     ~SpriteTextures() {
         SDL_DestroyTexture(charTexture);
         SDL_DestroyTexture(timTexture);
         SDL_DestroyTexture(skeleTexture);
         SDL_DestroyTexture(goblinTexture);
         SDL_DestroyTexture(roomTexture);
-    }*/
+    }
 
 };
 
@@ -87,7 +88,7 @@ public:
 
     void endProcess() const;
     void Update(Subject* theChangedSubject, const std::string& thePropertyName);
-    void renderSprite(SDL_Texture *theCharTexture);
+    void renderSprite(SDL_Texture *theCharTexture, AbstractCharacter* theCharacter);
 
 
 
