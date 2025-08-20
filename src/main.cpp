@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Hello World!" << std::endl;
 
-    View* gameView = new View();
+    View* gameView = View::guiInstance().get();
 
     //Loading Image
     SDL_Texture *charTexture = IMG_LoadTexture(gameView->getRenderer(),
