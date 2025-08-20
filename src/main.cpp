@@ -9,13 +9,14 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
-#include <thread>
+
+#include "include/View.h"
 
 //#include "app/model/Characters/Dummy.h"
+
 /*
 #include "include/Room.h"
 #include "include/Dungeon.h"
-#include "include/View.h"
 
 #include "include/Bitz.h"
 #include "include/Clock.h"
@@ -26,46 +27,19 @@ int showWindow();
 void userPolling();
 */
 
-struct SDLItems {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
 
-};
-
-void cleanup(SDLItems &theItems);
+void cleanup(const SDLItems &theItems);
 
 int main(int argc, char* argv[]) {
 
     std::cout << "Hello World!" << std::endl;
 
-    SDLItems theItems;
-
-    //See if SDL Boots
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
-    }
-
-
-
-    //Make the Window
-    const int width{800};
-    const int height{600};
-    theItems.window = SDL_CreateWindow("Game", width, height, 0);
-    if (!theItems.window) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
-        SDL_Quit();
-    }
-
-    //Create the renderer
-    theItems.renderer = SDL_CreateRenderer(theItems.window, nullptr);
-    if (!theItems.renderer) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
-        SDL_Quit();
-    }
+    const View* gameView = new View();
 
     //Loading Image
-
-    SDL_Texture *idleTexture = IMG_LoadTexture(theItems.renderer, "assets/Kinght_Of_The_Pointer.png");
+    SDL_Texture *charTexture = IMG_LoadTexture(gameView->getRenderer(),
+        "assets/Kinght_Of_The_Pointer.png");
+    SDL_SetTextureScaleMode(charTexture, SDL_SCALEMODE_NEAREST);
 
     //Game Loop
     bool gameRunning = true;
@@ -82,29 +56,35 @@ int main(int argc, char* argv[]) {
         }
 
         //Perform Draw Commands
-        SDL_SetRenderDrawColor(theItems.renderer, 5, 255, 255, 255);
-        SDL_RenderClear(theItems.renderer);
+        SDL_SetRenderDrawColor(gameView->getRenderer(), 5, 255, 255, 255);
+        SDL_RenderClear(gameView->getRenderer());
 
-        SDL_RenderTexture(theItems.renderer, idleTexture, nullptr, nullptr);
+        SDL_FRect charSizeRect{
+            .x = 0,
+            .y = 0,
+            .w = 16,
+            .h = 16
+        };
+
+        SDL_FRect charLocRect{
+            .x = 0,
+            .y = 0,
+            .w = 96,
+            .h = 96
+        };
+
+        SDL_RenderTexture(gameView->getRenderer(), charTexture, &charSizeRect,
+            &charLocRect);
 
         //Swap buffers and present screen
-        SDL_RenderPresent(theItems.renderer);
+        SDL_RenderPresent(gameView->getRenderer());
 
     }
 
     std::cout << "The window is created, hit X when done..." << std::endl;
 
-    SDL_DestroyTexture(idleTexture);
-    cleanup(theItems);
+    SDL_DestroyTexture(charTexture);
     return 0;
-}
-
-
-void cleanup(SDLItems &theItems) {
-    SDL_DestroyWindow(theItems.window);
-    SDL_DestroyRenderer(theItems.renderer);
-
-    SDL_Quit();
 }
 
 
