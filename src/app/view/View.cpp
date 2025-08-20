@@ -8,7 +8,6 @@
 #include <ostream>
 #include <stdexcept>
 #include <string>
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../include/stb_image.h"
 
@@ -37,9 +36,9 @@ void View::initialize() {
     }
 
     //Create device directly with SLD_GPU (unique to SLD3).
-    //Runs off Direct12, Vulkan, and Metal
+    //Runs off Direct12, or Vulkan
     //Throws exception if fails to create device
-    myDevice = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_MSL,
+    myDevice = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_SPIRV,
         true, nullptr);
     if (!myDevice) {
         throw SDLException("Failed to create GPU device");
@@ -65,17 +64,22 @@ void View::initialize() {
 
 
 void View::render() {
+    std::cout << "Rendering Game Window..." << std::endl;
 
-    SDL_GPUCommandBuffer* commandBuffer = SDL_AcquireGPUCommandBuffer(myDevice);
-    if (!commandBuffer) {
+    myCommandBuffer = SDL_AcquireGPUCommandBuffer(myDevice);
+    if (!myCommandBuffer) {
         throw SDLException{"Failed to acquire GPU command buffer"};
     }
 
+    if (!isWindowRunning())
+        SDL_CancelGPUCommandBuffer(myCommandBuffer);
+
     SDL_GPUTexture* swapchainTexture = nullptr;
     Uint32 swapchainWidth, swapchainHeight;
-    if (!SDL_AcquireGPUSwapchainTexture(commandBuffer, myWindow, &swapchainTexture, &swapchainWidth, &swapchainHeight)) {
+    if (!SDL_AcquireGPUSwapchainTexture(myCommandBuffer, myWindow, &swapchainTexture, &swapchainWidth, &swapchainHeight)) {
         throw SDLException{"Failed to acquire swapchain texture"};
     }
+    printf("Created Swapchain: %p\n", static_cast<void *>(swapchainTexture));
 
     if (!swapchainTexture) {
         return; // Try again next frame
@@ -89,20 +93,26 @@ void View::render() {
 
     // Begin render pass
     SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(
-        commandBuffer,
+        myCommandBuffer,
         &colorTarget, 1,
         nullptr  // No depth buffer for now
     );
+    printf("Created Renderpass: %p\n", static_cast<void *>(renderPass));
+
 
     //We'll place our sprite drawing method(s) here
-
-    drawRoom(commandBuffer, renderPass, testRoom);
+    std::cout << "Drawing Room" << std::endl;
+    drawRoom(myCommandBuffer, renderPass, testRoom);
 
     // End render pass and submit
     SDL_EndGPURenderPass(renderPass);
+    printf("Destory renderpass: %p\n", static_cast<void *>(renderPass));
 
-    if (!SDL_SubmitGPUCommandBuffer(commandBuffer))
+
+    if (!SDL_SubmitGPUCommandBuffer(myCommandBuffer))
         throw SDLException{"Failed to submit GPU command buffer"};
+
+
 }
 
 
@@ -113,8 +123,16 @@ bool View::handleEvents() {
             case SDL_EVENT_QUIT:
             case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
                 isRunning = false;
+                cleanup();
                 return false;
 
+            case SDL_EVENT_WINDOW_RESIZED:
+                handleWindowResize(event.window.data1, event.window.data2);
+                break;
+
+            case SDL_EVENT_KEY_DOWN:
+                handleKeyDown(event.key.key);
+                break;
 
             default:
                 break;
@@ -124,8 +142,40 @@ bool View::handleEvents() {
 }
 
 
+void View::handleWindowResize(const int theNewWidth, const int theNewHeight) {
+    //myCamera.updateViewport(theNewWidth, theNewHeight);
+    // Possibly update any UI elements that depend on window size
+}
+
+
+void View::handleKeyDown(const SDL_Keycode theKey) {
+    switch (theKey) {
+        case SDLK_ESCAPE:
+            isRunning = false;
+            cleanup();
+            break;
+        case SDLK_F11:
+            SDL_SetWindowFullscreen(myWindow, true);
+            break;
+        default:
+            break;
+    }
+}
+
+
 void View::cleanup() {
     std::cout << "Closing Window" << std::endl;
+
+    // Stop any rendering loop first (if you have a separate render thread,
+    // ensure it has been told to stop and joined)
+    isRunning = false;
+
+    if (myDevice)
+        SDL_WaitForGPUIdle(myDevice);
+
+    if (myCommandBuffer) {
+        myCommandBuffer = nullptr;
+    }
 
     if (myGraphicsPipeline) {
         SDL_ReleaseGPUGraphicsPipeline(myDevice, myGraphicsPipeline);
@@ -139,14 +189,19 @@ void View::cleanup() {
 
     if (myUniformBuffer) {
         SDL_ReleaseGPUBuffer(myDevice, myUniformBuffer);
+        printf("Releasing buffer: %p\n", static_cast<void *>(myUniformBuffer));
         myUniformBuffer = nullptr;
     }
     if (myVertexBuffer) {
         SDL_ReleaseGPUBuffer(myDevice, myVertexBuffer);
+        printf("Releasing buffer: %p\n", static_cast<void *>(myVertexBuffer));
+
         myVertexBuffer = nullptr;
     }
     if (myIndexBuffer) {
         SDL_ReleaseGPUBuffer(myDevice, myIndexBuffer);
+        printf("Releasing buffer: %p\n", static_cast<void *>(myIndexBuffer));
+
         myIndexBuffer = nullptr;
     }
 
@@ -155,16 +210,20 @@ void View::cleanup() {
         mySampler = nullptr;
     }
 
+    // If we have any outstanding transfer buffers, fences, or command buffers we must
+    // ensure they are finished / canceled on the thread that acquired them.
+    // (SDL_WaitForGPUIdle above helps for submitted work.)
+
     //Free the window and GPU
     SDL_ReleaseWindowFromGPUDevice(myDevice, myWindow);
-
-    //Close and destroy GPU
-    SDL_DestroyGPUDevice(myDevice);
-    myDevice = nullptr;
 
     // Close and destroy the window
     SDL_DestroyWindow(myWindow);
     myWindow = nullptr;
+
+    //Close and destroy GPU
+    SDL_DestroyGPUDevice(myDevice);
+    myDevice = nullptr;
 
     // Clean up
     SDL_Quit();
@@ -431,6 +490,8 @@ void View::createRenderingPipeline() {
 
     //Create the Buffers (in separate method for compartmentalization)
     //If failed to create Buffers, call cleanup
+
+    //Problem?
     if (!createBuffers()) {
         cleanup();
         throw SDLException{"Failed to create buffers"};
@@ -478,7 +539,6 @@ bool View::createBuffers() {
     memcpy(mappedData, quadVertices, sizeof(quadVertices));
     SDL_UnmapGPUTransferBuffer(myDevice, vertexUploadBuffer);
 
-
     // Create index buffer for quad (2 triangles)
     uint16_t quadIndices[] = {
         0, 1, 2,  // First triangle
@@ -503,8 +563,9 @@ bool View::createBuffers() {
     SDL_UnmapGPUTransferBuffer(myDevice, indexUploadBuffer);
 
     if (!myUniformBuffer || !myVertexBuffer || !myIndexBuffer) {
-        SDL_ReleaseGPUBuffer(myDevice, myIndexBuffer);
         SDL_ReleaseGPUTransferBuffer(myDevice, vertexUploadBuffer);
+        SDL_ReleaseGPUTransferBuffer(myDevice, indexUploadBuffer);
+        SDL_ReleaseGPUBuffer(myDevice, myIndexBuffer);
         SDL_ReleaseGPUBuffer(myDevice, myVertexBuffer);
         SDL_ReleaseGPUBuffer(myDevice, myUniformBuffer);
         return false;
@@ -542,7 +603,11 @@ bool View::createBuffers() {
     // Wait for upload to complete before cleaning up transfer buffers
     SDL_WaitForGPUIdle(myDevice);
     SDL_ReleaseGPUTransferBuffer(myDevice, vertexUploadBuffer);
+    printf("Releasing buffer: %p\n", static_cast<void *>(vertexUploadBuffer));
+
     SDL_ReleaseGPUTransferBuffer(myDevice, indexUploadBuffer);
+    printf("Releasing buffer: %p\n", static_cast<void *>(indexUploadBuffer));
+
 
     std::cout << "Successfully made Buffers!" << std::endl;
     return true;
@@ -669,15 +734,14 @@ TileUV View::getTileUV(const DunText::DungeonTile& theTile) {
 void View::observeDungeon(Dungeon* theDungeon) {
     if (!theDungeon) throw SDLException{"Dungeon is null"};
 
-    theDungeon->attach(std::unique_ptr<Observer>(this));
-
+    theDungeon->attach(std::shared_ptr<Observer>(this));
 }
 
 
 void View::unobserveDungeon(Dungeon* theDungeon) {
     if (!theDungeon) throw SDLException{"Failed to null Dungeon"};
 
-    theDungeon->detach(std::unique_ptr<Observer>(this));
+    theDungeon->detach(std::shared_ptr<Observer>(this));
 
 }
 
@@ -685,7 +749,7 @@ void View::unobserveDungeon(Dungeon* theDungeon) {
 void View::observeCharacter(AbstractCharacter* theCharacter) {
     if (!theCharacter) throw SDLException{"Failed to observe character"};
 
-    theCharacter->attach(std::unique_ptr<Observer>(this));
+    theCharacter->attach(std::shared_ptr<Observer>(this));
 
     //May need to include data structure that holds active chars
 }
@@ -694,7 +758,7 @@ void View::observeCharacter(AbstractCharacter* theCharacter) {
 void View::unobserveCharacter(AbstractCharacter* theCharacter) {
     if (!theCharacter) throw SDLException{"Failed to unobserve character"};
 
-    theCharacter->detach(std::unique_ptr<Observer>(this));
+    theCharacter->detach(std::shared_ptr<Observer>(this));
 
     //May need to remove from data structure that holds active chars
 }
@@ -721,8 +785,8 @@ void View::drawRoom(SDL_GPUCommandBuffer* theCommandBuffer, SDL_GPURenderPass* t
         return;
     }
 
-    int mapHeight = theRoomMap.size();
-    int mapWidth = theRoomMap[0].size();
+    const int mapHeight = theRoomMap.size();
+    const int mapWidth = theRoomMap[0].size();
 
     // Calculate scaling to fit the room nicely on screen
     float tilePixelSize = 16.0f; // Your tiles are 16x16 pixels

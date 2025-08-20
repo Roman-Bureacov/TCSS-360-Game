@@ -42,16 +42,17 @@ int main(int argc, char* argv[]) {
     //While window is open and running...
     while (userView.isWindowRunning()) {
         //Check if window has been closed
-        if (!userView.handleEvents()) {
-            break;
-        }
+
+        SDL_Delay(1000);
 
         userView.render();
 
+        if (!userView.handleEvents()) {
+            break;
+        }
     }
 
     //Closes Window and closes all associated resources
-    userView.cleanup();
     //VIEW TEST ENDS
 
     //runGame();

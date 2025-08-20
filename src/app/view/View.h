@@ -8,6 +8,8 @@
 
 #include "SDL3/SDL.h"
 #include "unordered_map"
+#include "RenderConfig.h"
+#include "GPURenderer.h"
 #include "../../include/AbstractCharacter.h"
 #include "../../include/Dungeon.h"
 
@@ -47,9 +49,11 @@ private:
     //SDL Window Components
     SDL_Window* myWindow;
     SDL_GPUDevice* myDevice;
+    //std::shared_ptr<Observer> myDungeonSubscriber;
     bool isRunning;
 
     //Graphic Pipline Components
+    SDL_GPUCommandBuffer* myCommandBuffer;
     SDL_GPUGraphicsPipeline* myGraphicsPipeline;
     SDL_GPUBuffer* myUniformBuffer;
     SDL_GPUBuffer* myVertexBuffer;
@@ -74,9 +78,9 @@ private:
 
 public:
     //Create View with empty window, GPU device, and declare the window isn't running (false)
-    View() : myWindow(nullptr), myDevice(nullptr), isRunning(false), myGraphicsPipeline(nullptr),
-        myUniformBuffer(nullptr), myVertexBuffer(nullptr), myIndexBuffer(nullptr), mySampler(nullptr),
-        myTilesetTexture(nullptr) {}
+    View() : myWindow(nullptr), myDevice(nullptr), isRunning(false), myCommandBuffer(nullptr),
+             myGraphicsPipeline(nullptr), myUniformBuffer(nullptr), myVertexBuffer(nullptr),
+             myIndexBuffer(nullptr), mySampler(nullptr), myTilesetTexture(nullptr) {}
 
     //Window and all GPU resources will close automatically w/ Deconstructor
     ~View() = default;
@@ -89,6 +93,8 @@ public:
 
     //Handle events like closing the application
     bool handleEvents();
+    void handleWindowResize(int theNewWidth, int theNewHeight);
+    void handleKeyDown(const SDL_Keycode theKey);
 
     //Close all associated devices
     void cleanup();
