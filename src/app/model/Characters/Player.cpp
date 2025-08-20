@@ -103,6 +103,7 @@ void Player::endRoll() {
 
 void Player::attack() {
     if (instance) {
+        notify(PROPERTY_KILLED);
         Bitz::enqueueAttackEvent(instance.get());
     }
 

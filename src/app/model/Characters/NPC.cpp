@@ -51,6 +51,7 @@ void NPC::Update(Subject *theChangedSubject, const std::string &thePropertyName)
 }
 
 void NPC::attackPlayer() {
+    notify(PROPERTY_KILLED);
 
     Bitz::enqueueAttackEvent(this);
 }
