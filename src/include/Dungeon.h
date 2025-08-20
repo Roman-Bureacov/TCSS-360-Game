@@ -73,6 +73,9 @@ public:
      */
     void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> entities);
 
+    /** Property name used to signal room change events. */
+    inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
+
 private:
     /** Constructs the Dungeon object. Private for singleton enforcement. */
     Dungeon();
@@ -107,8 +110,7 @@ private:
     /** Size of the hitbox used for collision detection. */
     const int hitBoxSize = 10;
 
-    /** Property name used to signal room change events. */
-    inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
+
 };
 
 

@@ -2,6 +2,8 @@
 
 #include "../../include/View.h"
 
+#include "../../include/Dungeon.h"
+
 
 std::shared_ptr<View> View::instance = nullptr;
 
@@ -48,6 +50,48 @@ void View::initialize() {
 
 
 void View::Update(Subject* theChangedSubject, const std::string& thePropertyName) {
+
+    if (NPC* npc = dynamic_cast<NPC*>(theChangedSubject)) {
+        if (thePropertyName == NPC::PROPERTY_LOCATION_CHANGED) {
+
+
+        } else if (thePropertyName == NPC::PROPERTY_KILLED) {
+
+
+        } else if (thePropertyName == NPC::PROPERTY_DIRECTION_CHANGED) {
+
+
+        } else if (thePropertyName == NPC::PROPERTY_I_ATTACKED) {
+
+
+        }
+
+
+    } else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
+
+        if (thePropertyName == Player::PROPERTY_LOCATION_CHANGED) {
+
+
+        } else if (thePropertyName == Player::PROPERTY_KILLED) {
+
+
+        } else if (thePropertyName == Player::PROPERTY_DIRECTION_CHANGED) {
+
+
+        } else if (thePropertyName == Player::PROPERTY_I_ATTACKED) {
+
+
+        }
+
+    } else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
+
+        if (thePropertyName == Dungeon::PROPERTY_ROOM_CHANGE) {
+
+
+        }
+
+
+    }
 
 
 }

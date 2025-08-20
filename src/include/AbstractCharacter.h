@@ -56,6 +56,8 @@ public:
     inline static const std::string PROPERTY_HITBOX_CHANGED = "My hitbox changed!";
     /** the property name for when the character's direction changed. */
     inline static const std::string PROPERTY_DIRECTION_CHANGED = "My direction changed!";
+    /** the property name for attacking*/
+    inline static const std::string PROPERTY_I_ATTACKED = "I am attacking";
 
     virtual ~AbstractCharacter() = default;
 

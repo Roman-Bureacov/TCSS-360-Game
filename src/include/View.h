@@ -8,6 +8,7 @@
 #include "SDL3/SDL.h"
 #include "SDL3_image/SDL_image.h"
 #include "ObserverPattern.h"
+#include "NPC.h"
 
 
 struct SDLItems {
