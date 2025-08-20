@@ -13,10 +13,13 @@
 
 
 #include "include/Room.h"
-#include "include/Dungeon.h"
+//#include "include/Dungeon.h"
+#include "include/Player.h"
 #include "include/View.h"
 #include "include/Bitz.h"
 #include "include/Clock.h"
+
+void runGame();
 
 
 int main(int argc, char* argv[]) {
@@ -31,8 +34,11 @@ int main(int argc, char* argv[]) {
     SDL_SetTextureScaleMode(charTexture, SDL_SCALEMODE_NEAREST);
 
     //setup Game Data
-    float playerX {150.0}, playerY {150.0};
-    const float charSize {16.0};
+    //float playerX {150.0}, playerY {150.0};
+    //const float charSize {16.0};
+
+    Player* player = Player::playerInstance().get();
+    //player = new Player("Tom", 100, 100);
 
     //Game Loop
     bool gameRunning = true;
@@ -44,29 +50,7 @@ int main(int argc, char* argv[]) {
             gameRunning = false;
         }
 
-        //Perform Draw Commands
-        SDL_SetRenderDrawColor(gameView->getRenderer(), 5, 255, 255, 255);
-        SDL_RenderClear(gameView->getRenderer());
-
-        SDL_FRect charSizeRect{
-            .x = 0,
-            .y = 0,
-            .w = charSize,
-            .h = charSize
-        };
-
-        SDL_FRect charLocRect{
-            .x = playerX,
-            .y = playerY,
-            .w = charSize*3,
-            .h = charSize*3
-        };
-
-        SDL_RenderTexture(gameView->getRenderer(), charTexture, &charSizeRect,
-            &charLocRect);
-
-        //Swap buffers and present screen
-        SDL_RenderPresent(gameView->getRenderer());
+        gameView->renderCharacter(charTexture, player);
 
     } while (gameRunning);
 
@@ -75,11 +59,12 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(charTexture);
     return 0;
 }
-/*
-    auto dbManager = std::make_shared<DatabaseManager>(":memory:");//TODO change this to the actuall database file.
-    Dungeon* dungeon = Dungeon::DungeonInstance();
-    dungeon->initialize(dbManager);
-    
-    Clock::runClock(); //Start the main loop of all of this
 
-*/
+
+void runGame() {
+    //auto dbManager = std::make_shared<DatabaseManager>(":memory:");//TODO change this to the actuall database file.
+    //Dungeon* dungeon = Dungeon::DungeonInstance();
+    //dungeon->initialize(dbManager);
+    Clock::runClock();
+
+}

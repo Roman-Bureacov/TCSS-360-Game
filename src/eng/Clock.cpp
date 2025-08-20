@@ -31,18 +31,21 @@ void Clock::runClock() {
         if (testingStopTick != 0 && testingStopTick <= tickCount) break;
 
 
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
+        SDL_Event gameEvent = { 0 };
+        View::guiInstance()->handleEvent(gameEvent);
+        /*
+        while (SDL_PollEvent(&gameEvent)) {
             // Handle quit event
-            if (event.type == SDL_EVENT_QUIT) {
+            if (gameEvent.type == SDL_EVENT_QUIT) {
                 setActive(false);
                 break;
             }
             //Handel user input.
             if (auto player = Player::playerInstance()) {
-                player->userInput(event);
+                player->userInput(gameEvent);
             }
         }
+        */
 
         //Placeholder for now, till we have a better way
         //To poke the active NPCs

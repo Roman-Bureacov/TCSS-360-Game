@@ -9,7 +9,7 @@
 
 #include "../include/Bitz.h"
 #include "../include/NPC.h"
-#include "../include/Bitz.h"
+#include "../include/View.h"
 
 #include <chrono>
 #include <iostream>

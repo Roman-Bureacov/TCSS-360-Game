@@ -2,7 +2,6 @@
 
 #include "../../include/View.h"
 
-#include "../../include/Dungeon.h"
 
 
 std::shared_ptr<View> View::instance = nullptr;
@@ -19,6 +18,7 @@ std::shared_ptr<View> View::guiInstance() {
     return instance;
 
 }
+
 
 void View::initialize() {
     //See if SDL Boots
@@ -65,6 +65,9 @@ bool View::handleEvent(SDL_Event theEvent) {
                 myItems.initWidth = theEvent.window.data2;
                 break;
             }
+            case SDL_EVENT_KEY_DOWN: {
+                handleKeyDown(theEvent.key.scancode);
+            }
 
 
             default: return false;
@@ -73,6 +76,19 @@ bool View::handleEvent(SDL_Event theEvent) {
     return true;
 }
 
+
+void View::handleKeyDown(const SDL_Scancode theKey) {
+    switch (theKey) {
+        case SDL_SCANCODE_ESCAPE:
+            isRunning = false;
+            break;
+        case SDL_SCANCODE_F11:
+            SDL_SetWindowFullscreen(myItems.window, true);
+            break;
+        default:
+            break;
+    }
+}
 
 
 void View::Update(Subject* theChangedSubject, const std::string& thePropertyName) {
@@ -121,6 +137,39 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
 
 }
+
+
+
+void View::renderCharacter(SDL_Texture* theCharTexture, Player* thePlayer) {
+
+    const float playerX = thePlayer->getX() * 1.0;
+    const float playerY = thePlayer->getY() * 1.0;
+
+    //Perform Draw Commands
+    SDL_SetRenderDrawColor(myItems.renderer, 5, 255, 255, 255);
+    SDL_RenderClear(myItems.renderer);
+
+    SDL_FRect charSizeRect{
+        .x = 0,
+        .y = 0,
+        .w = myItems.charSpriteSize,
+        .h = myItems.charSpriteSize
+    };
+
+    SDL_FRect charLocRect{
+        .x = playerX,
+        .y = playerY,
+        .w = myItems.charSpriteSize*3,
+        .h = myItems.charSpriteSize*3
+    };
+
+    SDL_RenderTexture(myItems.renderer, theCharTexture, &charSizeRect,
+        &charLocRect);
+
+    //Swap buffers and present screen
+    SDL_RenderPresent(myItems.renderer);
+}
+
 
 
 void View::endProcess() const {
