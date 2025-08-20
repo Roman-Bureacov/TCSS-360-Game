@@ -68,7 +68,7 @@ void Player::userInput(int code) {
         default: break;
         }
     }
-}
+
 
 void Player::roll() {
     switch (getDirection()) {

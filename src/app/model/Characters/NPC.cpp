@@ -60,7 +60,7 @@ bool NPC::canAttack() {
     const int xDiff = std::abs(this->getX() - player->getX());
     const int yDiff = std::abs(this->getY() - player->getY());
 
-    return xDiff < 5 && yDiff < 5;
+    return xDiff < 50 && yDiff < 50;
 
 }
 

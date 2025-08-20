@@ -29,7 +29,7 @@ struct NPCStats {
 
     static const inline std::string skeletonName = "Skeleton";
     static const inline int skeletonMaxHealth = 100;
-    static const inline int skeletonMovementSpeed = 25;
+    static const inline int skeletonMovementSpeed = 10;
 
 };
 
@@ -142,7 +142,7 @@ protected:
     bool active = false;
 
     /**Just a basic hitbox for the weapon.*/
-    Hitbox NPCWeaponHitbox = Hitbox(10, 10);
+    Hitbox NPCWeaponHitbox = Hitbox(50, 50);
 
 };
 
