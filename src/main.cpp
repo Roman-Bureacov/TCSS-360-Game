@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Making Player..." << std::endl;
     Player* player = Player::playerInstance().get();
+    player->attach(View::guiInstance());
     player->setX(50.0);
     player->setY(50.0);
     std::cout << player->getX() << std::endl;

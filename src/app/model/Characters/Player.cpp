@@ -13,8 +13,8 @@ std::shared_ptr<Player> Player::instance = nullptr;
 
 std::shared_ptr<Player> Player::playerInstance() {
 
-    if (instance == nullptr) {
-        instance =  std::shared_ptr<Player>(new Player(name,
+    if (!instance) {
+        instance = std::shared_ptr<Player>(new Player(name,
             startingHealth, movementSpeed));
     }
 
@@ -26,7 +26,6 @@ Player::Player(const std::string &theName
         , int theMaxHealth, int theMovementSpeed)
             : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {
 
-    attach(View::guiInstance());
 
     setHitbox(hitBoxSize, hitBoxSize);
     Weapon* PlayerWeapon =
