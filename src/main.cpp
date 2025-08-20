@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
             gameRunning = false;
         }
 
-        gameView->renderCharacter(charTexture, player);
+        gameView->renderCharacter(charTexture);
 
     } while (gameRunning);
 

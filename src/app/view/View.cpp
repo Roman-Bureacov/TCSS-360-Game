@@ -140,10 +140,10 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
 
 
-void View::renderCharacter(SDL_Texture* theCharTexture, Player* thePlayer) {
+void View::renderCharacter(SDL_Texture* theCharTexture) {
 
-    const float playerX = thePlayer->getX() * 1.0;
-    const float playerY = thePlayer->getY() * 1.0;
+    const float playerX = Player::playerInstance()->getX() * 1.0;
+    const float playerY = Player::playerInstance()->getY() * 1.0;
 
     //Perform Draw Commands
     SDL_SetRenderDrawColor(myItems.renderer, 5, 255, 255, 255);

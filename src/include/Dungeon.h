@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "View.h"
 
+class DatabaseManager;
 
 /**
  * Represents the dungeon system in the game.

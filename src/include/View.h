@@ -9,7 +9,7 @@
 #include "SDL3_image/SDL_image.h"
 #include "ObserverPattern.h"
 #include "Player.h"
-//#include "Dungeon.h"
+#include "Dungeon.h"
 #include "NPC.h"
 
 
@@ -56,7 +56,7 @@ public:
 
     void endProcess() const;
     void Update(Subject* theChangedSubject, const std::string& thePropertyName);
-    void renderCharacter(SDL_Texture *theCharTexture, Player* thePlayer);
+    void renderCharacter(SDL_Texture *theCharTexture);
 
 
 
