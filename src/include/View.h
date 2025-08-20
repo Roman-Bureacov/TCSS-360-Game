@@ -16,9 +16,38 @@
 struct SDLItems {
     SDL_Window* window {nullptr};
     SDL_Renderer* renderer {nullptr};
-    int initWidth {800}, initHeight {600}, logiWidth {800}, logiHeight {800};
-    const float charSpriteSize {16.0};
+    int initWidth {1500}, initHeight {1500}, logiWidth {1500}, logiHeight {1500};
+
+    //Different Structure probably
+    //Character Sprite Handler
+    float charTilemapX {0.0f}, charTilemapY {16.0f};
 };
+
+
+struct SpriteTextures {
+    //Size of Sprite on Tile Maps
+    const float charSpriteSize {16.0};
+
+    SDL_Texture* charTexture {nullptr};
+    SDL_Texture* timTexture {nullptr};
+    SDL_Texture* skeleTexture {nullptr};
+    SDL_Texture* goblinTexture {nullptr};
+    SDL_Texture* roomTexture {nullptr};
+
+    /*
+    ~SpriteTextures() {
+        SDL_DestroyTexture(charTexture);
+        SDL_DestroyTexture(timTexture);
+        SDL_DestroyTexture(skeleTexture);
+        SDL_DestroyTexture(goblinTexture);
+        SDL_DestroyTexture(roomTexture);
+    }*/
+
+};
+
+
+//8 enemies on screen, you need sprite points for them all
+//They use the same or two textures
 
 /**
  *
@@ -29,11 +58,12 @@ struct SDLItems {
 class View : public Observer {
 private:
     SDLItems myItems;
+    SpriteTextures mySprites;
     bool isRunning {false};
 
     static void cleanup(const SDLItems &theItems);
 
-    View() { initialize(); };
+    View() { initialize(); generateSprites(); };
 
     static std::shared_ptr<View> instance;
 
@@ -46,6 +76,7 @@ public:
     ~View() { endProcess(); }
 
     void initialize();
+    void generateSprites();
 
     bool handleEvent(SDL_Event theEvent);
     void handleKeyDown(const SDL_Scancode theKey);

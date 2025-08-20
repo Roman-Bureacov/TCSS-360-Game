@@ -1,7 +1,6 @@
 
-
 #include "../../include/View.h"
-
+#include "../../include/Utils.h"
 
 
 std::shared_ptr<View> View::instance = nullptr;
@@ -22,6 +21,7 @@ std::shared_ptr<View> View::guiInstance() {
 
 void View::initialize() {
     //See if SDL Boots
+    std::cout << "Initialize View" << std::endl;
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
         cleanup(myItems);
@@ -48,6 +48,43 @@ void View::initialize() {
         SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
     isRunning = true;
+    std::cout << "The window is created" << std::endl;
+}
+
+
+void View::generateSprites() {
+    std::cout << "Generating sprites" << std::endl;
+
+    mySprites.charTexture = IMG_LoadTexture(myItems.renderer,
+        "assets/Kinght_Of_The_Pointer.png");
+    SDL_SetTextureScaleMode(mySprites.charTexture, SDL_SCALEMODE_NEAREST);
+    std::cout << "The Player are generated" << std::endl;
+
+
+    mySprites.timTexture = IMG_LoadTexture(myItems.renderer,
+        "assets/Dark_Lord_Tom.png");
+    SDL_SetTextureScaleMode(mySprites.timTexture, SDL_SCALEMODE_NEAREST);
+    std::cout << "The Tim are generated" << std::endl;
+
+
+    mySprites.skeleTexture = IMG_LoadTexture(myItems.renderer,
+        "assets/Skelleton_Of_Null.png");
+    SDL_SetTextureScaleMode(mySprites.skeleTexture, SDL_SCALEMODE_NEAREST);
+    std::cout << "The Skeleton are generated" << std::endl;
+
+
+    mySprites.goblinTexture = IMG_LoadTexture(myItems.renderer,
+        "assets/Goblin_Of_Null.png");
+    SDL_SetTextureScaleMode(mySprites.goblinTexture, SDL_SCALEMODE_NEAREST);
+    std::cout << "The Goblin are generated" << std::endl;
+
+
+    mySprites.roomTexture = IMG_LoadTexture(myItems.renderer,
+        "assets/Tiling_dungeon_Tile_Set.png");
+    SDL_SetTextureScaleMode(mySprites.roomTexture, SDL_SCALEMODE_NEAREST);
+
+
+    std::cout << "The sprites are generated" << std::endl;
 }
 
 
@@ -108,7 +145,6 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
         }
 
-
     } else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
 
         if (thePropertyName == Player::PROPERTY_LOCATION_CHANGED) {
@@ -118,12 +154,36 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
 
         } else if (thePropertyName == Player::PROPERTY_DIRECTION_CHANGED) {
-
+            util::Direction direction = player->getDirection();
+            switch (direction) {
+                case util::NORTH: {
+                    myItems.charTilemapX = 3 * mySprites.charSpriteSize;
+                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    break;
+                }
+                case util::EAST: {
+                    myItems.charTilemapX = 0 * mySprites.charSpriteSize;
+                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    break;
+                }
+                case util::WEST: {
+                    myItems.charTilemapX = 1 * mySprites.charSpriteSize;
+                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    break;
+                }
+                case util::SOUTH: {
+                    myItems.charTilemapX = 2 * mySprites.charSpriteSize;
+                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    break;
+                }
+            }
 
         } else if (thePropertyName == Player::PROPERTY_I_ATTACKED) {
 
 
         }
+
+    renderCharacter(mySprites.charTexture);
 
     } else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
 
@@ -139,7 +199,6 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 }
 
 
-
 void View::renderCharacter(SDL_Texture* theCharTexture) {
 
     const float playerX = Player::playerInstance()->getX() * 1.0;
@@ -150,17 +209,17 @@ void View::renderCharacter(SDL_Texture* theCharTexture) {
     SDL_RenderClear(myItems.renderer);
 
     SDL_FRect charSizeRect{
-        .x = 0,
-        .y = 0,
-        .w = myItems.charSpriteSize,
-        .h = myItems.charSpriteSize
+        .x = myItems.charTilemapX,
+        .y = myItems.charTilemapY,
+        .w = mySprites.charSpriteSize,
+        .h = mySprites.charSpriteSize
     };
 
     SDL_FRect charLocRect{
         .x = playerX,
         .y = playerY,
-        .w = myItems.charSpriteSize*3,
-        .h = myItems.charSpriteSize*3
+        .w = mySprites.charSpriteSize*10,//160 px x 160px
+        .h = mySprites.charSpriteSize*10 //160 px x 160px
     };
 
     SDL_RenderTexture(myItems.renderer, theCharTexture, &charSizeRect,
