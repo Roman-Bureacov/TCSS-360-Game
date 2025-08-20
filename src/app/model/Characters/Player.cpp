@@ -58,9 +58,9 @@ void Player::userInput(SDL_Event &event) {
             case SDL_SCANCODE_SPACE:
                 attack();
                 break;
-            case SDL_SCANCODE_LSHIFT:
-                roll();
-                break;
+            //case SDL_SCANCODE_LSHIFT:
+                //roll();
+                //break;
             default: break;
         }
     }

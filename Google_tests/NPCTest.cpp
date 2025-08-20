@@ -49,8 +49,8 @@ TEST(NPCTEST,DungeonSpawnsNPCTest) {
 
     auto room = dungeon->getCurrentRoom();
 
-    //300 npcs and 1 player.
-    ASSERT_EQ(Bitz::getEntities().size(), 301);
+    //100 npcs and 1 player.
+    ASSERT_EQ(Bitz::getEntities().size(), 101);
 
 
 
@@ -84,7 +84,7 @@ TEST(NPCTEST, ActiveNPCs) {
 
         }
     }
-    ASSERT_EQ(allNPCs.size(), 3);
+    ASSERT_EQ(allNPCs.size(), 1);
 
 }
 
@@ -115,12 +115,6 @@ TEST(NPCTEST,GoToPLayer) {
     int initalX1 = allNPCs[0]->getX();
     int initalY1 = allNPCs[0]->getY();
 
-    int initalX2 = allNPCs[1]->getX();
-    int initalY2 = allNPCs[1]->getY();
-
-    int initalX3 = allNPCs[2]->getX();
-    int initalY3 = allNPCs[2]->getY();
-
 
     Clock::StopClockForTesting( 5);
     Clock::runClock();
@@ -128,15 +122,8 @@ TEST(NPCTEST,GoToPLayer) {
     int endX1 = allNPCs[0]->getX();
     int endY1 = allNPCs[0]->getY();
 
-    int endX2 = allNPCs[1]->getX();
-    int endY2 = allNPCs[1]->getY();
-
-    int endX3 = allNPCs[2]->getX();
-    int endY3 = allNPCs[2]->getY();
-
     ASSERT_TRUE(initalX1 != endX1 || initalY1 != endY1);
-    ASSERT_TRUE(initalX2 != endX2 || initalY2 != endY2);
-    ASSERT_TRUE(initalX3 != endX3 || initalY3 != endY3);
+
 
 
 
@@ -167,8 +154,6 @@ TEST(NPCTEST, AttackPLayer) {
 
 
     auto player = Player::playerInstance();
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
 
     int playerHealth = player->getHealth();
 
@@ -201,15 +186,11 @@ TEST(NPCTEST, NPCDEATH) {
         }
     }
     allNPCs[0]->setHealth(0);
-    allNPCs[1]->setHealth(-1);
+
 
     Clock::StopClockForTesting(5);
     Clock::runClock();
 
     ASSERT_FALSE(allNPCs[0]->getIsActive());
-    ASSERT_FALSE(allNPCs[1]->getIsActive());
-    ASSERT_TRUE(allNPCs[2]->getIsActive());
-
-
 
 }

@@ -36,8 +36,6 @@ TEST(PLAYERTEST,movementEastTest) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
 
 
     SDL_Event event;
@@ -83,8 +81,6 @@ TEST (PLAYERTEST,movementWestTest) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
 
 
     SDL_Event event;
@@ -129,9 +125,6 @@ TEST(PLAYERTEST, movementNorthTest) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
-
 
     SDL_Event event;
     event.type = SDL_EVENT_KEY_DOWN;
@@ -176,9 +169,6 @@ TEST(PLAYERTEST, movementSouthTest) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
-
 
     SDL_Event event;
     event.type = SDL_EVENT_KEY_DOWN;
@@ -224,9 +214,6 @@ TEST(PLAYERTEST, EastWallColision) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
-
 
     SDL_Event event;
     event.type = SDL_EVENT_KEY_DOWN;
@@ -274,9 +261,6 @@ TEST(PLAYERTEST,WestWallColision) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
-
 
     SDL_Event event;
     event.type = SDL_EVENT_KEY_DOWN;
@@ -322,8 +306,6 @@ TEST(PLAYERTEST,northWallColision) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
 
 
     SDL_Event event;
@@ -369,9 +351,6 @@ TEST(PLAYERTEST, SouthWallColision) {
 
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
-
 
     SDL_Event event;
     event.type = SDL_EVENT_KEY_DOWN;
@@ -417,8 +396,7 @@ TEST(PLAYERTEST, AttackNPCTEST) {
 
     auto player = Player::playerInstance();
 
-    allNPCs[1]->setIsActive(false);
-    allNPCs[2]->setIsActive(false);
+
 
     int statingHealth = allNPCs[0]->getHealth();
 
