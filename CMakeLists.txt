@@ -37,6 +37,7 @@ add_executable(TCSS-360-Game
         src/app/model/Characters/NPC.cpp
         src/eng/Bitz.cpp
         src/eng/Clock.cpp
+        src/app/view/View.cpp
 )
 
 # Link against SDL3
