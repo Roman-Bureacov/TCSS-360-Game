@@ -51,7 +51,7 @@ void NPC::Update(Subject *theChangedSubject, const std::string &thePropertyName)
 }
 
 void NPC::attackPlayer() {
-    notify(PROPERTY_KILLED);
+    notify(PROPERTY_I_ATTACKED);
 
     Bitz::enqueueAttackEvent(this);
 }
@@ -131,7 +131,7 @@ Skeleton::Skeleton(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(10, 10, std::move(NPCWeaponHitbox));
+        new Weapon(1, 10, std::move(NPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
     name = theName;
     movementSpeed = theMovementSpeed;

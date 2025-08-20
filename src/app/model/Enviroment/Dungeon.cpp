@@ -59,23 +59,22 @@ void Dungeon::generateDungeon() {
             if (j == 0) roomBuilder.setRoomWest(false);
             if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
 
-            auto char1 = NPC::skeletonFactory();
-            //auto char2 = NPC::skeletonFactory();
-            //auto char3 = NPC::skeletonFactory();
+            std::shared_ptr<NPC> char1;
+            if (1 + (std::rand() % 2) == 1) char1 = NPC::skeletonFactory();
+            else char1 = NPC::goblinFactory();
+
+
 
             roomBuilder.setChar1ID(char1->getID());
-            //roomBuilder.setChar2ID(char2->getID());
-            //roomBuilder.setChar3ID(char3->getID());
+
 
             char1->setHitbox( hitBoxSize, hitBoxSize);
-            //char2->setHitbox( hitBoxSize, hitBoxSize);
-            //char3->setHitbox( hitBoxSize, hitBoxSize);
+
 
             char1->attach(gui);
 
             Bitz::registerCharacter(char1);
-            //Bitz::registerCharacter(char2);
-            //Bitz::registerCharacter(char3);
+
 
             auto room = roomBuilder.build();
 
@@ -117,8 +116,7 @@ void Dungeon::setCharacterRoom(const int roomID) {
 
 void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> entities) {
     long long char1 = currentRoom->getCharacters().at(0);
-    //long long char2 = currentRoom->getCharacters().at(1);
-    //long long char3 = currentRoom->getCharacters().at(2);
+
 
 
 
@@ -130,8 +128,6 @@ void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractChar
                 npc->setIsActive(true);
                 activeCharaceter = npc;
             }
-            //else if (npc->getID() == char2) npc->setIsActive(true);
-            //else if (npc->getID() == char3) npc->setIsActive(true);
             else npc->setIsActive(false);
         }
     }

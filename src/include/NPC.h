@@ -25,7 +25,7 @@ enum class NPCType {
 struct NPCStats {
     static const inline std::string goblinName = "Goblin";
     static const inline int goblinMaxHealth = 50;
-    static const inline int goblinMovementSpeed = 100;
+    static const inline int goblinMovementSpeed = 20;
 
     static const inline std::string skeletonName = "Skeleton";
     static const inline int skeletonMaxHealth = 100;
