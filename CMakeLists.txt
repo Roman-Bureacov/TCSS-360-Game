@@ -5,10 +5,12 @@ set(CMAKE_CXX_STANDARD 23)
 
 # path to SDL3
 set(SDL3_ROOT "${CMAKE_SOURCE_DIR}/SDL3-3.2.16")
+set(SDL3_IMG_ROOT "${CMAKE_SOURCE_DIR}/SDL3_image-3.2.4")
 set(SQLITE_ROOT "${CMAKE_SOURCE_DIR}/sqlite")
 
 # Add include directories for SLD and SQLite
 include_directories("${SDL3_ROOT}/include")
+include_directories("${SDL3_IMG_ROOT}/x86_64-w64-mingw32/include")
 include_directories("${SQLITE_ROOT}/include")
 
 # Add include directory for our project files
@@ -16,6 +18,8 @@ include_directories("${CMAKE_SOURCE_DIR}/include")
 
 # Link SDL3 directory
 link_directories("${SDL3_ROOT}/lib/x64")
+link_directories("${SDL3_IMG_ROOT}/x86_64-w64-mingw32/lib")
+
 
 # Add source files
 add_executable(TCSS-360-Game
@@ -33,9 +37,11 @@ add_executable(TCSS-360-Game
         src/app/model/Characters/NPC.cpp
         src/eng/Bitz.cpp
         src/eng/Clock.cpp
-        src/app/view/View.cpp
-
 )
+
+# Link against SDL3
+target_link_libraries(TCSS-360-Game SDL3)
+target_link_libraries(TCSS-360-Game SDL3_image)
 
 # static libraries, primarily for testing purposes
 add_library(engine STATIC
@@ -104,14 +110,18 @@ add_executable(TCSS-360-Tests
 #Adds the test ecosystem
 target_include_directories(TCSS-360-Tests PRIVATE src/include)
 
-# Link against SDL3
-target_link_libraries(TCSS-360-Game SDL3)
-
 # Copy SDL3.dll to the executable output directory
 add_custom_command(TARGET TCSS-360-Game POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${SDL3_ROOT}/lib/x64/SDL3.dll"
         $<TARGET_FILE_DIR:TCSS-360-Game>)
+
+# Copy SDL3_image.dll to the executable output directory
+add_custom_command(TARGET TCSS-360-Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${SDL3_IMG_ROOT}/x86_64-w64-mingw32/bin/SDL3_image.dll"
+        $<TARGET_FILE_DIR:TCSS-360-Game>)
+
 
 #Include Path to Shaders
 add_custom_command(TARGET TCSS-360-Game POST_BUILD

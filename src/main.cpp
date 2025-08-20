@@ -7,64 +7,106 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
 #include <iostream>
 #include <thread>
 
-#include "app/model/Characters/Dummy.h"
-
+//#include "app/model/Characters/Dummy.h"
+/*
 #include "include/Room.h"
 #include "include/Dungeon.h"
-
 #include "include/View.h"
 
 #include "include/Bitz.h"
 #include "include/Clock.h"
 
-//void runGame();
-//int runTest();
-//int showWindow();
-//void userPolling();
+void runGame();
+int runTest();
+int showWindow();
+void userPolling();
+*/
+
+struct SDLItems {
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+
+};
+
+void cleanup(SDLItems &theItems);
 
 int main(int argc, char* argv[]) {
 
     std::cout << "Hello World!" << std::endl;
-/*
-    std::cout << "Hello Console, we're opening window..." << std::endl;
 
-    //VIEW TEST BEGINS
-    //Create the view
-    View userView;
-    //Initialize (open) Window
-    userView.initialize();
+    SDLItems theItems;
 
-    std::cout << "The window is created, hit X when done..." << std::endl;
+    //See if SDL Boots
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
+    }
 
-    //Main should be creating the controller and controller will handle view and model
 
-    //While window is open and running...
-    while (userView.isWindowRunning()) {
-        //Check if window has been closed
 
-        SDL_Delay(1000);
+    //Make the Window
+    const int width{800};
+    const int height{600};
+    theItems.window = SDL_CreateWindow("Game", width, height, 0);
+    if (!theItems.window) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
+        SDL_Quit();
+    }
 
-        userView.render();
+    //Create the renderer
+    theItems.renderer = SDL_CreateRenderer(theItems.window, nullptr);
+    if (!theItems.renderer) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
+        SDL_Quit();
+    }
 
-        if (!userView.handleEvents()) {
-            break;
+    //Loading Image
+
+    SDL_Texture *idleTexture = IMG_LoadTexture(theItems.renderer, "assets/Kinght_Of_The_Pointer.png");
+
+    //Game Loop
+    bool gameRunning = true;
+    while (gameRunning) {
+        SDL_Event event { 0 };
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_EVENT_QUIT: {
+                    gameRunning = false;
+                    break;
+                }
+                default: break;
+            }
         }
 
-        userView.render();
+        //Perform Draw Commands
+        SDL_SetRenderDrawColor(theItems.renderer, 5, 255, 255, 255);
+        SDL_RenderClear(theItems.renderer);
+
+        SDL_RenderTexture(theItems.renderer, idleTexture, nullptr, nullptr);
+
+        //Swap buffers and present screen
+        SDL_RenderPresent(theItems.renderer);
 
     }
 
-    //Closes Window and closes all associated resources
-    userView.cleanup();
-    //VIEW TEST ENDS
+    std::cout << "The window is created, hit X when done..." << std::endl;
 
-    //runGame();
-
+    SDL_DestroyTexture(idleTexture);
+    cleanup(theItems);
     return 0;
 }
+
+
+void cleanup(SDLItems &theItems) {
+    SDL_DestroyWindow(theItems.window);
+    SDL_DestroyRenderer(theItems.renderer);
+
+    SDL_Quit();
+}
+
 
 /*
 void runGame() {
