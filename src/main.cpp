@@ -36,7 +36,6 @@ void cleanup(SDLItems &theItems);
 
 int main(int argc, char* argv[]) {
 
-
     std::cout << "Hello World!" << std::endl;
 
     SDLItems theItems;
