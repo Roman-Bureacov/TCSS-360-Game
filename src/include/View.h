@@ -16,15 +16,28 @@ struct SDLItems {
     int initWidth {800}, initHeight {600}, logiWidth {800}, logiHeight {800};
 };
 
+/**
+ *
+ * @author Kyler McLees, Riley Hopper
+ *
+ */
+
 class View : public Observer {
 private:
     SDLItems myItems;
     bool isRunning {false};
+
     static void cleanup(const SDLItems &theItems);
+
+    View() { initialize(); };
+
+    static std::shared_ptr<View> instance;
+
+
 
 public:
 
-    View() { initialize(); };
+    static std::shared_ptr<View> guiInstance();
 
     ~View() { endProcess(); }
 
@@ -39,6 +52,8 @@ public:
 
     void endProcess() const;
     void Update(Subject* theChangedSubject, const std::string& thePropertyName);
+
+
 
 };
 

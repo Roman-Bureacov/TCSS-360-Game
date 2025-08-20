@@ -16,6 +16,7 @@
 #include "Bitz.h"
 #include "NPC.h"
 #include "Player.h"
+#include "View.h"
 
 
 /**

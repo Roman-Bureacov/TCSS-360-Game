@@ -1,12 +1,22 @@
 
-/**
- *
- * @author Kyler McLees
- *
- */
 
 #include "../../include/View.h"
 
+
+std::shared_ptr<View> View::instance = nullptr;
+
+
+std::shared_ptr<View> View::guiInstance() {
+
+    //Breaks at this if
+    if (instance == nullptr) {
+        instance =  std::unique_ptr<View>(new View());
+    }
+
+
+    return instance;
+
+}
 
 void View::initialize() {
     //See if SDL Boots
@@ -64,6 +74,7 @@ bool View::handleEvent(SDL_Event theEvent) {
 
 
 void View::Update(Subject* theChangedSubject, const std::string& thePropertyName) {
+
 
 }
 

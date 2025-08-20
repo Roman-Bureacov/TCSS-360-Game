@@ -3,9 +3,9 @@
 //
 
 #include "../../../include/Player.h"
-#include "../../../include/Bitz.h"
 
-#include <future>
+
+
 
 
 
@@ -26,6 +26,8 @@ Player::Player(const std::string &theName
         , int theMaxHealth, int theMovementSpeed)
             : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {
 
+    attach(View::guiInstance());
+
     setHitbox(hitBoxSize, hitBoxSize);
     Weapon* PlayerWeapon =
         new Weapon(10, 10, std::move(PlayerWeaponHitbox));
@@ -36,7 +38,6 @@ void Player::Update(Subject *theChangedSubject
         , const std::string &thePropertyName) {}
 
 void Player::userInput(SDL_Event &event) {
-    std::cout << "Player position: " << getX() << " " << getY() << std::endl;
     if (event.type == SDL_EVENT_KEY_DOWN) {
         switch (event.key.scancode) {
             case SDL_SCANCODE_W:
@@ -58,9 +59,9 @@ void Player::userInput(SDL_Event &event) {
             case SDL_SCANCODE_SPACE:
                 attack();
                 break;
-            case SDL_SCANCODE_LSHIFT:
-                roll();
-                break;
+            //case SDL_SCANCODE_LSHIFT:
+                //roll();
+                //break;
             default: break;
         }
     }

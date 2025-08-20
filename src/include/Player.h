@@ -6,7 +6,11 @@
 #define PLAYER_H
 
 #include <SDL3/SDL.h>
+#include <future>
+
 #include "AbstractCharacter.h"
+#include "Bitz.h"
+#include "View.h"
 
 /**
  * Represents the player character in the game.
