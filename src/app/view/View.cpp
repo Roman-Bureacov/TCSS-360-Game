@@ -91,11 +91,31 @@ void View::generateSprites() {
 
 
     mySprites.roomTexture = IMG_LoadTexture(myItems.renderer,
-        "assets/Tiling_dungeon_Tile_Set.png");
+        "assets/TestDungeon.png");
     SDL_SetTextureScaleMode(mySprites.roomTexture, SDL_SCALEMODE_NEAREST);
 
-
+    loadActiveSprites();
     std::cout << "The sprites are generated" << std::endl;
+}
+
+
+void View::loadActiveSprites() {
+    mySprites.characters.clear();
+
+    for (auto character : Bitz::getEntities()) {
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            mySprites.characters.push_back(npc);
+        }
+    }
+
+    for (auto character : Bitz::getEntities()) {
+
+        if (character->getName() == "John programmer") {
+            mySprites.characters.push_back(character);
+        }
+    }
 }
 
 
@@ -180,7 +200,7 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
         }
 
-        renderSprite(mySprites.skeleTexture, static_cast<AbstractCharacter*>(theChangedSubject));
+        renderSprite(mySprites.skeleTexture, *npc);
     }
     else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
         if (thePropertyName == Player::PROPERTY_LOCATION_CHANGED) {
@@ -221,13 +241,13 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
             //myItems.charTilemapY = 2.0 * mySprites.spriteSize;
         }
 
-    renderSprite(mySprites.charTexture, static_cast<AbstractCharacter*>(theChangedSubject));
+    renderSprite(mySprites.charTexture, *player);
 
     }
     else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
 
         if (thePropertyName == Dungeon::PROPERTY_ROOM_CHANGE) {
-
+            loadActiveSprites();
 
         }
 
@@ -237,41 +257,55 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
 }
 
-void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter* theCharacter) {
+void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter &theCharacter) {
 
-//skeleton
-
-    float posX = theCharacter->getX();
-    float posY = theCharacter->getY();
-    float scaleX, scaleY;
-    if (theCharacter->getName() != "John programmer") {
-        scaleX = myItems.npcTilemapX;
-        scaleY = myItems.npcTilemapY;
-    } else {
-        scaleX = myItems.charTilemapX;
-        scaleY = myItems.charTilemapY;
-    }
-
-    //Perform Draw Commands
+    //Perform Draw Commands - Clear Screen
     SDL_SetRenderDrawColor(myItems.renderer, 5, 255, 255, 255);
     SDL_RenderClear(myItems.renderer);
 
-    SDL_FRect charSizeRect{
-        .x = scaleX,
-        .y = scaleY,
-        .w = mySprites.spriteSize,
-        .h = mySprites.spriteSize
-    };
+    // draw background images
+    SDL_RenderTexture(myItems.renderer, mySprites.roomTexture, nullptr, nullptr);
+    /*
+    drawParalaxBackground(state.renderer, res.texBg4, gs.player().velocity.x,
+    gs.bg4Scroll, 0.075f, deltaTime);
+    drawParalaxBackground(state.renderer, res.texBg3, gs.player().velocity.x,
+    gs.bg3Scroll, 0.150f, deltaTime);
+    drawParalaxBackground(state.renderer, res.texBg2, gs.player().velocity.x,
+    gs.bg2Scroll, 0.3f, deltaTime);
+    */
 
-    SDL_FRect charLocRect{
-        .x = posX,
-        .y = posY,
-        .w = mySprites.spriteSize*10,//160 px x 160px
-        .h = mySprites.spriteSize*10 //160 px x 160px
-    };
+    float posX, posY, scaleX, scaleY;
 
-    SDL_RenderTexture(myItems.renderer, theCharTexture, &charSizeRect,
-        &charLocRect);
+    for (auto sprite : mySprites.characters) {
+        std::cout << sprite->getName() << std::endl;
+        SDL_Texture* spriteTex = mySprites.grabTexture(sprite);
+        posX = sprite->getX();
+        posY = sprite->getY();
+        if (sprite->getName() != "John programmer") {
+            scaleX = myItems.npcTilemapX;
+            scaleY = myItems.npcTilemapY;
+        } else {
+            scaleX = myItems.charTilemapX;
+            scaleY = myItems.charTilemapY;
+        }
+
+        SDL_FRect charSizeRect{
+            .x = scaleX,
+            .y = scaleY,
+            .w = mySprites.spriteSize,
+            .h = mySprites.spriteSize
+        };
+
+        SDL_FRect charLocRect{
+            .x = posX,
+            .y = posY,
+            .w = mySprites.spriteSize*10,//160 px x 160px
+            .h = mySprites.spriteSize*10 //160 px x 160px
+        };
+
+        SDL_RenderTexture(myItems.renderer, spriteTex, &charSizeRect,
+            &charLocRect);
+    }
 
     //Swap buffers and present screen
     SDL_RenderPresent(myItems.renderer);

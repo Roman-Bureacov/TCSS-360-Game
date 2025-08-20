@@ -5,12 +5,15 @@
 
 #ifndef VIEW_H
 #define VIEW_H
+
 #include "SDL3/SDL.h"
 #include "SDL3_image/SDL_image.h"
 #include "ObserverPattern.h"
 #include "Player.h"
 #include "Dungeon.h"
+#include "Bitz.h"
 #include "NPC.h"
+#include <set>
 
 //SDL State
 struct SDLItems {
@@ -22,6 +25,8 @@ struct SDLItems {
     //Character Sprite Handler
     float charTilemapX {0.0f}, charTilemapY {16.0f};
     float npcTilemapX {0.0f}, npcTilemapY {16.0f};
+    std::set<long long> activeSpritesIDs;
+    std::set<AbstractCharacter*> activeSprites;
 };
 
 
@@ -35,6 +40,15 @@ struct SpriteTextures {
     SDL_Texture* goblinTexture {nullptr};
     SDL_Texture* roomTexture {nullptr};
 
+    std::vector<std::shared_ptr<AbstractCharacter>> characters;
+
+    SDL_Texture* grabTexture(std::shared_ptr<AbstractCharacter> theCharacter) {
+        if (theCharacter->getName() == "John programmer")
+            return charTexture;
+        if (theCharacter->getName() == "Skeleton")
+            return skeleTexture;
+        return goblinTexture;
+    }
 
     ~SpriteTextures() {
         SDL_DestroyTexture(charTexture);
@@ -68,7 +82,7 @@ private:
 
     static std::shared_ptr<View> instance;
 
-
+    void loadActiveSprites();
 
 public:
 
@@ -87,8 +101,8 @@ public:
     bool getRunning() const { return isRunning; }
 
     void endProcess() const;
-    void Update(Subject* theChangedSubject, const std::string& thePropertyName);
-    void renderSprite(SDL_Texture *theCharTexture, AbstractCharacter* theCharacter);
+    void Update(Subject* theChangedSubject, const std::string &thePropertyName);
+    void renderSprite(SDL_Texture *theCharTexture, AbstractCharacter &theCharacter);
 
 
 
