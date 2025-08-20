@@ -145,47 +145,52 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
         }
 
-    } else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
-
+    }
+    else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
         if (thePropertyName == Player::PROPERTY_LOCATION_CHANGED) {
-
+            //Animate Walking?????????
 
         } else if (thePropertyName == Player::PROPERTY_KILLED) {
-
+            myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
+            myItems.charTilemapY = 4.0 * mySprites.charSpriteSize;
 
         } else if (thePropertyName == Player::PROPERTY_DIRECTION_CHANGED) {
             util::Direction direction = player->getDirection();
             switch (direction) {
                 case util::NORTH: {
-                    myItems.charTilemapX = 3 * mySprites.charSpriteSize;
-                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
+                    myItems.charTilemapY = 3.0 * mySprites.charSpriteSize;
                     break;
                 }
                 case util::EAST: {
-                    myItems.charTilemapX = 0 * mySprites.charSpriteSize;
-                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
+                    myItems.charTilemapY = 0.0 * mySprites.charSpriteSize;
                     break;
                 }
                 case util::WEST: {
-                    myItems.charTilemapX = 1 * mySprites.charSpriteSize;
-                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
+                    myItems.charTilemapY = 1.0 * mySprites.charSpriteSize;
                     break;
                 }
                 case util::SOUTH: {
-                    myItems.charTilemapX = 2 * mySprites.charSpriteSize;
-                    myItems.charTilemapY = 0 * mySprites.charSpriteSize;
+                    myItems.charTilemapX = 0.0 * mySprites.charSpriteSize;
+                    //std::cout << myItems.charTilemapX << std::endl;
+                    myItems.charTilemapY = 2.0 * mySprites.charSpriteSize;
+                    //std::cout << myItems.charTilemapY << std::endl;
                     break;
                 }
             }
 
         } else if (thePropertyName == Player::PROPERTY_I_ATTACKED) {
-
-
+            //Animation from Walking?
+            myItems.charTilemapX = 5.0 * mySprites.charSpriteSize;
+            //myItems.charTilemapY = 2.0 * mySprites.charSpriteSize;
         }
 
-    renderCharacter(mySprites.charTexture);
+    renderSprite(mySprites.charTexture);
 
-    } else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
+    }
+    else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
 
         if (thePropertyName == Dungeon::PROPERTY_ROOM_CHANGE) {
 
@@ -198,11 +203,13 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
 }
 
+void View::renderSprite(SDL_Texture* theCharTexture) {
 
-void View::renderCharacter(SDL_Texture* theCharTexture) {
+    //std::cout << "Drawing Sprite..." << std::endl;
 
     const float playerX = Player::playerInstance()->getX() * 1.0;
     const float playerY = Player::playerInstance()->getY() * 1.0;
+
 
     //Perform Draw Commands
     SDL_SetRenderDrawColor(myItems.renderer, 5, 255, 255, 255);

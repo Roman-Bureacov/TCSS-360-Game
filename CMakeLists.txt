@@ -24,20 +24,20 @@ link_directories("${SDL3_IMG_ROOT}/x86_64-w64-mingw32/lib")
 # Add source files
 add_executable(TCSS-360-Game
         src/main.cpp
-        src/app/model/Characters/AbstractCharacter.cpp
-        src/app/model/Hitbox.cpp
-        src/app/model/Characters/Weapons/Weapon.cpp
         src/app/model/ObserverPattern.cpp
-        src/app/model/Enviroment/Dungeon.cpp
-        src/app/model/Enviroment/Room.cpp
-        src/app/model/Enviroment/Interactable.cpp
-        src/db/DatabaseManager.cpp
-        ${SQLITE_ROOT}/lib/sqlite3.c
+        src/app/view/View.cpp
+        src/app/model/Hitbox.cpp
+        src/app/model/Characters/AbstractCharacter.cpp
         src/app/model/Characters/Player.cpp
         src/app/model/Characters/NPC.cpp
+        src/app/model/Characters/Weapons/Weapon.cpp
+        src/app/model/Enviroment/Interactable.cpp
+        src/app/model/Enviroment/Room.cpp
+        src/app/model/Enviroment/Dungeon.cpp
+        ${SQLITE_ROOT}/lib/sqlite3.c
+        src/db/DatabaseManager.cpp
         src/eng/Bitz.cpp
         src/eng/Clock.cpp
-        src/app/view/View.cpp
 )
 
 # Link against SDL3

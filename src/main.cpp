@@ -28,27 +28,20 @@ int main(int argc, char* argv[]) {
 
     View* gameView = View::guiInstance().get();
 
-    //Loading Image
-    /*
-    SDL_Texture *charTexture = IMG_LoadTexture(gameView->getRenderer(),
-        "assets/Kinght_Of_The_Pointer.png");
-    SDL_SetTextureScaleMode(charTexture, SDL_SCALEMODE_NEAREST);
-    */
-
     std::cout << "Making Player..." << std::endl;
     Player* player = Player::playerInstance().get();
     player->attach(View::guiInstance());
-    player->setX(50.0);
-    player->setY(50.0);
-    std::cout << player->getX() << std::endl;
-    std::cout << player->getY() << std::endl;
-    player->setDirection(util::SOUTH);
+    player->setX(1050.0);
+    player->setY(1050.0);
+    std::cout << Player::playerInstance()->getX()<< std::endl;
+    std::cout << Player::playerInstance()->getY() << std::endl;
     std::cout << "Player made..." << std::endl;
 
     //Game Loop
+    int directions {0};
     bool gameRunning = true;
     do {
-        std::cout << "Started loop..." << std::endl;
+        //std::cout << "Started loop..." << std::endl;
         SDL_Event gameEvent { 0 };
         gameView->handleEvent(gameEvent);
 
@@ -56,9 +49,33 @@ int main(int argc, char* argv[]) {
             gameRunning = false;
         }
 
-        gameView->Update(player, NPC::PROPERTY_DIRECTION_CHANGED);
+        switch (directions % 4) {
+            case 0:
+                Player::playerInstance()->setDirection(util::SOUTH);
+                break;
+            case 1:
+                Player::playerInstance()->setDirection(util::WEST);
+                break;
+            case 2:
+                Player::playerInstance()->setDirection(util::NORTH);
+                break;
+            case 3:
+                Player::playerInstance()->setDirection(util::EAST);
+                break;
+        }
+        //Player::playerInstance()->notify(Player::PROPERTY_DIRECTION_CHANGED);
         //gameView->renderCharacter(charTexture);
-
+        if (directions <= 10) {
+            directions++;
+            View::guiInstance()->Update(player, Player::PROPERTY_DIRECTION_CHANGED);
+        }
+        else if (directions < 20) {
+            directions++;
+            View::guiInstance()->Update(player, Player::PROPERTY_KILLED);
+        } else {
+            View::guiInstance()->Update(player, Player::PROPERTY_I_ATTACKED);
+        }
+            SDL_Delay(400);
     } while (gameRunning);
 
     std::cout << "The window is created, hit X when done..." << std::endl;

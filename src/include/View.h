@@ -87,7 +87,7 @@ public:
 
     void endProcess() const;
     void Update(Subject* theChangedSubject, const std::string& thePropertyName);
-    void renderCharacter(SDL_Texture *theCharTexture);
+    void renderSprite(SDL_Texture *theCharTexture);
 
 
 
