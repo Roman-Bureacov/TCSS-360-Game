@@ -34,9 +34,9 @@ public:
     /**
      * Processes user input events.
      * Handles movement, rolling, and attacking based on key presses.
-     * @param event SDL event containing user input data.
+     * @param code key code of the key pressed.
      */
-    void userInput(SDL_Event &event);
+    void userInput(int code);
 
     /**
      * Initiates a roll in the current movement direction.

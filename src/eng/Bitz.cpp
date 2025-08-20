@@ -210,7 +210,9 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
             }(); // immediately invoke lambda
 
             for (const std::shared_ptr<AbstractCharacter> c : entities) {
+
                 auto npc = std::dynamic_pointer_cast<NPC>(c);
+
                 if (npc && npc->getIsActive() && projection->intersects(c->getHitbox())) {
                     setMin(projection, c->getHitbox(), d);
                 }
