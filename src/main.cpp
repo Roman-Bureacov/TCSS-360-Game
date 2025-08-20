@@ -18,19 +18,6 @@
 #include "include/Bitz.h"
 #include "include/Clock.h"
 
-void runGame();
-int runTest();
-int showWindow();
-void userPolling();
-*/
-
-struct SDLItems {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-
-};
-
-void cleanup(SDLItems &theItems);
 
 int main(int argc, char* argv[]) {
 
@@ -38,8 +25,6 @@ int main(int argc, char* argv[]) {
     Dungeon* dungeon = Dungeon::DungeonInstance();
     dungeon->initialize(dbManager);
 
-    Bitz::registerCharacter(d1);
-    Bitz::registerCharacter(d2);
 
     Clock::runClock(); //Start the main loop of all of this
 

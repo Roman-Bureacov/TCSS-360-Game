@@ -49,6 +49,7 @@ private:
     static Room* currentRoom;
 
 
+
     /**
      * Processes the enqueued single events and persistent events.
      */

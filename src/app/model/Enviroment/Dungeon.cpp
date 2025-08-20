@@ -3,7 +3,7 @@
 //
 
 #include "../../../include/Dungeon.h"
-#include "../../../include/NPC.h"
+
 
 
 
@@ -31,6 +31,9 @@ void Dungeon::initialize(const std::shared_ptr<DatabaseManager> &dbManager) {
 }
 
 void Dungeon::generateDungeon() {
+    std::shared_ptr<View> gui = View::guiInstance();
+
+    attach(gui);
 
     if (!databaseManager) {
         throw std::runtime_error
@@ -67,6 +70,8 @@ void Dungeon::generateDungeon() {
             char1->setHitbox( hitBoxSize, hitBoxSize);
             //char2->setHitbox( hitBoxSize, hitBoxSize);
             //char3->setHitbox( hitBoxSize, hitBoxSize);
+
+            char1->attach(gui);
 
             Bitz::registerCharacter(char1);
             //Bitz::registerCharacter(char2);
