@@ -36,9 +36,8 @@ Player::Player(const std::string &theName
 void Player::Update(Subject *theChangedSubject
         , const std::string &thePropertyName) {}
 
-void Player::userInput(SDL_Event &event) {
-    if (event.type == SDL_EVENT_KEY_DOWN) {
-        switch (event.key.scancode) {
+void Player::userInput(SDL_Scancode keyEvent) {
+        switch (keyEvent) {
             case SDL_SCANCODE_W:
                 setDirection(util::NORTH);
                 Bitz::enqueueMovementEvent(this,movementSpeed);
@@ -63,7 +62,6 @@ void Player::userInput(SDL_Event &event) {
                 //break;
             default: break;
         }
-    }
 }
 
 void Player::roll() {

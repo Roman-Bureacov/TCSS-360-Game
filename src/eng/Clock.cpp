@@ -33,19 +33,6 @@ void Clock::runClock() {
 
         SDL_Event gameEvent = { 0 };
         View::guiInstance()->handleEvent(gameEvent);
-        /*
-        while (SDL_PollEvent(&gameEvent)) {
-            // Handle quit event
-            if (gameEvent.type == SDL_EVENT_QUIT) {
-                setActive(false);
-                break;
-            }
-            //Handel user input.
-            if (auto player = Player::playerInstance()) {
-                player->userInput(gameEvent);
-            }
-        }
-        */
 
         //Placeholder for now, till we have a better way
         //To poke the active NPCs
