@@ -157,7 +157,7 @@ TEST(NPCTEST, AttackPLayer) {
 
     int playerHealth = player->getHealth();
 
-    Clock::StopClockForTesting( 25);
+    Clock::StopClockForTesting( 100);
     Clock::runClock();
 
     ASSERT_NE(playerHealth, player->getHealth());

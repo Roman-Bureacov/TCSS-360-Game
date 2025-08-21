@@ -97,7 +97,7 @@ private:
     bool rolling = false;
 
     /** Size of the player's hitbox. */
-    const int hitBoxSize = 10;
+    const int hitBoxSize = 100;
 
     /** Hitbox used for the player's weapon during attacks. */
     Hitbox PlayerWeaponHitbox = Hitbox(75, 75);

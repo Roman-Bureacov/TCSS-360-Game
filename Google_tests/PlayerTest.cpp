@@ -12,6 +12,8 @@
 #include "../src/include/Clock.h"
 
 
+//These tests aren't super helpful since, if we're tweaking stats for balance they will fail
+
 TEST(PLAYERTEST,movementEastTest) {
     auto dbManager = std::make_shared<DatabaseManager>(":memory:");
     Dungeon* dungeon = Dungeon::DungeonInstance();
@@ -293,7 +295,7 @@ TEST(PLAYERTEST,northWallColision) {
     allNPCs[0]->setIsActive(false);
 
 
-    player->setY(1500 - 10);
+    player->setY(1500 - 35);
 
     //I'm too tired to write a getter.
     int finalX = player->getX();
@@ -335,7 +337,7 @@ TEST(PLAYERTEST, SouthWallColision) {
     allNPCs[0]->setIsActive(false);
 
 
-    player->setY(0);
+    player->setY(70);
 
     //I'm too tired to write a getter.
     int finalX = player->getX();
