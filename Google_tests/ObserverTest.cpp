@@ -1,36 +1,110 @@
 //
 // Created by iwant on 8/8/2025.
-// test to verify if the observer pattern works properly
+//
 //
 
-#include "../src/include/ObserverPattern.h"
 #include "gtest/gtest.h"
+#include <memory>
+#include <string>
+#include <vector>
+#include "../src/include/ObserverPattern.h" // adjust include path
 
-std::string testString = "test string bingbingwahoo!";
+// Test observer that records notifications
+struct TestObserver : public Observer {
+    int updateCount = 0;
+    int specificCount = 0;
+    std::string lastProperty;
+    std::vector<std::string> allProperties;
 
-struct A : Observer {
-    int myInt = 0;
-    int mySpecificInt = 0;
-
-    void Update(Subject *theChangedSubject, const std::string &thePropertyName) override {
-        myInt++;
-        if (thePropertyName == testString) mySpecificInt++;
+    void Update(Subject* /*theChangedSubject*/, const std::string& thePropertyName) override {
+        updateCount++;
+        lastProperty = thePropertyName;
+        allProperties.push_back(thePropertyName);
+        if (thePropertyName == "special") {
+            specificCount++;
+        }
     }
 };
 
-struct B : Subject {
-
+// Minimal concrete Subject for testing
+struct TestSubject : public Subject {
+    using Subject::notify; // expose notify for testing
 };
 
+TEST(ObserverPatternTest, SingleObserverReceivesNotification) {
+    auto obs = std::make_shared<TestObserver>();
+    TestSubject subj;
 
-TEST(ObserverTest, SubjectIsNotified) {
-    A a = A();
-    B b = B();
+    subj.attach(obs);
+    subj.notify("special");
 
-    b.attach(std::unique_ptr<Observer>(&a));
+    EXPECT_EQ(obs->updateCount, 1);
+    EXPECT_EQ(obs->specificCount, 1);
+    EXPECT_EQ(obs->lastProperty, "special");
+}
 
-    b.notify(testString);
+TEST(ObserverPatternTest, MultipleObserversAllReceiveNotification) {
+    auto obs1 = std::make_shared<TestObserver>();
+    auto obs2 = std::make_shared<TestObserver>();
+    TestSubject subj;
 
-    ASSERT_EQ(a.myInt, 1);
-    ASSERT_EQ(a.mySpecificInt, 1);
+    subj.attach(obs1);
+    subj.attach(obs2);
+    subj.notify("event");
+
+    EXPECT_EQ(obs1->updateCount, 1);
+    EXPECT_EQ(obs2->updateCount, 1);
+    EXPECT_EQ(obs1->lastProperty, "event");
+    EXPECT_EQ(obs2->lastProperty, "event");
+}
+
+TEST(ObserverPatternTest, DetachPreventsFurtherNotifications) {
+    auto obs1 = std::make_shared<TestObserver>();
+    auto obs2 = std::make_shared<TestObserver>();
+    TestSubject subj;
+
+    subj.attach(obs1);
+    subj.attach(obs2);
+
+    subj.notify("first");
+    subj.detach(obs1);
+    subj.notify("second");
+
+    EXPECT_EQ(obs1->updateCount, 1); // no update after detach
+    EXPECT_EQ(obs2->updateCount, 2); // still receives both
+}
+
+TEST(ObserverPatternTest, NotifyWithNoObserversIsSafe) {
+    TestSubject subj;
+    EXPECT_NO_THROW(subj.notify("anything"));
+}
+
+TEST(ObserverPatternTest, MultipleNotificationsAccumulate) {
+    auto obs = std::make_shared<TestObserver>();
+    TestSubject subj;
+
+    subj.attach(obs);
+    subj.notify("one");
+    subj.notify("two");
+    subj.notify("special");
+
+    EXPECT_EQ(obs->updateCount, 3);
+    EXPECT_EQ(obs->specificCount, 1);
+    EXPECT_EQ(obs->allProperties.size(), 3u);
+    EXPECT_EQ(obs->allProperties[0], "one");
+    EXPECT_EQ(obs->allProperties[1], "two");
+    EXPECT_EQ(obs->allProperties[2], "special");
+}
+
+TEST(ObserverPatternTest, DetachNonexistentObserverDoesNothing) {
+    auto obs1 = std::make_shared<TestObserver>();
+    auto obs2 = std::make_shared<TestObserver>();
+    TestSubject subj;
+
+    subj.attach(obs1);
+    EXPECT_NO_THROW(subj.detach(obs2)); // obs2 was never attached
+    subj.notify("ping");
+
+    EXPECT_EQ(obs1->updateCount, 1);
+    EXPECT_EQ(obs2->updateCount, 0);
 }

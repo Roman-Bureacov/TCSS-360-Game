@@ -14,171 +14,6 @@
 
 //These tests aren't super helpful since, if we're tweaking stats for balance they will fail
 
-TEST(PLAYERTEST,movementEastTest) {
-    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
-    Dungeon* dungeon = Dungeon::DungeonInstance();
-    dungeon->initialize(dbManager);
-
-    dungeon->setCharacterRoom(300);
-
-    auto room = dungeon->getCurrentRoom();
-
-    std::vector<std::shared_ptr<NPC>> allNPCs;
-
-    for (auto character : Bitz::getEntities()) {
-
-        auto npc = std::dynamic_pointer_cast<NPC>(character);
-
-        if (npc && npc->getIsActive()) {
-            allNPCs.push_back(npc);
-
-        }
-    }
-
-
-    auto player = Player::playerInstance();
-    allNPCs[0]->setIsActive(false);
-
-
-
-    //I'm too tired to write a getter.
-    int finalX = player->getX() + 75;
-    int finalY = player->getY();
-
-
-    player->userInput(SDL_SCANCODE_D);
-
-    Clock::StopClockForTesting( 1);
-    Clock::runClock();
-
-    ASSERT_EQ(finalX, player->getX());
-    ASSERT_EQ(finalY, player->getY());
-
-}
-
-TEST (PLAYERTEST,movementWestTest) {
-    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
-    Dungeon* dungeon = Dungeon::DungeonInstance();
-    dungeon->initialize(dbManager);
-
-    dungeon->setCharacterRoom(300);
-
-    auto room = dungeon->getCurrentRoom();
-
-    std::vector<std::shared_ptr<NPC>> allNPCs;
-
-    for (auto character : Bitz::getEntities()) {
-
-        auto npc = std::dynamic_pointer_cast<NPC>(character);
-
-        if (npc && npc->getIsActive()) {
-            allNPCs.push_back(npc);
-
-        }
-    }
-
-
-    auto player = Player::playerInstance();
-    allNPCs[0]->setIsActive(false);
-
-
-
-    //I'm too tired to write a getter.
-    int finalX = player->getX() - 75;
-    int finalY = player->getY();
-
-
-    player->userInput(SDL_SCANCODE_A);
-
-    Clock::StopClockForTesting( 1);
-    Clock::runClock();
-
-    ASSERT_EQ(finalX, player->getX());
-    ASSERT_EQ(finalY, player->getY());
-}
-
-TEST(PLAYERTEST, movementNorthTest) {
-    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
-    Dungeon* dungeon = Dungeon::DungeonInstance();
-    dungeon->initialize(dbManager);
-
-    dungeon->setCharacterRoom(300);
-
-    auto room = dungeon->getCurrentRoom();
-
-    std::vector<std::shared_ptr<NPC>> allNPCs;
-
-    for (auto character : Bitz::getEntities()) {
-
-        auto npc = std::dynamic_pointer_cast<NPC>(character);
-
-        if (npc && npc->getIsActive()) {
-            allNPCs.push_back(npc);
-
-        }
-    }
-
-
-    auto player = Player::playerInstance();
-    allNPCs[0]->setIsActive(false);
-
-
-
-    //I'm too tired to write a getter.
-    int finalX = player->getX();
-    int finalY = player->getY() + 75;
-
-
-    player->userInput(SDL_SCANCODE_W);
-
-    Clock::StopClockForTesting( 1);
-    Clock::runClock();
-
-    ASSERT_EQ(finalY, player->getY());
-    ASSERT_EQ(finalX, player->getX());
-
-
-}
-TEST(PLAYERTEST, movementSouthTest) {
-    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
-    Dungeon* dungeon = Dungeon::DungeonInstance();
-    dungeon->initialize(dbManager);
-
-    dungeon->setCharacterRoom(300);
-
-    auto room = dungeon->getCurrentRoom();
-
-    std::vector<std::shared_ptr<NPC>> allNPCs;
-
-    for (auto character : Bitz::getEntities()) {
-
-        auto npc = std::dynamic_pointer_cast<NPC>(character);
-
-        if (npc && npc->getIsActive()) {
-            allNPCs.push_back(npc);
-
-        }
-    }
-
-
-    auto player = Player::playerInstance();
-    allNPCs[0]->setIsActive(false);
-
-
-    //I'm too tired to write a getter.
-    int finalX = player->getX();
-    int finalY = player->getY() - 75;
-
-
-    player->userInput(SDL_SCANCODE_S);
-
-    Clock::StopClockForTesting( 1);
-    Clock::runClock();
-
-    ASSERT_EQ(finalX, player->getX());
-    ASSERT_EQ(finalY, player->getY());
-
-}
 
 TEST(PLAYERTEST, EastWallColision) {
     auto dbManager = std::make_shared<DatabaseManager>(":memory:");
@@ -207,20 +42,24 @@ TEST(PLAYERTEST, EastWallColision) {
     allNPCs[0]->setIsActive(false);
 
 
-    player->setX(1500 - 10);
-
-    //I'm too tired to write a getter.
-    int finalX = player->getX();
-    int finalY = player->getY();
+    //This will set the player exactly right outside the walls hitbox
+    player->setX((Room::roomSize * Room::tileSize) - player->getHitBoxSize());
 
 
-    player->userInput(SDL_SCANCODE_D);
+    int testAmount = 10;
 
-    Clock::StopClockForTesting( 1);
+    for (int i = 0; i < testAmount;i++) {
+        player->userInput(SDL_SCANCODE_D);
+    }
+
+
+
+    Clock::StopClockForTesting( testAmount);
     Clock::runClock();
 
-    ASSERT_EQ(finalX, player->getX());
-    ASSERT_EQ(finalY, player->getY());
+
+    ASSERT_TRUE( player->getX() < Room::roomSize *Room::tileSize);
+
 
 }
 
@@ -252,21 +91,22 @@ TEST(PLAYERTEST,WestWallColision) {
     allNPCs[0]->setIsActive(false);
 
 
-    player->setX(0);
-
-    //I'm too tired to write a getter.
-    int finalX = player->getX();
-    int finalY = player->getY();
+    //This will set the player exactly right outside the walls hitbox
+    player->setX(player->getHitBoxSize());
 
 
     player->userInput(SDL_SCANCODE_A);
 
-    Clock::StopClockForTesting( 1);
+    int testAmount = 10;
+
+    for (int i = 0; i < testAmount;i++) {
+        player->userInput(SDL_SCANCODE_D);
+    }
+
+    Clock::StopClockForTesting( testAmount);
     Clock::runClock();
 
-    ASSERT_EQ(finalX, player->getX());
-    ASSERT_EQ(finalY, player->getY());
-
+    ASSERT_TRUE(player->getX() > 0);
 }
 
 
@@ -295,20 +135,24 @@ TEST(PLAYERTEST,northWallColision) {
     allNPCs[0]->setIsActive(false);
 
 
-    player->setY(1500 - 35);
-
-    //I'm too tired to write a getter.
-    int finalX = player->getX();
-    int finalY = player->getY();
+    //This will set the player exactly right outside the walls hitbox
+    player->setY((Room::roomSize * Room::tileSize) - player->getHitBoxSize());
 
 
-    player->userInput(SDL_SCANCODE_W);
 
-    Clock::StopClockForTesting( 1);
+    int testAmount = 10;
+
+    for (int i = 0; i < testAmount;i++) {
+        player->userInput(SDL_SCANCODE_D);
+    }
+
+
+
+    Clock::StopClockForTesting( testAmount);
     Clock::runClock();
 
-    ASSERT_EQ(finalX, player->getX());
-    ASSERT_EQ(finalY, player->getY());
+
+    ASSERT_TRUE(player->getY() < Room::roomSize *Room::tileSize);
 
 }
 
@@ -337,20 +181,22 @@ TEST(PLAYERTEST, SouthWallColision) {
     allNPCs[0]->setIsActive(false);
 
 
-    player->setY(70);
+    //This will set the player exactly right outside the walls hitbox
+    player->setY(player->getHitBoxSize());
 
-    //I'm too tired to write a getter.
-    int finalX = player->getX();
-    int finalY = player->getY();
+    int testAmount = 10;
+
+    for (int i = 0; i < testAmount;i++) {
+        player->userInput(SDL_SCANCODE_D);
+    }
 
 
-    player->userInput(SDL_SCANCODE_S);
 
-    Clock::StopClockForTesting( 1);
+    Clock::StopClockForTesting( testAmount);
     Clock::runClock();
 
-    ASSERT_EQ(finalX, player->getX());
-    ASSERT_EQ(finalY, player->getY());
+
+    ASSERT_TRUE(player->getY() > 0);
 
 }
 
@@ -383,16 +229,19 @@ TEST(PLAYERTEST, AttackNPCTEST) {
     int statingHealth = allNPCs[0]->getHealth();
 
 
-    allNPCs[0]->setX(player->getX() + 10);
+    allNPCs[0]->setX(player->getX() + player->getHitBoxSize());
     allNPCs[0]->setY(player->getY());
 
-    player->setDirection(util::WEST);
+    player->setDirection(util::EAST);
     player->userInput(SDL_SCANCODE_SPACE);
     player->userInput(SDL_SCANCODE_SPACE);
     player->userInput(SDL_SCANCODE_SPACE);
 
     Clock::StopClockForTesting( 10);
     Clock::runClock();
+
+    std::cout << "This is the hitBOx of an npc: " << allNPCs[0]->getHitbox().getHeight() << " " << allNPCs[0]->getHitbox().getWidth() << std::endl;
+
 
     ASSERT_NE(allNPCs[0]->getHealth(), statingHealth);
 

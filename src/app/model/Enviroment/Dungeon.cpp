@@ -26,6 +26,8 @@ Dungeon* Dungeon::DungeonInstance() {
 
 void Dungeon::initialize(const std::shared_ptr<DatabaseManager> &dbManager) {
     databaseManager = dbManager;
+    //Makes sure there isn't any in there at the start.
+    Bitz::clearEntities();
     this->currentRoom = roomBuilder.build();
     this->generateDungeon();
 }
@@ -39,6 +41,7 @@ void Dungeon::generateDungeon() {
         throw std::runtime_error
             ("Database manager is not found");
     }
+
     Bitz::registerPlayer(Player::playerInstance());
     Player::playerInstance()->setX((Room::roomSize * Room::tileSize)/2);
     Player::playerInstance()->setY((Room::roomSize * Room::tileSize)/2);
@@ -67,9 +70,6 @@ void Dungeon::generateDungeon() {
             //roomBuilder.setChar2ID(char2->getID());
             //roomBuilder.setChar3ID(char3->getID());
 
-            char1->setHitbox( hitBoxSize, hitBoxSize);
-            //char2->setHitbox( hitBoxSize, hitBoxSize);
-            //char3->setHitbox( hitBoxSize, hitBoxSize);
 
             char1->attach(gui);
 

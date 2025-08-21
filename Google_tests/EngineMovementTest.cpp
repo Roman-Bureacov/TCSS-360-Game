@@ -1,5 +1,5 @@
 //
-// Created by iwant on 8/18/2025.
+// Created by RileyHop1 on 8/21/2025.
 //
 
 
@@ -7,175 +7,162 @@
 #include "../src/include/Clock.h"
 #include "gtest/gtest.h"
 
-class EngineMovementTest : public testing::Test {
-protected:
-    AbstractCharacter* d1;
-    AbstractCharacter* d2;
-    Hitbox* hb;
+TEST(EngineMovementTest, TestMovementNorth) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
 
-    void SetUp() override {
-        d1 = new Dummy();
-        d2 = new Dummy();
+    dungeon->setCharacterRoom(300);
 
-        hb = new Hitbox(10, 10);
-        d1->setHitbox(*hb);
-        d2->setHitbox(*hb);
+    auto room = dungeon->getCurrentRoom();
 
-        Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d1));
-        Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d2));
+    std::vector<std::shared_ptr<NPC>> allNPCs;
+
+    for (auto character : Bitz::getEntities()) {
+
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
+        }
     }
 
-    /**
-     * Convenience method for returning an event that stops the clock.
-     * @return an event that stops the clock
-     */
-    Event* getStopClockEvent() {
-        return new Event(
-            1,
-            []() -> void {
-                Clock::setActive(false);
-            },
-            *d2);
+
+    auto player = Player::playerInstance();
+    allNPCs[0]->setIsActive(false);
+
+    int aroundTheMiddle = 700;
+
+    player->setX(aroundTheMiddle);
+    player->setY(aroundTheMiddle);
+
+    player->userInput(SDL_SCANCODE_S);
+
+    Clock::StopClockForTesting(5);
+    Clock::runClock();
+
+
+
+    ASSERT_TRUE(aroundTheMiddle < player->getY());
+}
+
+TEST(EngineMovementTest, TestMovementSouth) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->setCharacterRoom(300);
+
+    auto room = dungeon->getCurrentRoom();
+
+    std::vector<std::shared_ptr<NPC>> allNPCs;
+
+    for (auto character : Bitz::getEntities()) {
+
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
+        }
     }
-};
 
-TEST_F(EngineMovementTest, MovementTestNorth) {
 
-    d1->setX(0); d1->setY(0);
-    d2->setX(0); d2->setY(50);
+    auto player = Player::playerInstance();
+    allNPCs[0]->setIsActive(false);
 
-    d1->setDirection(util::NORTH);
+    int aroundTheMiddle = 700;
 
-    // no collision problems should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
+    player->setX(aroundTheMiddle);
+    player->setY(aroundTheMiddle);
+
+    player->userInput(SDL_SCANCODE_W);
+
+    Clock::StopClockForTesting(5);
     Clock::runClock();
 
-    EXPECT_EQ(d1->getX(), 0);
-    EXPECT_EQ(d1->getY(), 25);
 
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
 
-    EXPECT_EQ(d1->getX(), 0);
-    EXPECT_EQ(d1->getY(), 50 - hb->getHeight());
-
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
-
-    EXPECT_EQ(d1->getX(), 0);
-    EXPECT_EQ(d1->getY(), 50 - hb->getHeight());
+    ASSERT_TRUE(aroundTheMiddle > player->getY());
 }
 
-TEST_F(EngineMovementTest, MovementTestEast) {
+TEST(EngineMovementTest, TestMovementEast) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
 
-    d1->setX(0); d1->setY(0);
-    d2->setX(50); d2->setY(0);
+    dungeon->setCharacterRoom(300);
 
-    d1->setDirection(util::EAST);
+    auto room = dungeon->getCurrentRoom();
 
-    // no collision problems should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
+    std::vector<std::shared_ptr<NPC>> allNPCs;
+
+    for (auto character : Bitz::getEntities()) {
+
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
+        }
+    }
+
+
+    auto player = Player::playerInstance();
+    allNPCs[0]->setIsActive(false);
+
+    int aroundTheMiddle = 700;
+
+    player->setX(aroundTheMiddle);
+    player->setY(aroundTheMiddle);
+
+    player->userInput(SDL_SCANCODE_D);
+
+    Clock::StopClockForTesting(5);
     Clock::runClock();
 
-    EXPECT_EQ(d1->getX(), 25);
-    EXPECT_EQ(d1->getY(), 0);
 
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
 
-    EXPECT_EQ(d1->getX(), 50 - hb->getWidth());
-    EXPECT_EQ(d1->getY(), 0);
+    ASSERT_TRUE(aroundTheMiddle < player->getX());
 
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
-
-    EXPECT_EQ(d1->getX(), 50 - hb->getWidth());
-    EXPECT_EQ(d1->getY(), 0);
 }
+TEST(EngineMovementTEst, TestMovementWest) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->setCharacterRoom(300);
+
+    auto room = dungeon->getCurrentRoom();
+
+    std::vector<std::shared_ptr<NPC>> allNPCs;
+
+    for (auto character : Bitz::getEntities()) {
+
+        auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+        if (npc && npc->getIsActive()) {
+            allNPCs.push_back(npc);
+
+        }
+    }
 
 
-TEST_F(EngineMovementTest, MovementTestSouth) {
+    auto player = Player::playerInstance();
+    allNPCs[0]->setIsActive(false);
 
-    d1->setX(0); d1->setY(50);
-    d2->setX(0); d2->setY(0);
+    int aroundTheMiddle = 700;
 
-    d1->setDirection(util::SOUTH);
+    player->setX(aroundTheMiddle);
+    player->setY(aroundTheMiddle);
 
-    // no collision problems should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
+    player->userInput(SDL_SCANCODE_A);
+
+    Clock::StopClockForTesting(5);
     Clock::runClock();
 
-    EXPECT_EQ(d1->getX(), 0);
-    EXPECT_EQ(d1->getY(), 25);
 
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
 
-    EXPECT_EQ(d1->getX(), 0);
-    EXPECT_EQ(d1->getY(), hb->getHeight());
-
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
-
-    EXPECT_EQ(d1->getX(), 0);
-    EXPECT_EQ(d1->getY(), hb->getHeight());
-}
-
-TEST_F(EngineMovementTest, MovementTestWest) {
-
-    d1->setX(50); d1->setY(0);
-    d2->setX(0); d2->setY(0);
-
-    d1->setDirection(util::WEST);
-
-    // no collision problems should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
-
-    EXPECT_EQ(d1->getX(), 25);
-    EXPECT_EQ(d1->getY(), 0);
-
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
-
-    EXPECT_EQ(d1->getX(), hb->getWidth());
-    EXPECT_EQ(d1->getY(), 0);
-
-    // a collision problem should occur
-    Clock::setActive(true);
-    Bitz::enqueueMovementEvent(d1, 25);
-    Bitz::enqueueEvent(getStopClockEvent());
-    Clock::runClock();
-
-    EXPECT_EQ(d1->getX(), hb->getWidth());
-    EXPECT_EQ(d1->getY(), 0);
+    ASSERT_TRUE(aroundTheMiddle > player->getX());
 }

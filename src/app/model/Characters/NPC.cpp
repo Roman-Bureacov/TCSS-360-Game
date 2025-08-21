@@ -117,6 +117,7 @@ Goblin::Goblin(
     Weapon* npcWeapon =
         new Weapon(10, 10, std::move(NPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
+    this->setHitbox(NPCHitBox);
     name = theName;
     movementSpeed = theMovementSpeed;
     maxHealth = theMaxHealth;
@@ -132,6 +133,7 @@ Skeleton::Skeleton(
     Weapon* npcWeapon =
         new Weapon(10, 10, std::move(NPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
+    this->setHitbox(NPCHitBox);
     name = theName;
     movementSpeed = theMovementSpeed;
     maxHealth = theMaxHealth;

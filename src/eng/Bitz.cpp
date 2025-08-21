@@ -289,6 +289,19 @@ void Bitz::setMin(Hitbox*& theProjection, const Hitbox &theIntersection, const u
     theProjection = new Hitbox(minX, minY, minWidth, minHeight);
 }
 
+void Bitz::clearEntities() {
+    entities.clear();
+}
+
+void Bitz::clearEventQueue() {
+    eventQueue.clear();
+    eventProcessQueue.clear();
+}
+
+void Bitz::clearInteractables() {
+    interactables.clear();
+}
+
 void Bitz::registerCharacter(std::shared_ptr<AbstractCharacter> theCharacter) {
     auto npc = std::dynamic_pointer_cast<NPC>(theCharacter);
     if (npc) {

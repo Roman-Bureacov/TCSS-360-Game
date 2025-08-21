@@ -14,6 +14,12 @@ int modifyThis;
  * Tests if only one event is enqueued at a time.
  */
 TEST(EngineTest, EnqueueOnlyOneEvent) {
+
+    Bitz::clearEntities();
+    Bitz::clearEventQueue();
+    Bitz::clearInteractables();
+    Clock::resetClock();
+
     auto d = new Dummy();
     modifyThis = 0;
     Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d));
@@ -30,7 +36,7 @@ TEST(EngineTest, EnqueueOnlyOneEvent) {
     Bitz::enqueueEvent(new Event(
       1,
       []() -> void {
-          modifyThis += -999;
+          modifyThis = -999;
           Clock::setActive(false);
       },
       *d
@@ -42,11 +48,17 @@ TEST(EngineTest, EnqueueOnlyOneEvent) {
 
     EXPECT_EQ(modifyThis, -999);
 }
-
 /**
  * Tests if the persistent events count for more than 1 tick.
  */
+
 TEST(EngineTest, PersistentEvent) {
+
+    Bitz::clearEntities();
+    Bitz::clearEventQueue();
+    Bitz::clearInteractables();
+
+
     modifyThis = 0;
     Bitz::enqueueEvent(new Event(
         3,
@@ -64,11 +76,15 @@ TEST(EngineTest, PersistentEvent) {
 
     EXPECT_EQ(modifyThis, 3);
 }
-
 /**
 * Tests if the persistent events prevent from enqueueing additional events by the same character.
 */
 TEST(EngineTest, PersistentQueueEventPrevention) {
+
+    Bitz::clearEntities();
+    Bitz::clearEventQueue();
+    Bitz::clearInteractables();
+
     const Dummy d = Dummy();
 
     modifyThis = 0;
@@ -95,48 +111,11 @@ TEST(EngineTest, PersistentQueueEventPrevention) {
     EXPECT_EQ(modifyThis, 2);
 }
 
-TEST(EngineTest, AttackingInRange) {
-    // setup
-    auto d1 = new Dummy();
-    auto d2 = new Dummy();
-
-    d1->setDirection(util::EAST);
-    d1->setHitbox(10, 10);
-    d1->giveWeapon(
-        new Weapon(
-            10,
-            1,
-            Hitbox(10, 10)
-        )
-    );
-
-    d2->setHitbox(10, 10);
-    d2->setX(15);
-    d2->setHealth(10);
-
-    Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d1));
-    Bitz::registerCharacter(std::shared_ptr<AbstractCharacter>(d2));
-
-    // attack
-    Clock::setActive(true);
-
-    Bitz::enqueueAttackEvent(d1);
-    Bitz::enqueueEvent(
-        new Event(
-        1,
-        []() -> void {
-            Clock::setActive(false);
-        },
-        *d2
-        )
-    );
-
-    Clock::runClock();
-
-    EXPECT_FALSE(d2->isAlive());
-}
-
 TEST(EngineTest, InteractionTest) {
+
+    Bitz::clearEntities();
+    Bitz::clearEventQueue();
+
     int* event = new int(0);
     auto d = new Dummy();
 

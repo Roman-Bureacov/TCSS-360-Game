@@ -20,7 +20,7 @@ AbstractCharacter::AbstractCharacter(
       myCurrentMovement(theMovementSpeed),
       myHitbox(Hitbox(util::Point(), 100, 100)),
       myDirection(util::NORTH),
-      myInteractionHitbox(10, 10) {
+      myInteractionHitbox(100, 100) {
 
     myWeapon = nullptr;
 }

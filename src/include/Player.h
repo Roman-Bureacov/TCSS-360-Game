@@ -61,6 +61,11 @@ public:
      */
     void attack();
 
+    /**
+     * A getter for the players hitBoxSize for testing
+     */
+    int getHitBoxSize();
+
 private:
     /**
      * Constructs the player character with specified attributes.
@@ -100,7 +105,7 @@ private:
     const int hitBoxSize = 100;
 
     /** Hitbox used for the player's weapon during attacks. */
-    Hitbox PlayerWeaponHitbox = Hitbox(75, 75);
+    Hitbox PlayerWeaponHitbox = Hitbox(100, 100);
 };
 
 #endif // PLAYER_H

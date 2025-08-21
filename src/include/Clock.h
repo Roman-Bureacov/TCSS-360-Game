@@ -35,6 +35,12 @@ private:
 
     Clock() = delete;
 public:
+
+    /**
+     * Rests the clock back to its original state.
+     */
+    static void resetClock();
+
     /**
      *
      * @return The tickrate of the clock.

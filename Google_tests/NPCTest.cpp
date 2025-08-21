@@ -41,6 +41,7 @@ TEST(NPCTEST, SpawnTest) {
 
 TEST(NPCTEST,DungeonSpawnsNPCTest) {
 
+    Bitz::clearEntities(); //Clears all active entities
     ASSERT_EQ(Bitz::getEntities().size(), 0);
 
     auto dbManager = std::make_shared<DatabaseManager>(":memory:");

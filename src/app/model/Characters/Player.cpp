@@ -69,7 +69,7 @@ void Player::userInput(int code) {
         }
     }
 
-
+//Just isn't setup in engine
 void Player::roll() {
     switch (getDirection()) {
         case util::NORTH:
@@ -106,4 +106,8 @@ void Player::attack() {
         Bitz::enqueueAttackEvent(instance.get());
     }
 
+}
+
+int Player::getHitBoxSize() {
+    return hitBoxSize;
 }

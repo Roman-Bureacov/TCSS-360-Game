@@ -145,9 +145,6 @@ private:
     /** ID of the room where the player spawns. */
     const int startingRoomId = 100;
 
-    /** Size of the hitbox used for collision detection. */
-    const int hitBoxSize = 10;
-
     /**This is the active character.*/
     std::shared_ptr<AbstractCharacter> activeCharaceter;
 

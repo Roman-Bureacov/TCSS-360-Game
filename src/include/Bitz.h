@@ -64,6 +64,20 @@ private:
     static void setMin(Hitbox*& theProjection, const Hitbox& theIntersection, util::Direction theDirection);
 public:
 
+    /**
+     * Clears the active entities.
+     */
+    static void clearEntities();
+
+    /**
+     * Clears the Event queue, eventProcessQueue.
+     */
+    static void clearEventQueue();
+
+    /**
+     * Clears the interactable.
+     */
+    static void clearInteractables();
 
     /**
      * Enqueues an event to occur in the next engine tick.

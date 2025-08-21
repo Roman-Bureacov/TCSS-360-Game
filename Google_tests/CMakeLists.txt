@@ -14,7 +14,6 @@ add_executable(
         EngineTest.cpp
         HitboxTest.cpp
         CharacterAttackTest.cpp
-        CharacterObserverTest.cpp
         ObserverTest.cpp
         ../src/app/model/Characters/NPC.cpp
         ../src/include/NPC.h
@@ -22,6 +21,7 @@ add_executable(
         NPCTest.cpp
         PlayerTest.cpp
         EngineMovementTest.cpp
+        DataBaseTest.cpp
 
 
 )

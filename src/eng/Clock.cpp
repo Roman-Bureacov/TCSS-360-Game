@@ -7,6 +7,11 @@
 
 class Bitz;
 
+void Clock::resetClock() {
+    isEnabled = false;
+    tickCount = 0;
+}
+
 long Clock::getTickRate() {
     return tickRate;
 }
