@@ -78,6 +78,22 @@ public:
      */
     void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> entities);
 
+    /**
+     * This prints the Spawn locations of the pilers for testing.
+     */
+    void printPilerSpawns();
+
+    /**
+     * Destroys all pilers for testing.
+     */
+    void destroyPilers();
+
+    /**
+     * This is the getter for the won boolean.
+     * @return This is the truthy value of if you won.
+     */
+    bool haveIWon();
+
     /** Property name used to signal room change events. */
     inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
     /**Property change for will the player wins the game. */
@@ -137,6 +153,9 @@ private:
 
     /**This is a map of pilers locations*/
     std::map<int, std::string> oopPillars;
+
+    /**This is if the player has beat the dungeon.*/
+    bool won = false;
 
 
 };

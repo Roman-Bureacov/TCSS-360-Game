@@ -46,6 +46,42 @@ TEST(DungeonRoom, RoomIDsMatch) {
 
 }
 
+TEST(DungeonRoom, CanWin) {
+
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->printPilerSpawns();
+    dungeon->destroyPilers();
+    ASSERT_TRUE(dungeon->haveIWon());
+
+}
+
+TEST(DungeonRoom, VisitEveryRoomWin) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    auto dungeonIDs = expectedDungeonIds();
+
+
+    for (const auto& row : dungeonIDs) {
+        for (int roomID : row) {
+            dungeon->setCharacterRoom(roomID);
+            std::cout << "Player moved to room: " << roomID << std::endl;
+
+
+            ASSERT_EQ(dungeon->getCurrentRoom()->getRoomID(), roomID);
+        }
+    }
+
+
+    ASSERT_TRUE(dungeon->haveIWon());
+}
+
+
+
 TEST(DungeonRoom, instanceWorks) {
     Dungeon* dungeon1 = Dungeon::DungeonInstance();
     Dungeon* dungeon2 = Dungeon::DungeonInstance();
@@ -378,4 +414,7 @@ TEST(RoomTileGeneration, ThreeDoorsSNW) {
     SCOPED_TRACE("ThreeDoorsWNS");
     EXPECT_EQ(room->getSerialRoomMap(), expected);
 }
+
+
+
 

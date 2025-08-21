@@ -116,6 +116,7 @@ void Dungeon::setCharacterRoom(const int roomID) {
         this->notify(PROPERTY_PILLAR_DESTROYED);
     } if (oopPillars.empty()) {
         std::cout << "All pillars have been destroyed!" << std::endl;
+        won = true;
         // Trigger a property change for winning, if applicable
         this->notify(PROPERTY_WIN);
     }
@@ -202,4 +203,40 @@ void Dungeon::generatePilers() {
 
 }
 
+void Dungeon::printPilerSpawns() {
+    if (oopPillars.empty()) {
+        std::cout << "No pillars have been spawned." << std::endl;
+        return;
+    }
+
+    std::cout << "Current pillar spawns:" << std::endl;
+    for (const auto& [id, pillar] : oopPillars) {
+        std::cout << "Room ID: " << id << " -> Pillar: " << pillar << std::endl;
+    }
+}
+
+void Dungeon::destroyPilers() {
+    if (oopPillars.empty()) {
+        std::cout << "No pillars to destroy." << std::endl;
+        return;
+    }
+
+    std::cout << "Destroying pillars..." << std::endl;
+    for (const auto& [id, pillar] : oopPillars) {
+        std::cout << "Destroyed pillar " << pillar << " in room " << id << std::endl;
+        this->notify(PROPERTY_PILLAR_DESTROYED);
+    }
+
+    oopPillars.clear();
+
+    if (oopPillars.empty()) {
+        std::cout << "All pillars destroyed! You win!" << std::endl;
+        won = true;
+        this->notify(PROPERTY_WIN);
+    }
+}
+
+bool Dungeon::haveIWon() {
+    return won;
+}
 
