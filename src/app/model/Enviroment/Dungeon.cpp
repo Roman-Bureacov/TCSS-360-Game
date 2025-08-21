@@ -13,6 +13,7 @@ std::vector<std::vector<int>> Dungeon::myIdMap{};
 
 
 
+
 Dungeon* Dungeon::DungeonInstance() {
 
     //Breaks at this if
@@ -34,9 +35,9 @@ void Dungeon::initialize(const std::shared_ptr<DatabaseManager> &theDbManager) {
 }
 
 void Dungeon::generateDungeon() {
-    std::shared_ptr<View> gui = View::guiInstance();
 
-    attach(gui);
+
+    attach(View::guiInstance());
 
     if (!databaseManager) {
         throw std::runtime_error
@@ -70,13 +71,13 @@ void Dungeon::generateDungeon() {
             myRoomBuilder.setChar1ID(char1->getID());
             //roomBuilder.setChar2ID(char2->getID());
             //roomBuilder.setChar3ID(char3->getID());
-
-
-            char1->attach(gui);
-
-            Bitz::registerCharacter(char1);
-            //Bitz::registerCharacter(char2);
-            //Bitz::registerCharacter(char3);
+            try {
+                char1->setRoomId(id);
+                std::cout << "NPC: " << char1->getName() << std::endl;
+                databaseManager->insertCharacter(*char1);
+            } catch (std::runtime_error &e) {
+                std::cerr << "Failed to insert NPC: " << e.what() << std::endl;
+            }
 
             auto room = myRoomBuilder.build();
 
@@ -116,6 +117,15 @@ bool Dungeon::setCharacterRoom(const int theRoomID) {
     myCurrentRoom->setSerialRoomMap("");
     myCurrentRoom = databaseManager->loadRoom(theRoomID);
     myCurrentRoom->generateExistingRoom();
+
+
+    auto npcs = databaseManager->loadCharacters(myCurrentRoom->getRoomID());
+
+    for (auto &npc : npcs) {
+        npc->attach(View::guiInstance());
+        std::cout << npc->getName();
+        Bitz::registerCharacter(npc);
+    }
 
     // You win the game by finding all the pilers and destroying them.
     if (myOopPillars.contains(theRoomID)) {

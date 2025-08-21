@@ -301,17 +301,21 @@ void Bitz::clearInteractables() {
 }
 
 void Bitz::registerCharacter(std::shared_ptr<AbstractCharacter> theCharacter) {
+    entities.clear();//Clean out other active npcs
     auto npc = std::dynamic_pointer_cast<NPC>(theCharacter);
     if (npc) {
         npc->setPlayer(player);
     }
     entities.insert(theCharacter);
 
+    std::cout << entities.size();
+
 }
 
 void Bitz::registerPlayer(std::shared_ptr<AbstractCharacter> theCharacter) {
     player = theCharacter;
     entities.insert(theCharacter);
+
 }
 
 void Bitz::registerInteractable(Interactable *theInteractable) {

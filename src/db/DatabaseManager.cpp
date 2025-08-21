@@ -11,6 +11,8 @@ DatabaseManager::DatabaseManager(const std::string &theDbFile) {
     openDatabase(theDbFile);
 
     createRoomTableIfNotExists();
+
+    createActiveNPCTableIfNotExists();
 }
 
 DatabaseManager::~DatabaseManager() {
@@ -163,9 +165,9 @@ void DatabaseManager::insertCharacter(AbstractCharacter &theCharacter) const {
         throw std::runtime_error(sqlite3_errmsg(db));
     }
 
-    sqlite3_bind_int(stmt, 1, npc->getID()); // Assuming AbstractCharacter has getId()
-    sqlite3_bind_int(stmt, 2, static_cast<int>(npc->getType())); // Assuming NPC has getType()
-    sqlite3_bind_int(stmt, 3, npc->getRoomId()); // Assuming NPC knows its room
+    sqlite3_bind_int(stmt, 1, npc->getID());
+    sqlite3_bind_int(stmt, 2, static_cast<int>(npc->getType()));
+    sqlite3_bind_int(stmt, 3, npc->getRoomId());
     sqlite3_bind_int(stmt, 4, npc->getHealth());
     sqlite3_bind_int(stmt, 5, npc->getX());
     sqlite3_bind_int(stmt, 6, npc->getY());
@@ -178,7 +180,7 @@ void DatabaseManager::insertCharacter(AbstractCharacter &theCharacter) const {
     sqlite3_finalize(stmt);
 }
 
-std::vector<std::shared_ptr<NPC>> DatabaseManager::loadCharacters(int theRoomId) {
+std::vector<std::shared_ptr<NPC>> DatabaseManager::loadCharacters(const int theRoomId) {
     const char *sql = R"(
         SELECT type_id, health, x, y, is_active
         FROM active_npcs
@@ -205,7 +207,7 @@ std::vector<std::shared_ptr<NPC>> DatabaseManager::loadCharacters(int theRoomId)
         npc->setHealth(health);
         npc->setX(x);
         npc->setY(y);
-        npc->setIsActive(isActive);
+        npc->setIsActive(true);
 
         npcs.push_back(npc);
     }
