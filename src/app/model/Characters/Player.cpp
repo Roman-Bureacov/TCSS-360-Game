@@ -122,9 +122,9 @@ void Player::userInput(const int theCode) {
         case SDL_SCANCODE_UP:
             Bitz::loadDungeonRoom(util::NORTH);
             break;
-        //case SDL_SCANCODE_LSHIFT:
-            //roll();
-            //break;
+        case SDL_SCANCODE_LSHIFT:
+            usePotion();
+            break;
         default: break;
         }
     }

@@ -12,8 +12,6 @@
 #include "../src/include/Clock.h"
 
 
-//These tests aren't super helpful since, if we're tweaking stats for balance they will fail
-
 
 TEST(PLAYERTEST, EastWallColision) {
     auto dbManager = std::make_shared<DatabaseManager>(":memory:");
@@ -43,7 +41,7 @@ TEST(PLAYERTEST, EastWallColision) {
 
 
     //This will set the player exactly right outside the walls hitbox
-    player->setX((Room::ROOMSIZE * Room::TILESIZE) - player->getHitBoxSize());
+    player->setX(((Room::ROOMSIZE - 1) * Room::TILESIZE) - player->getHitBoxSize());
 
 
     int testAmount = 10;
@@ -58,7 +56,8 @@ TEST(PLAYERTEST, EastWallColision) {
     Clock::runClock();
 
 
-    ASSERT_TRUE( player->getX() < Room::ROOMSIZE *Room::TILESIZE);
+
+    ASSERT_TRUE( player->getX() < Room::ROOMSIZE * Room::TILESIZE);
 
 
 }
@@ -287,4 +286,153 @@ TEST(PLAYERTEST,potionTest) {
 
 
 }
+
+TEST(PLAYERTEST, playerCanHealWithPotion) {
+
+    auto player = Player::playerInstance();
+    player->setHealth(1);
+
+    player->givePotion();
+    ASSERT_EQ(player->getHealth(),1);
+
+    player->userInput(SDL_SCANCODE_LSHIFT);
+
+    ASSERT_EQ(player->getHealth(),Player::MYPOTIONSTRENGTH + 1);
+}
+
+
+TEST(PLAYERTEST,testSwitchRoomSouth) {
+
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+
+    dungeon->setCharacterRoom(505);
+
+    int dungeonStartingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+
+    player->userInput(SDL_SCANCODE_DOWN);
+
+    ASSERT_EQ(dungeonStartingRoomId + Dungeon::ROOMVERTICALIDCHANGE, dungeon->getCurrentRoom()->getRoomID());
+
+}
+
+TEST(PLAYTEST, testSwitchRoomWest) {
+
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->setCharacterRoom(505);
+
+    int dungeonStartingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+
+    player->userInput(SDL_SCANCODE_LEFT);
+
+    ASSERT_EQ(dungeonStartingRoomId - Dungeon::ROOMHORIZONTALIDCHANGE, dungeon->getCurrentRoom()->getRoomID());
+
+}
+
+TEST(PLAYERTEST, testSwitchRoomNorth) {
+
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->setCharacterRoom(505);
+
+    int dungeonStartingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+
+    player->userInput(SDL_SCANCODE_UP);
+
+    ASSERT_EQ(dungeonStartingRoomId - Dungeon::ROOMVERTICALIDCHANGE,
+              dungeon->getCurrentRoom()->getRoomID());
+}
+
+TEST(PLAYERTEST, testSwitchRoomEast) {
+
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    dungeon->setCharacterRoom(505);
+
+    int dungeonStartingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+
+    player->userInput(SDL_SCANCODE_RIGHT);
+
+    ASSERT_EQ(dungeonStartingRoomId + Dungeon::ROOMHORIZONTALIDCHANGE,
+              dungeon->getCurrentRoom()->getRoomID());
+}
+
+TEST(PLAYERTEST, testSwitchRoomNorth_NoRoom) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    // Top row, moving north should fail
+    dungeon->setCharacterRoom(100);
+    int startingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+    player->userInput(SDL_SCANCODE_UP);
+
+    ASSERT_EQ(startingRoomId, dungeon->getCurrentRoom()->getRoomID());
+}
+
+TEST(PLAYERTEST, testSwitchRoomSouth_NoRoom) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    // Bottom row, moving south should fail
+    dungeon->setCharacterRoom(1000);
+    int startingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+    player->userInput(SDL_SCANCODE_DOWN);
+
+    ASSERT_EQ(startingRoomId, dungeon->getCurrentRoom()->getRoomID());
+}
+
+TEST(PLAYERTEST, testSwitchRoomWest_NoRoom) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    // First column, moving west should fail
+    dungeon->setCharacterRoom(500);
+    int startingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+    player->userInput(SDL_SCANCODE_LEFT);
+
+    ASSERT_EQ(startingRoomId, dungeon->getCurrentRoom()->getRoomID());
+}
+
+TEST(PLAYERTEST, testSwitchRoomEast_NoRoom) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    // Last column, moving east should fail
+    dungeon->setCharacterRoom(509);
+    int startingRoomId = dungeon->getCurrentRoom()->getRoomID();
+
+    auto player = Player::playerInstance();
+    player->userInput(SDL_SCANCODE_RIGHT);
+
+    ASSERT_EQ(startingRoomId, dungeon->getCurrentRoom()->getRoomID());
+}
+
+
 
