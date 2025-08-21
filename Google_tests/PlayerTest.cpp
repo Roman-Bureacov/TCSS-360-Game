@@ -265,9 +265,11 @@ TEST(PLAYERTEST, changeClass) {
 
 TEST(PLAYERTEST,potionTest) {
 
+
     auto player = Player::playerInstance();
     //Just so the player can be healed
     player->setHealth(1);
+    player->setPotionAmount(0);
 
     //Player should start with no potions
     ASSERT_EQ(player->getPotionAmount(), 0);

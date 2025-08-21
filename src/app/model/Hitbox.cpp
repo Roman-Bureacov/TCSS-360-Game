@@ -10,8 +10,7 @@
 Hitbox::Hitbox(const util::Point& THEORIGIN, const int theWidth, const int theHeight)
     : myOrigin(THEORIGIN), myWidth(theWidth), myHeight(theHeight){
 
-   if (theWidth < 0) throw std::logic_error("width must be zero or greater");
-   if (theHeight < 0) throw std::logic_error("height must be zero or greater");
+
 }
 
 Hitbox::Hitbox(const int theX, const int theY, const int theWidth, const int theHeight)
@@ -38,11 +37,11 @@ const util::Point & Hitbox::getOrigin() const {
 }
 
 int Hitbox::getWidth() const {
-    return myWidth;
+    return std::abs(myWidth);
 }
 
 int Hitbox::getHeight() const {
-    return myHeight;
+    return std::abs(myHeight);
 }
 
 bool Hitbox::contains(const util::Point thePoint) const {
@@ -50,8 +49,8 @@ bool Hitbox::contains(const util::Point thePoint) const {
 }
 
 bool Hitbox::contains(const int theX, const int theY) const {
-    const int endX = myOrigin.x + myWidth;
-    const int endY = myOrigin.y + myHeight;
+    const int endX = myOrigin.x + std::abs(myWidth);
+    const int endY = myOrigin.y + std::abs(myHeight);
 
     return myOrigin.x <= theX && theX <= endX
             && myOrigin.y <= theY && theY <= endY;
@@ -59,9 +58,9 @@ bool Hitbox::contains(const int theX, const int theY) const {
 
 bool Hitbox::intersects(const Hitbox& theOtherHitbox) const {
     // see: https://dyn4j.org/2010/01/sat/
-    const int xMax = myOrigin.x + myWidth;
+    const int xMax = myOrigin.x + std::abs(myWidth);
     const int xMaxOther = theOtherHitbox.getOrigin().x + theOtherHitbox.getWidth();
-    const int yMax = myOrigin.y + myHeight;
+    const int yMax = myOrigin.y + std::abs(myHeight);
     const int yMaxOther = theOtherHitbox.getOrigin().y + theOtherHitbox.getHeight();
 
     bool xContained;
@@ -88,8 +87,8 @@ void Hitbox::project(Hitbox& theOtherHitbox, util::Direction theDirection) const
 
     int xOffset;
     int yOffset;
-    const int h = std::abs(getHeight());
-    const int w = std::abs(getWidth());
+    const int h = getHeight();
+    const int w = getWidth();
 
     // myDimension - (myDimension + otherDimension)/2
     // simplified to (myDimension - otherDimension)/2
