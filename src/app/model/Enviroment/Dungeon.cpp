@@ -93,8 +93,10 @@ void Dungeon::generateDungeon() {
         myIdMap.push_back(idRow);
     }
 
-    //This will set up the pillers in the dungeon
+    //This will set up the pilers in the dungeon.
     generatePilers();
+    //Will randomly spawn potions.
+    spawnPotions();
     //Its 100, just so you don't have to look.
     setCharacterRoom(STARTINGROOMID);
 
@@ -119,6 +121,9 @@ void Dungeon::setCharacterRoom(const int theRoomID) {
         myWin = true;
         // Trigger a property change for winning, if applicable
         this->notify(PROPERTY_WIN);
+    } if (myPotionLocations.contains(theRoomID)) {
+        Player::playerInstance()->givePotion();
+        myPotionLocations.erase(theRoomID);
     }
 
 
@@ -212,6 +217,41 @@ void Dungeon::printPilerSpawns() {
     std::cout << "Current pillar spawns:" << std::endl;
     for (const auto& [id, pillar] : myOopPillars) {
         std::cout << "Room ID: " << id << " -> Pillar: " << pillar << std::endl;
+    }
+}
+
+void Dungeon::spawnPotions() {
+    // Validate map dimensions
+    if (myIdMap.size() != 10) {
+        std::cerr << "Error: idMap must have exactly 10 rows!\n";
+        return;
+    }
+    for (size_t i = 0; i < myIdMap.size(); ++i) {
+        if (myIdMap[i].size() != 10) {
+            std::cerr << "Error: Row " << i << " must have exactly 10 elements!\n";
+            return;
+        }
+    }
+
+    // Random number generator
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> coordDist(0, 9); // for x/y positions
+    std::uniform_int_distribution<> potionCountDist(1, 6); // random number of potions
+
+    // Decide how many potions to spawn
+    int potionCount = potionCountDist(gen);
+
+    // Clear any previous potion locations
+    myPotionLocations.clear();
+
+    for (int i = 0; i < potionCount; ++i) {
+        int row = coordDist(gen);
+        int col = coordDist(gen);
+        int key = myIdMap[row][col];
+
+        // Mark this location as having a potion
+        myPotionLocations[key] = true;
     }
 }
 

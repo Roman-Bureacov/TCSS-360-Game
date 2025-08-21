@@ -214,18 +214,18 @@ public:
 
 private:
     /** Flags for adjacent rooms. */
-    bool theRoomNorth = true;
-    bool theRoomEast = true;
-    bool theRoomWest = true;
-    bool theRoomSouth = true;
+    bool myRoomNorth = true;
+    bool myRoomEast = true;
+    bool myRoomWest = true;
+    bool myRoomSouth = true;
 
     /** Character IDs for the room. */
-    long long theCharID1;
-    long long theCharID2;
-    long long theCharID3;
+    long long myCharID1;
+    long long myCharID2;
+    long long myCharID3;
 
     /** Unique room identifier. */
-    int theRoomID = 0;
+    int myRoomID = 0;
 };
 
 #endif // ROOM_H

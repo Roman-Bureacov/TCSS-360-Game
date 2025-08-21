@@ -84,6 +84,11 @@ public:
     void printPilerSpawns();
 
     /**
+     * This spawns potions.
+     */
+    void spawnPotions();
+
+    /**
      * Destroys all pilers for testing.
      */
     void destroyPilers();
@@ -150,6 +155,10 @@ private:
 
     /**This is a map of pilers locations*/
     std::map<int, std::string> myOopPillars;
+
+    /**This is a map of the potion spawn locations.*/
+    std::map<int, bool> myPotionLocations;
+
 
     /**This is if the player has beat the dungeon.*/
     bool myWin = false;

@@ -79,6 +79,27 @@ TEST(DungeonRoom, VisitEveryRoomWin) {
 
     ASSERT_TRUE(dungeon->haveIWon());
 }
+TEST(DungeonRoom, testPotionSpawns) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    auto dungeonIDs = expectedDungeonIds();
+
+
+    for (const auto& row : dungeonIDs) {
+        for (int roomID : row) {
+            dungeon->setCharacterRoom(roomID);
+            std::cout << "Player moved to room: " << roomID << std::endl;
+
+
+            ASSERT_EQ(dungeon->getCurrentRoom()->getRoomID(), roomID);
+        }
+    }
+    ASSERT_TRUE(Player::playerInstance()->getPotionAmount() > 0);
+    Player::playerInstance()->setPotionAmount(0);
+}
+
 
 
 

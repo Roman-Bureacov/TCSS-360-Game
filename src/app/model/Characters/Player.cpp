@@ -36,7 +36,7 @@ Player::Player(const std::string &theName
 void Player::Update(Subject *theChangedSubject
         , const std::string &thePropertyName) {}
 
-void Player::setClass(playerTypes myType) {
+void Player::setClass(const playerTypes myType) {
     switch (myType) {
         case playerTypes::Knight:
             this->setName(PlayerClasses::MYNAMEKNIGHT);
@@ -72,7 +72,7 @@ void Player::setClass(playerTypes myType) {
 
 }
 
-void Player::userInput(int theCode) {
+void Player::userInput(const int theCode) {
     if (!isAlive()) return;
     switch (theCode) {
         case SDL_SCANCODE_W:
@@ -145,11 +145,20 @@ void Player::usePotion() {
 }
 
 void Player::givePotion() {
+    std::cout << "You've got a new potion" << std::endl;
     myPotionAmount++;
 }
 
 int Player::getPotionAmount() {
     return myPotionAmount;
+}
+
+void Player::setPotionAmount(const int theAmount) {
+    //You can't have a negative amount
+    if (theAmount >= 0) {
+        myPotionAmount = theAmount;
+    }
+
 }
 
 void Player::attack() {

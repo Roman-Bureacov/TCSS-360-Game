@@ -128,6 +128,12 @@ public:
     int getPotionAmount();
 
     /**
+     * This will set the amount of potions the player has.
+     * @param theAmount the amount of potions the player should have.
+     */
+    void setPotionAmount(int theAmount);
+
+    /**
      * Executes an attack action.
      * Uses the player's weapon hitbox to detect collisions.
      */

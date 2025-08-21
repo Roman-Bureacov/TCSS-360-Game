@@ -6,6 +6,7 @@
 
 
 
+
 void Room::generateNonExistingRoom() {
 
     //Awful algorithm.
@@ -231,42 +232,42 @@ ConcreteRoomBuilder::ConcreteRoomBuilder() = default;
 
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomNorth(const bool theNorth) {
-    theRoomNorth = theNorth;
+    myRoomNorth = theNorth;
     return *this;
 }
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomEast(const bool theEast) {
-    theRoomEast = theEast;
+    myRoomEast = theEast;
     return *this;
 }
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomWest(const bool theWest) {
-    theRoomWest = theWest;
+    myRoomWest = theWest;
     return *this;
 }
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomSouth(const bool theSouth) {
-    theRoomSouth = theSouth;
+    myRoomSouth = theSouth;
     return *this;
 }
 
 ConcreteRoomBuilder& ConcreteRoomBuilder::setRoomId(const int theId) {
-    theRoomID = theId;
+    myRoomID = theId;
     return *this;
 }
 
 ConcreteRoomBuilder & ConcreteRoomBuilder::setChar1ID(const long long theID) {
-    theCharID1 = theID;
+    myCharID1 = theID;
     return *this;
 }
 
 ConcreteRoomBuilder & ConcreteRoomBuilder::setChar2ID(const long long theID) {
-    theCharID2 = theID;
+    myCharID2 = theID;
     return *this;
 }
 
 ConcreteRoomBuilder & ConcreteRoomBuilder::setChar3ID(const long long theID) {
-    theCharID3 = theID;
+    myCharID3 = theID;
     return *this;
 }
 
@@ -274,27 +275,27 @@ std::shared_ptr<Room> ConcreteRoomBuilder::build() {
 
     auto room = std::make_shared<Room>();
 
-    room->setNorth(theRoomNorth);
-    room->setEast(theRoomEast);
-    room->setWest(theRoomWest);
-    room->setSouth(theRoomSouth);
-    room->setRoomID(theRoomID);
+    room->setNorth(this->myRoomNorth);
+    room->setEast(this->myRoomEast);
+    room->setWest(this->myRoomWest);
+    room->setSouth(this->myRoomSouth);
+    room->setRoomID(this->myRoomID);
     room->setAlreadyGenerated(false);
-    room->setChar1ID(theCharID1);
-    room->setChar2ID(theCharID2);
-    room->setChar3ID(theCharID3);
+    room->setChar1ID(this->myCharID1);
+    room->setChar2ID(this->myCharID2);
+    room->setChar3ID(this->myCharID3);
 
     room->initializeRoom();
 
     //Reset the builder
-    this->theRoomNorth = true;
-    this->theRoomEast = true;
-    this->theRoomWest = true;
-    this->theRoomSouth = true;
-    this->theRoomID = 0;
-    this->theCharID1 = 0;
-    this->theCharID2 = 0;
-    this->theCharID3 = 0;
+    this->myRoomNorth = true;
+    this->myRoomEast = true;
+    this->myRoomWest = true;
+    this->myRoomSouth = true;
+    this->myRoomID = 0;
+    this->myCharID1 = 0;
+    this->myCharID2 = 0;
+    this->myCharID3 = 0;
 
 
     return room;
