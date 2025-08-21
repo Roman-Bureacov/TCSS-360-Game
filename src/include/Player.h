@@ -21,12 +21,17 @@
  */
 struct PlayerClasses {
 
+    /**This is the attack time the time takes.*/
+    static const inline int MYPLAYERATTACKTIME = 10;
+
     /** Name of the Knight player character. */
     static inline const std::string MYNAMEKNIGHT = "John Programmer";
     /** Starting health value for the Knight player character. */
     static inline const int MYSTARTINGHEALTHKNIGHT = 100;
     /** Movement speed value for the Knight player character. */
     static inline const int MYMOVEMENTSPEEDKNIGHT = 35;
+    /**This is the damage the player does.*/
+    static inline const int MYDAMAGEKNIGHT = 10;
 
     /** Name of the Rogue player character. */
     static inline const std::string MYNAMEROGUE = "John Git Puller";
@@ -34,6 +39,8 @@ struct PlayerClasses {
     static inline const int MYSTARTINGHEALTHROGUE = 50;
     /** Movement speed value for the Rogue player character. */
     static inline const int MYMOVEMENTSPEEDROGUE = 50;
+    /**This is the damage the player does.*/
+    static inline const int MYDAMAGEROGUE = 5;
 
     /** Name of the Mage player character. */
     static inline const std::string MYNAMEMAGE = "John Stack Overflow";
@@ -41,6 +48,8 @@ struct PlayerClasses {
     static inline const int MYSTARTINGHEALTHMAGE = 40;
     /** Movement speed value for the Mage player character. */
     static inline const int MYMOVEMENTSPEEDMAGE = 30;
+    /**This is the damage the player does.*/
+    static inline const int MYDAMAGEMAGE = 60;
 
     /** Name of the Archer player character. */
     static inline const std::string MYNAMEARCHER = "John Code Sniper";
@@ -48,6 +57,8 @@ struct PlayerClasses {
     static inline const int MYSTARTINGHEALTHARCHER = 60;
     /** Movement speed value for the Archer player character. */
     static inline const int MYMOVEMENTSPEEDARCHER = 45;
+    /**This is the damage the player does.*/
+    static inline const int MYDAMAGEARCHER = 50;
 };
 
 /**

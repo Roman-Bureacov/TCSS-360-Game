@@ -23,13 +23,27 @@ enum class NPCType {
  * This struct holds the stats of basic NPCS
  */
 struct NPCStats {
-    static const inline std::string GOBLINNAME = "Goblin";
-    static const inline int GOBLINMAXHEALTH = 50;
-    static const inline int GOBLINMOVEMENTSPEED = 100;
 
-    static const inline std::string SKELETONNAME = "Skeleton";
-    static const inline int SKELETONMAXHEALTH = 100;
-    static const inline int SKELETONMOVEMENTSPEED = 10;
+    /**This is the time the NPC takes to attack. */
+    static const inline int MYNPCATTACKTIME = 10;
+
+    /**This is the name of the goblin. */
+    static const inline std::string MYGOBLINNAME = "Goblin";
+    /**THis is the health of the goblin. */
+    static const inline int MYGOBLINMAXHEALTH = 50;
+    /**This is the movment speed of the goblin. */
+    static const inline int MYGOBLINMOVEMENTSPEED = 100;
+    /**This is the damage the goblin. */
+    static const inline int MYGOBLINDAMAGE = 1;
+
+    /**The name skeleton. */
+    static const inline std::string MYSKELETONNAME = "Skeleton";
+    /**The health of the skeleton. */
+    static const inline int MYSKELETONMAXHEALTH = 100;
+    /**The movement speed of the skeleton. */
+    static const inline int MYSKELETONMOVEMENTSPEED = 10;
+    /**The is the damage the skeleton does.  */
+    static const inline int MYSKELETONDAMAGE = 2;
 
 };
 

@@ -115,7 +115,8 @@ Goblin::Goblin(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(1, 10, std::move(myNPCWeaponHitbox));
+        new Weapon(NPCStats::MYGOBLINDAMAGE,
+            NPCStats::MYNPCATTACKTIME, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
     this->setHitbox(myNPCHitBox);
     myName = theName;
@@ -131,7 +132,8 @@ Skeleton::Skeleton(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(1, 10, std::move(myNPCWeaponHitbox));
+        new Weapon(NPCStats::MYSKELETONDAMAGE,
+            NPCStats::MYNPCATTACKTIME, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
     this->setHitbox(myNPCHitBox);
     myName = theName;
@@ -174,9 +176,9 @@ bool TimCapaul::canAttack() {
 
 std::shared_ptr<Goblin> NPC::goblinFactory() {
     auto goblin = std::make_shared<Goblin>(
-        NPCStats::GOBLINNAME,
-        NPCStats::GOBLINMAXHEALTH,
-        NPCStats::GOBLINMOVEMENTSPEED
+        NPCStats::MYGOBLINNAME,
+        NPCStats::MYGOBLINMAXHEALTH,
+        NPCStats::MYGOBLINMOVEMENTSPEED
     );
 
     //Should randomize spawn position.
@@ -192,9 +194,9 @@ std::shared_ptr<TimCapaul> NPC::timCapaulFactory() {
 
 std::shared_ptr<Skeleton> NPC::skeletonFactory() {
     auto skeleton = std::make_shared<Skeleton>(
-        NPCStats::SKELETONNAME,
-        NPCStats::SKELETONMAXHEALTH,
-        NPCStats::SKELETONMOVEMENTSPEED
+        NPCStats::MYSKELETONNAME,
+        NPCStats::MYSKELETONMAXHEALTH,
+        NPCStats::MYSKELETONMOVEMENTSPEED
     );
     setRandomPosition(skeleton);
     return skeleton;

@@ -29,7 +29,8 @@ Player::Player(const std::string &theName
 
     setHitbox(MYHITBOXSIZE, MYHITBOXSIZE);
     Weapon* PlayerWeapon =
-        new Weapon(10, 10, std::move(PlayerWeaponHitbox));
+        new Weapon(PlayerClasses::MYDAMAGEKNIGHT,
+            PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox));
     this->giveWeapon(PlayerWeapon);
 }
 
@@ -42,24 +43,32 @@ void Player::setClass(const playerTypes myType) {
             this->setName(PlayerClasses::MYNAMEKNIGHT);
             this->setHealth(PlayerClasses::MYSTARTINGHEALTHKNIGHT);
             this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDKNIGHT);
+            this->giveWeapon( new Weapon(PlayerClasses::MYDAMAGEKNIGHT,
+            PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox)));
             break;
 
         case playerTypes::Rogue:
             this->setName(PlayerClasses::MYNAMEROGUE);
             this->setHealth(PlayerClasses::MYSTARTINGHEALTHROGUE);
             this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDROGUE);
+            this->giveWeapon( new Weapon(PlayerClasses::MYDAMAGEROGUE,
+            PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox)));
             break;
 
         case playerTypes::Mage:
             this->setName(PlayerClasses::MYNAMEMAGE);
             this->setHealth(PlayerClasses::MYSTARTINGHEALTHMAGE);
             this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDMAGE);
+            this->giveWeapon( new Weapon(PlayerClasses::MYDAMAGEMAGE,
+            PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox)));
             break;
 
         case playerTypes::Archer:
             this->setName(PlayerClasses::MYNAMEARCHER);
             this->setHealth(PlayerClasses::MYSTARTINGHEALTHARCHER);
             this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDARCHER);
+            this->giveWeapon( new Weapon(PlayerClasses::MYDAMAGEARCHER,
+            PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox)));
             break;
 
         default:
@@ -67,6 +76,8 @@ void Player::setClass(const playerTypes myType) {
             this->setName(PlayerClasses::MYNAMEKNIGHT);
             this->setHealth(PlayerClasses::MYSTARTINGHEALTHKNIGHT);
             this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDKNIGHT);
+            this->giveWeapon( new Weapon(PlayerClasses::MYDAMAGEKNIGHT,
+            PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox)));
             break;
     }
 
