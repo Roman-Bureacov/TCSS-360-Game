@@ -40,12 +40,10 @@ private:
     int count = 3;
 public:
     Dummy() : AbstractCharacter("Dummy", 25, 0) {
-        std::cout << "I, the dummy, have been CONSTRUCTED into existance!" << std::endl;
         giveWeapon(new DummyWeapon());
     }
 
     ~Dummy() override {
-        std::cout << "I, the dummy, have been deconstructed!" << std::endl;
     }
 
     void attack() {

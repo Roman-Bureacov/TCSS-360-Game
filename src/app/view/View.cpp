@@ -277,7 +277,6 @@ void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter &theChara
     float posX, posY, scaleX, scaleY;
 
     for (auto sprite : mySprites.characters) {
-        std::cout << sprite->getName() << std::endl;
         SDL_Texture* spriteTex = mySprites.grabTexture(sprite);
         posX = sprite->getX();
         posY = sprite->getY();

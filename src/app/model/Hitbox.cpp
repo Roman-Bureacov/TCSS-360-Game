@@ -112,7 +112,6 @@ void Hitbox::project(Hitbox& theOtherHitbox, util::Direction theDirection) const
         default: throw new std::logic_error("Bad direction in getAttackHitbox");
     }
 
-    std::cout << xOffset << " " << yOffset << std::endl;
     theOtherHitbox.setOrigin(
             myOrigin.x + xOffset,
             myOrigin.y + yOffset

@@ -89,22 +89,18 @@ void Player::userInput(const int theCode) {
     switch (theCode) {
         case SDL_SCANCODE_W:
             setDirection(util::SOUTH);
-            std::cout << "w";
             Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_S:
             setDirection(util::NORTH);
-            std::cout << "s";
             Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_A:
             setDirection(util::WEST);
-            std::cout << "a";
             Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_D:
             setDirection(util::EAST);
-            std::cout << "d";
             Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_SPACE:

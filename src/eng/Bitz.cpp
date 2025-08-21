@@ -86,8 +86,6 @@ void Bitz::enqueueAttackEvent(AbstractCharacter *theCharacter) {
             const Weapon w = theCharacter->getWeapon();
             const Hitbox h = theCharacter->getAttackHitbox();
 
-            std::cout << w.getModifiedDamage() << std::endl;
-
             // check for any and all intersections
             for (const auto character : entities) {
                 //Checking if the character is a player or NPC
