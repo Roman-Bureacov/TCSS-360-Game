@@ -137,6 +137,21 @@ void Player::endRoll() {
     myRolling = false;
 }
 
+void Player::usePotion() {
+    if (myPotionAmount > 0) {
+        myPotionAmount--;
+        heal(MYPOTIONSTRENGTH);
+    }
+}
+
+void Player::givePotion() {
+    myPotionAmount++;
+}
+
+int Player::getPotionAmount() {
+    return myPotionAmount;
+}
+
 void Player::attack() {
     if (myInstance) {
         Bitz::enqueueAttackEvent(myInstance.get());

@@ -75,6 +75,12 @@ public:
     /** Property name used to signal when the player starts rolling. */
     inline static const std::string PROPERTY_CHANGED_ROLL = "I might be rolling";
 
+    /**This is how much health is healed by a potion.*/
+    inline static const int MYPOTIONSTRENGTH = 20;
+
+    /** This is the amount of healing potions the player has.*/
+    int myPotionAmount = 0;
+
     /**
      * Retrieves the singleton instance of the player.
      * @return A shared pointer to the player instance.
@@ -106,6 +112,22 @@ public:
     void endRoll();
 
     /**
+     * Uses a potion the player has.
+     */
+    void usePotion();
+
+    /**
+     * This give one potion to the player.
+     */
+    void givePotion();
+
+    /**
+     * This gives you the mount of potions the player has.
+     * @return The amount of potions the player has.
+     */
+    int getPotionAmount();
+
+    /**
      * Executes an attack action.
      * Uses the player's weapon hitbox to detect collisions.
      */
@@ -115,7 +137,6 @@ public:
      * A getter for the players hitBoxSize for testing
      */
     int getHitBoxSize();
-
 
     /**
      * This sets the players class.

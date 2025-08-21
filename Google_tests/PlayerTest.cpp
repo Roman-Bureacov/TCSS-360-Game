@@ -263,3 +263,26 @@ TEST(PLAYERTEST, changeClass) {
 
 }
 
+TEST(PLAYERTEST,potionTest) {
+
+    auto player = Player::playerInstance();
+    //Just so the player can be healed
+    player->setHealth(1);
+
+    //Player should start with no potions
+    ASSERT_EQ(player->getPotionAmount(), 0);
+
+    player->givePotion();
+    ASSERT_EQ(player->myPotionAmount, 1);
+
+    int currentPlayerHealth = player->getHealth();
+
+    player->usePotion();
+
+    ASSERT_EQ(player->getHealth(), currentPlayerHealth + Player::MYPOTIONSTRENGTH);
+
+    ASSERT_EQ(player->getPotionAmount(), 0);
+
+
+}
+
