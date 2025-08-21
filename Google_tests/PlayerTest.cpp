@@ -38,16 +38,13 @@ TEST(PLAYERTEST,movementEastTest) {
     allNPCs[0]->setIsActive(false);
 
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_D;
 
     //I'm too tired to write a getter.
     int finalX = player->getX() + 75;
     int finalY = player->getY();
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_D);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -83,16 +80,13 @@ TEST (PLAYERTEST,movementWestTest) {
     allNPCs[0]->setIsActive(false);
 
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_A;
 
     //I'm too tired to write a getter.
     int finalX = player->getX() - 75;
     int finalY = player->getY();
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_A);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -126,16 +120,14 @@ TEST(PLAYERTEST, movementNorthTest) {
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_W;
+
 
     //I'm too tired to write a getter.
     int finalX = player->getX();
     int finalY = player->getY() + 75;
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_W);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -170,16 +162,13 @@ TEST(PLAYERTEST, movementSouthTest) {
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_S;
 
     //I'm too tired to write a getter.
     int finalX = player->getX();
     int finalY = player->getY() - 75;
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_S);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -215,9 +204,7 @@ TEST(PLAYERTEST, EastWallColision) {
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_D;
+
     player->setX(1500 - 10);
 
     //I'm too tired to write a getter.
@@ -225,7 +212,7 @@ TEST(PLAYERTEST, EastWallColision) {
     int finalY = player->getY();
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_D);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -262,9 +249,7 @@ TEST(PLAYERTEST,WestWallColision) {
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_A;
+
     player->setX(0);
 
     //I'm too tired to write a getter.
@@ -272,7 +257,7 @@ TEST(PLAYERTEST,WestWallColision) {
     int finalY = player->getY();
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_A);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -308,9 +293,6 @@ TEST(PLAYERTEST,northWallColision) {
     allNPCs[0]->setIsActive(false);
 
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_W;
     player->setY(1500 - 10);
 
     //I'm too tired to write a getter.
@@ -318,7 +300,7 @@ TEST(PLAYERTEST,northWallColision) {
     int finalY = player->getY();
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_W);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -352,9 +334,7 @@ TEST(PLAYERTEST, SouthWallColision) {
     auto player = Player::playerInstance();
     allNPCs[0]->setIsActive(false);
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_S;
+
     player->setY(0);
 
     //I'm too tired to write a getter.
@@ -362,7 +342,7 @@ TEST(PLAYERTEST, SouthWallColision) {
     int finalY = player->getY();
 
 
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_S);
 
     Clock::StopClockForTesting( 1);
     Clock::runClock();
@@ -400,17 +380,14 @@ TEST(PLAYERTEST, AttackNPCTEST) {
 
     int statingHealth = allNPCs[0]->getHealth();
 
-    SDL_Event event;
-    event.type = SDL_EVENT_KEY_DOWN;
-    event.key.scancode = SDL_SCANCODE_SPACE;
 
     allNPCs[0]->setX(player->getX() + 10);
     allNPCs[0]->setY(player->getY());
 
     player->setDirection(util::WEST);
-    player->userInput(event);
-    player->userInput(event);
-    player->userInput(event);
+    player->userInput(SDL_SCANCODE_SPACE);
+    player->userInput(SDL_SCANCODE_SPACE);
+    player->userInput(SDL_SCANCODE_SPACE);
 
     Clock::StopClockForTesting( 10);
     Clock::runClock();

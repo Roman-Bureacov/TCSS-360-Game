@@ -66,6 +66,8 @@ add_library(model STATIC
         src/app/model/Characters/Player.cpp
         src/app/model/Characters/NPC.cpp
         src/include/Player.h
+        src/app/view/View.cpp
+
 
 
 )
@@ -74,6 +76,8 @@ target_include_directories(model PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${SQLITE_ROOT}/include
         ${SDL3_ROOT}/include
+        ${SDL3_IMG_ROOT}/x86_64-w64-mingw32/include
+
 )
 
 
