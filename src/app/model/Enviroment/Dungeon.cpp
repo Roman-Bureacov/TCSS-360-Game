@@ -93,6 +93,8 @@ void Dungeon::generateDungeon() {
         idMap.push_back(idRow);
     }
 
+    //This will set up the pillers in the dungeon
+    generatePilers();
     //Its 100, just so you don't have to look.
     setCharacterRoom(startingRoomId);
 
@@ -106,6 +108,19 @@ void Dungeon::setCharacterRoom(const int roomID) {
     currentRoom->setSerialRoomMap("");
     currentRoom = databaseManager->loadRoom(roomID);
     currentRoom->generateExistingRoom();
+
+    // You win the game by finding all the pilers and destroying them.
+    if (oopPillars.contains(roomID)) {
+        std::cout << "You found: " << oopPillars[roomID] << std::endl;
+        oopPillars.erase(roomID);
+        this->notify(PROPERTY_PILLAR_DESTROYED);
+    } if (oopPillars.empty()) {
+        std::cout << "All pillars have been destroyed!" << std::endl;
+        // Trigger a property change for winning, if applicable
+        this->notify(PROPERTY_WIN);
+    }
+
+
     updateRoomEntities(Bitz::getEntities());
 
 
@@ -157,5 +172,34 @@ std::shared_ptr<AbstractCharacter> Dungeon::getActiveCharacter() {
 }
 
 Dungeon::Dungeon() {}
+
+void Dungeon::generatePilers() {
+
+    if (idMap.size() != 10) {
+        std::cerr << "Error: idMap must have exactly 10 rows!" << std::endl;
+        return;
+    }
+    for (size_t i = 0; i < idMap.size(); ++i) {
+        if (idMap[i].size() != 10) {
+            std::cerr << "Error: Row " << i << " must have exactly 10 elements!" << std::endl;
+            return ;
+        }
+    }
+
+    const char* pillars[4] = {"Encapsulation", "Abstraction"
+        , "Inheritance", "Polymorphism"};
+
+
+    //random nums form 1 to 9
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 9);
+
+    for (int i = 0; i < 4; ++i) {
+        int key = idMap[dis(gen)][dis(gen)];
+        oopPillars[key] = pillars[i];
+    }
+
+}
 
 

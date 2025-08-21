@@ -9,6 +9,10 @@
 #include <unordered_set>
 #include <vector>
 #include <iostream>
+#include <map>
+#include <map>
+#include <random>
+#include <string>
 
 #include "Room.h"
 #include "ObserverPattern.h"
@@ -76,6 +80,11 @@ public:
 
     /** Property name used to signal room change events. */
     inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";
+    /**Property change for will the player wins the game. */
+    inline static const std::string PROPERTY_WIN = "Game Won";
+    /**Property change for when a piler is destroyed. */
+    inline static const std::string PROPERTY_PILLAR_DESTROYED = "Pillar Destroyed";
+
 
     /**
      *
@@ -86,6 +95,12 @@ public:
 private:
     /** Constructs the Dungeon object. Private for singleton enforcement. */
     Dungeon();
+
+    /**
+     * Places the pilers in random locations,
+     * Within the dungeon.
+     */
+    void generatePilers();
 
     /** Builder used to construct rooms. */
     ConcreteRoomBuilder roomBuilder;
@@ -119,6 +134,9 @@ private:
 
     /**This is the active character.*/
     std::shared_ptr<AbstractCharacter> activeCharaceter;
+
+    /**This is a map of pilers locations*/
+    std::map<int, std::string> oopPillars;
 
 
 };
