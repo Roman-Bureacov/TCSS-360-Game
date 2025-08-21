@@ -35,6 +35,8 @@ struct NPCStats {
     static const inline int MYGOBLINMOVEMENTSPEED = 100;
     /**This is the damage the goblin. */
     static const inline int MYGOBLINDAMAGE = 1;
+    /**This is the NPCs type.*/
+    static const inline int MYGOBLINTYPE = 2;
 
     /**The name skeleton. */
     static const inline std::string MYSKELETONNAME = "Skeleton";
@@ -44,6 +46,8 @@ struct NPCStats {
     static const inline int MYSKELETONMOVEMENTSPEED = 10;
     /**The is the damage the skeleton does.  */
     static const inline int MYSKELETONDAMAGE = 2;
+    /**This is the NPCs type.*/
+    static const inline int MYSKELETONTYPE = 1;
 
 };
 
@@ -103,7 +107,7 @@ public:
      *
      * @return The truthy value on if the character is active.
      */
-    bool getIsActive();
+    bool getIsActive() const;
 
     /**
      * Protected constructor used by derived NPCs.
@@ -120,7 +124,23 @@ public:
      */
     void setPlayer(std::shared_ptr<AbstractCharacter> thePlayer);
 
+    /**
+     * This gets the NPCs type.
+     * @return They type of NPC
+     */
+    int getType() const;
 
+    /**
+     * Gets the id of the room the NPC is in.
+     * @return the Id of the room the NPC is in.
+     */
+    int getRoomId() const;
+
+    /**
+     * Gets the id of the room the npc is in.
+     * @param Id This is the id of the room the NPC is in.
+     */
+    void setRoomId(int Id);
 
 protected:
 
@@ -144,7 +164,7 @@ protected:
      * Checks if the player is in range to be attacked.
      * @return True if the NPC can attack the player this turn.
      */
-    bool canAttack();
+    bool canAttack() const;
 
     /**
      * This makes tells the NPC to changes its
@@ -159,6 +179,11 @@ protected:
     Hitbox myNPCWeaponHitbox = Hitbox(100, 100);
     /**Just a simple hitbox for the NPC*/
     Hitbox myNPCHitBox = Hitbox(100, 100);
+
+    /**This is what the NPC is*/
+    int myType;
+
+    int myRoomId;
 
 
 };

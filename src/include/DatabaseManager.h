@@ -13,6 +13,7 @@
 #include "Bitz.h"
 
 
+class NPC;
 /**
  * Class that handles database calls.
  * @author Riley Hopper
@@ -36,16 +37,33 @@ public:
     void insertRoom(Room &theRoom) const;
 
     /**
-     * Inserts a character into the table.
-     * @param theCharacter A reference to the character to be inserted.
-     */
-    void insertCharacter(AbstractCharacter &theCharacter);
+    * Inserts or updates an active NPC instance in the database.
+    * Stores the NPC's type, current room, health, position, and active state.
+    *
+    * @param theCharacter Reference to the NPC to be inserted or updated.
+    *        Must be an instance of NPC or a derived class.
+    */
+    void insertCharacter(AbstractCharacter &theCharacter) const;
 
     /**
-     * Inserts a character type into the tabel.
-     * @param theCharacter Reference to the character type to be inserted.
+     * Loads all NPC instances for a given room from the database.
+     * Uses the stored type_id to construct the correct NPC subclass
+     * with base stats from NPCStats, then applies saved instance state.
+     *
+     * @param theRoomId The ID of the room whose NPCs should be loaded.
+     * @return A vector of shared pointers to NPC objects for that room.
      */
-    void insertCharacterType(AbstractCharacter &theCharacter);
+    std::vector<std::shared_ptr<NPC>> loadCharacters(int theRoomId);
+
+    /**
+     * Creates an NPC of the given type with base stats from NPCStats.
+     * This does not set instance-specific state like position or health.
+     *
+     * @param theCharType The NPC type ID (matches NPCType enum).
+     * @return A shared pointer to a newly constructed NPC of the given type.
+     */
+    std::shared_ptr<NPC> loadCharacterType(int theCharType);
+
 
     /**
     * This loads a room from the database.
@@ -54,34 +72,6 @@ public:
     */
     std::shared_ptr<Room> loadRoom(int theId);
 
-    /**
-     *
-     * @param theRoomId ID of the room the character is in.
-     * @return A shared pointer to the character.
-     */
-    std::shared_ptr<AbstractCharacter> loadCharacter(int theRoomId);
-
-    /**
-     *
-     * @param theCharType Integer representing character type.
-     * @return  A shared pointer to the character.
-     */
-    std::shared_ptr<AbstractCharacter> loadCharacterType(int theCharType);
-
-
-    /**
-     * Fetches a character from the database.
-     * @param theCharacterID the ID of the character
-     * @return the character associated with the ID
-     */
-    std::shared_ptr<AbstractCharacter> fetchCharacter(int theCharacterID) const;
-
-    /**
-     * Fetches a weapon from the database.
-     * @param theWeaponID the ID of the weapon
-     * @return the weapon object associate with the ID
-     */
-    std::shared_ptr<Weapon> fetchWeapon(int theWeaponID) const;
 
 
 private:
@@ -104,29 +94,12 @@ private:
     void createRoomTableIfNotExists();
 
     /**
-     * Creates a table for the active characters.
-     */
-    void createActiveCharacterTableIfNotExists();
+    * Creates the table for storing active NPC instances if it does not exist.
+    * The table stores NPC type, room, health, position, and active state.
+    */
+    void createActiveNPCTableIfNotExists();
 
-    /**
-     * Creates a table for character types.
-     */
-    void createTypeTableIfNotExists();
 
-    /**
-     * Saves the room table.
-     */
-    void saveRoomTable();
-
-    /**
-     * Saves the active characters.
-     */
-    void saveActiveCharacter();
-
-    /**
-     * Saves the type table.
-     */
-    void saveTypeTable();
 };
 
-#endif //DATABASEMANAGER_H
+#endif//DATABASEMANAGER_H

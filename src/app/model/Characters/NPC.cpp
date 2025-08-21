@@ -55,7 +55,7 @@ void NPC::attackPlayer() {
     Bitz::enqueueAttackEvent(this);
 }
 
-bool NPC::canAttack() {
+bool NPC::canAttack() const {
 
     const int xDiff = std::abs(this->getX() - player->getX());
     const int yDiff = std::abs(this->getY() - player->getY());
@@ -69,7 +69,7 @@ void NPC::setIsActive(const bool isActive) {
     notify(PROPERTY_ACTIVE_CHANGED);
 }
 
-bool NPC::getIsActive() {
+bool NPC::getIsActive() const {
     return active;
 }
 
@@ -122,6 +122,7 @@ Goblin::Goblin(
     myName = theName;
     myMovementSpeed = theMovementSpeed;
     myMaxHealth = theMaxHealth;
+    myType = NPCStats::MYGOBLINTYPE;
 }
 
 // =========================
@@ -139,7 +140,17 @@ Skeleton::Skeleton(
     myName = theName;
     myMovementSpeed = theMovementSpeed;
     myMaxHealth = theMaxHealth;
+    myType = NPCStats::MYSKELETONTYPE;
 }
+
+int NPC::getRoomId() const {
+    return myRoomId;
+}
+
+void NPC::setRoomId(const int Id) {
+    myRoomId = Id;
+}
+
 // =========================
 // TimCapaul
 // =========================
@@ -172,6 +183,10 @@ bool TimCapaul::canAttack() {
 
 // =========================
 // Factory Implementations
+int NPC::getType() const {
+    return myType;
+}
+
 // =========================
 
 std::shared_ptr<Goblin> NPC::goblinFactory() {

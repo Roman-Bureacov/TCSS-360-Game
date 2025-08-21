@@ -17,16 +17,6 @@ DatabaseManager::~DatabaseManager() {
     closeDatabase();
 }
 
-std::shared_ptr<AbstractCharacter> DatabaseManager::fetchCharacter(int theCharacterID) const {
-    // TODO: create character function
-    return 0;
-}
-
-std::shared_ptr<Weapon> DatabaseManager::fetchWeapon(int theWeaponID) const {
-    // TODO: create weapon creation function
-    return 0;
-}
-
 void DatabaseManager::insertRoom(Room &theRoom) const {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms
@@ -58,55 +48,6 @@ void DatabaseManager::insertRoom(Room &theRoom) const {
 
     sqlite3_finalize(stmt);
 }
-
-
-void DatabaseManager::insertCharacter(AbstractCharacter &theCharacter) {
-    //TODO
-
-}
-
-void DatabaseManager::insertCharacterType(AbstractCharacter &theCharacter) {
-    //TODO
-
-}
-
-std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int theRoomId) {
-    //TODO
-
-    return 0;
-}
-
-std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int theCharType) {
-    //TODO
-
-    return 0;
-}
-
-void DatabaseManager::createActiveCharacterTableIfNotExists() {
-    //TODO
-
-}
-
-void DatabaseManager::createTypeTableIfNotExists() {
-    //TODO
-
-}
-
-void DatabaseManager::saveRoomTable() {
-    //TODO
-
-}
-
-void DatabaseManager::saveActiveCharacter() {
-    //TODO
-
-}
-
-void DatabaseManager::saveTypeTable() {
-    //TODO
-
-}
-
 
 std::shared_ptr<Room> DatabaseManager::loadRoom(const int theId) {
     const char *sql = R"(SELECT north, south, east
@@ -203,5 +144,114 @@ void DatabaseManager::createRoomTableIfNotExists() {
         throw std::runtime_error(sqlite3_errmsg(db));
         sqlite3_free(errmsg);
         throw std::runtime_error(sqlite3_errmsg(db));
+    }
+}
+
+void DatabaseManager::insertCharacter(AbstractCharacter &theCharacter) const {
+    // Only handle NPCs
+    auto npc = dynamic_cast<NPC*>(&theCharacter);
+    if (!npc) return;
+
+    const char *sql = R"(
+        INSERT OR REPLACE INTO active_npcs
+        (id, type_id, room_id, health, x, y, is_active)
+        VALUES(?, ?, ?, ?, ?, ?, ?);
+    )";
+
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        throw std::runtime_error(sqlite3_errmsg(db));
+    }
+
+    sqlite3_bind_int(stmt, 1, npc->getID()); // Assuming AbstractCharacter has getId()
+    sqlite3_bind_int(stmt, 2, static_cast<int>(npc->getType())); // Assuming NPC has getType()
+    sqlite3_bind_int(stmt, 3, npc->getRoomId()); // Assuming NPC knows its room
+    sqlite3_bind_int(stmt, 4, npc->getHealth());
+    sqlite3_bind_int(stmt, 5, npc->getX());
+    sqlite3_bind_int(stmt, 6, npc->getY());
+    sqlite3_bind_int(stmt, 7, npc->getIsActive() ? 1 : 0);
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        throw std::runtime_error(sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+}
+
+std::vector<std::shared_ptr<NPC>> DatabaseManager::loadCharacters(int theRoomId) {
+    const char *sql = R"(
+        SELECT type_id, health, x, y, is_active
+        FROM active_npcs
+        WHERE room_id = ?;
+    )";
+
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        throw std::runtime_error(sqlite3_errmsg(db));
+    }
+
+    sqlite3_bind_int(stmt, 1, theRoomId);
+
+    std::vector<std::shared_ptr<NPC>> npcs;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int typeId = sqlite3_column_int(stmt, 0);
+        int health = sqlite3_column_int(stmt, 1);
+        int x = sqlite3_column_int(stmt, 2);
+        int y = sqlite3_column_int(stmt, 3);
+        bool isActive = sqlite3_column_int(stmt, 4) != 0;
+
+        auto npc = loadCharacterType(typeId);
+        npc->setHealth(health);
+        npc->setX(x);
+        npc->setY(y);
+        npc->setIsActive(isActive);
+
+        npcs.push_back(npc);
+    }
+
+    sqlite3_finalize(stmt);
+    return npcs;
+}
+
+std::shared_ptr<NPC> DatabaseManager::loadCharacterType(int theCharType) {
+    switch (static_cast<NPCType>(theCharType)) {
+        case NPCType::Goblin:
+            return std::make_shared<Goblin>(
+                NPCStats::MYGOBLINNAME,
+                NPCStats::MYGOBLINMAXHEALTH,
+                NPCStats::MYGOBLINMOVEMENTSPEED
+            );
+        case NPCType::Skeleton:
+            return std::make_shared<Skeleton>(
+                NPCStats::MYSKELETONNAME,
+                NPCStats::MYSKELETONMAXHEALTH,
+                NPCStats::MYSKELETONMOVEMENTSPEED
+            );
+        case NPCType::TimCapaul:
+            return NPC::timCapaulFactory();
+        default:
+            throw std::runtime_error("Unknown NPC type");
+    }
+}
+
+void DatabaseManager::createActiveNPCTableIfNotExists() {
+    const char *sql = R"(
+        CREATE TABLE IF NOT EXISTS active_npcs(
+            id INTEGER PRIMARY KEY,
+            type_id INTEGER NOT NULL,
+            room_id INTEGER NOT NULL,
+            health INTEGER NOT NULL,
+            x INTEGER NOT NULL,
+            y INTEGER NOT NULL,
+            is_active INTEGER NOT NULL
+        );
+    )";
+
+    char *errmsg = nullptr;
+    if (sqlite3_exec(db, sql, nullptr, nullptr, &errmsg) != SQLITE_OK) {
+        std::string errMsgCopy = errmsg ? errmsg : sqlite3_errmsg(db);
+        sqlite3_free(errmsg);
+        throw std::runtime_error(errMsgCopy);
     }
 }
