@@ -188,10 +188,10 @@ void Bitz::enqueueMovementEvent(AbstractCharacter *theCharacter, int theDesiredF
 
 
             // adjust parameters to fit the room
-            projX = std::max(0, projX);
-            projY = std::max(0, projY);
-            projWidth = std::min(Room::ROOMSIZE * Room::TILESIZE - projX, projWidth);
-            projHeight = std::min(Room::ROOMSIZE * Room::TILESIZE - projY, projHeight);
+            projX = std::max(Room::TILESIZE, projX);
+            projY = std::max(Room::TILESIZE, projY);
+            projWidth = std::min((Room::ROOMSIZE - 1) * Room::TILESIZE - projX, projWidth);
+            projHeight = std::min((Room::ROOMSIZE - 1) * Room::TILESIZE - projY, projHeight);
             // create the projection
 
             Hitbox* projection = new Hitbox(projX, projY, projWidth, projHeight);
@@ -362,16 +362,16 @@ void Bitz::loadDungeonRoom(const util::Direction theMoveDirection) {
     constexpr int doorOffset = 50;
     switch (comingFrom) {
         case util::SOUTH:
-            player->setY(Room::TILESIZE);
+            player->setY(Room::TILESIZE * 2);
             break;
         case util::WEST:
-            player->setX(Room::TILESIZE * (Room::ROOMSIZE-1));
+            player->setX(Room::TILESIZE * (Room::ROOMSIZE - 2));
             break;
         case util::NORTH:
-            player->setY(Room::TILESIZE * (Room::ROOMSIZE-1));
+            player->setY(Room::TILESIZE * (Room::ROOMSIZE - 2));
             break;
         case util::EAST:
-            player->setX(Room::TILESIZE);
+            player->setX(Room::TILESIZE * 2);
             break;
         default:
             throw std::logic_error("missing handle on direction " + std::to_string(comingFrom));
