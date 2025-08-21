@@ -4,30 +4,36 @@
 
 #include "../include/DatabaseManager.h"
 
+#include <filesystem>
 
 
+const DatabaseManager DatabaseManager::INSTANCE = DatabaseManager();
+sqlite3* DatabaseManager::DATABASE = nullptr;
 
-DatabaseManager::DatabaseManager(const std::string &dbFile) {
-    openDatabase(dbFile);
-
-    createRoomTableIfNotExists();
+DatabaseManager::DatabaseManager() {
+    if (std::filesystem::exists(DATABASE_PATH)) {
+        sqlite3_open_v2(DATABASE_PATH, &DATABASE, SQLITE_OPEN_READWRITE, nullptr);
+    } else {
+        sqlite3_open_v2(DATABASE_PATH, &DATABASE, SQLITE_OPEN_CREATE, nullptr);
+        setupDatabase();
+    }
 }
 
 DatabaseManager::~DatabaseManager() {
-    closeDatabase();
+    sqlite3_close(DATABASE);
 }
 
-std::shared_ptr<AbstractCharacter> DatabaseManager::fetchCharacter(int theCharacterID) const {
+std::shared_ptr<AbstractCharacter> DatabaseManager::fetchCharacter(int theCharacterID) {
     // TODO: create character function
     return 0;
 }
 
-std::shared_ptr<Weapon> DatabaseManager::fetchWeapon(int theWeaponID) const {
+std::shared_ptr<Weapon> DatabaseManager::fetchWeapon(int theWeaponID) {
     // TODO: create weapon creation function
     return 0;
 }
 
-void DatabaseManager::insertRoom(Room &room) const {
+void DatabaseManager::insertRoom(Room &room) {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms
                         (id, north, south, east, west, serialMap, char1, char2, char3)
@@ -35,9 +41,9 @@ void DatabaseManager::insertRoom(Room &room) const {
                         )";
 
     sqlite3_stmt *stmt;
-    if (sqlite3_prepare_v2(db, sql, -1
+    if (sqlite3_prepare_v2(DATABASE, sql, -1
         , &stmt, nullptr) != SQLITE_OK) {
-        throw std::runtime_error(sqlite3_errmsg(db));
+        throw std::runtime_error(sqlite3_errmsg(DATABASE));
     }
     //First run through this will do nothing
     room.serializeRoomMap();
@@ -53,7 +59,7 @@ void DatabaseManager::insertRoom(Room &room) const {
     sqlite3_bind_int64(stmt, 9, room.getCharacters().at(2 ) );
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
-        throw std::runtime_error(sqlite3_errmsg(db));
+        throw std::runtime_error(sqlite3_errmsg(DATABASE));
     }
 
     sqlite3_finalize(stmt);
@@ -114,9 +120,9 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
                         , char2, char3 FROM rooms WHERE id = ?;)";
     sqlite3_stmt *stmt;
 
-    if (sqlite3_prepare_v2(db, sql, -1
+    if (sqlite3_prepare_v2(DATABASE, sql, -1
         , &stmt, nullptr) != SQLITE_OK) {
-        throw std::runtime_error(sqlite3_errmsg(db));
+        throw std::runtime_error(sqlite3_errmsg(DATABASE));
     }
 
     sqlite3_bind_int(stmt, 1, id);
@@ -159,29 +165,7 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
     return room;
 }
 
-void DatabaseManager::openDatabase(const std::string &dbFile) {
-
-    int rc = sqlite3_open(dbFile.c_str(), &db);
-
-    if (rc != SQLITE_OK) {
-
-        throw std::runtime_error(sqlite3_errmsg(db));
-
-
-    } else {
-        std::cout << "Database opened" << std::endl;
-
-    }
-}
-
-void DatabaseManager::closeDatabase() {
-    if (db) {
-        sqlite3_close(db);
-        db = nullptr;
-    }
-}
-
-void DatabaseManager::createRoomTableIfNotExists() {
+void DatabaseManager::setupDatabase() {
 
     const char *sql = R"(
         CREATE TABLE IF NOT EXISTS rooms(
@@ -197,11 +181,11 @@ void DatabaseManager::createRoomTableIfNotExists() {
             );
         )";
 
-
-    char *errmsg = nullptr;
-    if (sqlite3_exec(db, sql, nullptr, nullptr, &errmsg) != SQLITE_OK) {
-        throw std::runtime_error(sqlite3_errmsg(db));
-        sqlite3_free(errmsg);
-        throw std::runtime_error(sqlite3_errmsg(db));
+    char* message = nullptr;
+    if (sqlite3_exec(DATABASE, sql, nullptr, nullptr, &message) != SQLITE_OK) {
+        const std::string err = message ? message : "Unknown error";
+        sqlite3_free(message);
+        throw std::runtime_error(err);
     }
+
 }

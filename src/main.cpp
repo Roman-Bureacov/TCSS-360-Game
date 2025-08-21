@@ -35,9 +35,8 @@ int main(int argc, char* argv[]) {
     Player* player = Player::playerInstance().get();
     player->attach(View::guiInstance());
 
-    auto dbManager = std::make_shared<DatabaseManager>(":memory:");//TODO change this to the actuall database file.
     Dungeon* dungeon = Dungeon::DungeonInstance();
-    dungeon->initialize(dbManager);
+    dungeon->initialize();
 
     std::vector<std::shared_ptr<NPC>> allNPCs;
 
