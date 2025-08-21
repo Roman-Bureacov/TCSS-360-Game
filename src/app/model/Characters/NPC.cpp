@@ -115,7 +115,7 @@ Goblin::Goblin(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(10, 10, std::move(myNPCWeaponHitbox));
+        new Weapon(1, 10, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
     this->setHitbox(myNPCHitBox);
     myName = theName;
@@ -131,7 +131,7 @@ Skeleton::Skeleton(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(10, 10, std::move(myNPCWeaponHitbox));
+        new Weapon(1, 10, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
     this->setHitbox(myNPCHitBox);
     myName = theName;
