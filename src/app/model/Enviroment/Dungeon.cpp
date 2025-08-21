@@ -9,6 +9,7 @@
 
 
 std::unique_ptr<Dungeon> Dungeon::myInstance = nullptr;
+std::vector<std::vector<int>> Dungeon::myIdMap{};
 
 
 
@@ -105,7 +106,12 @@ void Dungeon::generateDungeon() {
 
 
 
-void Dungeon::setCharacterRoom(const int theRoomID) {
+bool Dungeon::setCharacterRoom(const int theRoomID) {
+
+    if (!roomIDIsInTheDungeon(theRoomID)) {
+        return false;
+
+    }
 
     myCurrentRoom->setSerialRoomMap("");
     myCurrentRoom = databaseManager->loadRoom(theRoomID);
@@ -132,6 +138,8 @@ void Dungeon::setCharacterRoom(const int theRoomID) {
 
 
     this->notify(PROPERTY_ROOM_CHANGE);
+
+    return true;
 
 
 }
@@ -178,6 +186,12 @@ std::shared_ptr<AbstractCharacter> Dungeon::getActiveCharacter() {
 }
 
 Dungeon::Dungeon() {}
+
+bool Dungeon::roomIDIsInTheDungeon(int theId) {
+    return std::any_of(myIdMap.begin(), myIdMap.end(), [&](const auto& row) {
+        return std::find(row.begin(), row.end(), theId) != row.end();
+    });
+}
 
 void Dungeon::generatePilers() {
 

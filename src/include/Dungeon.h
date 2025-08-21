@@ -69,8 +69,9 @@ public:
      * Changes the current room based on room ID.
      * Triggers a "Room Changed" event.
      * @param theRoomID ID of the room to switch to.
+     * @return truthy value related to if the room could be set.
      */
-    void setCharacterRoom(int theRoomID);
+    bool setCharacterRoom(int theRoomID);
 
     /**
      * Updates persistent storage with the current room's entities.
@@ -106,6 +107,11 @@ public:
     /**Property change for when a piler is destroyed. */
     inline static const std::string PROPERTY_PILLAR_DESTROYED = "Pillar Destroyed";
 
+    /**This is to the amount that rooms east and west change.*/
+    inline static const int ROOMHORIZONTALIDCHANGE = 1;
+
+    /**This is the amount rooms to the north or south change.*/
+    inline static const int ROOMVERTICALIDCHANGE = 100;
 
     /**
      *
@@ -116,6 +122,13 @@ public:
 private:
     /** Constructs the Dungeon object. Private for singleton enforcement. */
     Dungeon();
+
+    /**
+     *
+     * @param theId This is the room id that will be looked for.
+     * @return A truthy value if it exists within the dungeon
+     */
+    static bool roomIDIsInTheDungeon(int theId);
 
     /**
      * Places the pilers in random locations,
@@ -130,7 +143,7 @@ private:
     std::shared_ptr<Room> myCurrentRoom;
 
     /** 2D map of room IDs representing the dungeon layout. */
-    std::vector<std::vector<int>> myIdMap;
+    static std::vector<std::vector<int>> myIdMap;
 
     /** Singleton instance of the dungeon. */
     static std::unique_ptr<Dungeon> myInstance;
@@ -139,16 +152,16 @@ private:
     std::shared_ptr<DatabaseManager> databaseManager;
 
     /** Size of the dungeon grid (10x10 rooms). */
-    const int DUNGEONSIZE = 10;
+    static const int DUNGEONSIZE = 10;
 
     /** Starting ID value for room generation. */
-    const int DUNGEONIDRANGE = 100;
+    static const int DUNGEONIDRANGE = 100;
 
     /** Multiplier used to calculate unique room IDs by row. */
-    const int ROWINDEXMULT = 100;
+    static const int ROWINDEXMULT = 100;
 
     /** ID of the room where the player spawns. */
-    const int STARTINGROOMID = 100;
+    static const int STARTINGROOMID = 100;
 
     /**This is the active character.*/
     std::shared_ptr<AbstractCharacter> myActiveCharaceter;

@@ -136,9 +136,9 @@ public:
 
     /**
      * loads the dungeon room into the engine.
-     * @param theRoomID the new room to load.
+     * @param theMoveDirection the direction the player wants to move.
      */
-    static void loadDungeonRoom(int theRoomID);
+    static void loadDungeonRoom(util::Direction theMoveDirection);
 
     /**
      * Retrieves characters that have been registered with the engine.

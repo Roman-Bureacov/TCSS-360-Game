@@ -110,6 +110,18 @@ void Player::userInput(const int theCode) {
         case SDL_SCANCODE_SPACE:
             attack();
             break;
+        case SDL_SCANCODE_RIGHT:
+            Bitz::loadDungeonRoom(util::EAST);
+            break;
+        case SDL_SCANCODE_LEFT:
+            Bitz::loadDungeonRoom(util::WEST);
+            break;
+        case SDL_SCANCODE_DOWN:
+            Bitz::loadDungeonRoom(util::SOUTH);
+            break;
+        case SDL_SCANCODE_UP:
+            Bitz::loadDungeonRoom(util::NORTH);
+            break;
         //case SDL_SCANCODE_LSHIFT:
             //roll();
             //break;

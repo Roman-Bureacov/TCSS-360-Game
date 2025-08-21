@@ -90,7 +90,7 @@ public:
 
     /**This is how much health is healed by a potion.*/
     inline static const int MYPOTIONSTRENGTH = 20;
-
+    
     /** This is the amount of healing potions the player has.*/
     int myPotionAmount = 0;
 

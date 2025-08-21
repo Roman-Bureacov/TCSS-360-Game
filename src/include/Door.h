@@ -21,7 +21,7 @@ public:
     : Interactable(theHitbox), myNextRoomID(theNextRoomID) { }
 
     void interact() override {
-        Bitz::loadDungeonRoom(myNextRoomID);
+        return;
     }
 };
 

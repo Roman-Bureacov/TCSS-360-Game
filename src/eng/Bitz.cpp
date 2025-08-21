@@ -320,86 +320,63 @@ void Bitz::registerInteractable(Interactable *theInteractable) {
     interactables.insert((theInteractable));
 }
 
-void Bitz::loadDungeonRoom(const int theRoomID) {
-    // get current room code to infer where we are coming from
-    const int dif = theRoomID - currentRoom->getRoomID();
-    util::Direction comingFrom;
-    switch (dif) {
-        case 1: comingFrom = util::WEST; break;
-        case -1: comingFrom = util::EAST; break;
-        case 10: comingFrom = util::NORTH; break;
-        case -10: comingFrom = util::SOUTH; break;
-        default: throw std::logic_error("Unknown room ID translation" + dif);
-    }
+void Bitz::loadDungeonRoom(const util::Direction theMoveDirection) {
+
+
+    util::Direction comingFrom = theMoveDirection;
+    int nextRoom;
 
     // cleanup
     eventQueue.clear();
     eventProcessQueue.clear();
 
-    // cleanup entities, store their information in the database
-    //entities.erase(player);
-    //dungeonGenerator.updateRoomEntities(entities);
-    //entities.clear();
-    //entities.insert(player);
-
-    for (auto i : interactables) delete i;
-    interactables.clear();
-
-    // next room
-    dungeonGenerator.setCharacterRoom(theRoomID);
-    currentRoom = dungeonGenerator.getCurrentRoom().get();
-
-    // position NESW doors
-    // each room is made of tiles, with 2 tiles serving as walls on both ends
-    const int doorWidth = Room::TILESIZE;
-    const int doorDepth = Room::TILESIZE / 2;
-    const int centeredPos = (Room::ROOMSIZE - doorWidth)/2;
-    const int doorInsetPos = (doorDepth / 2);
-    if (currentRoom->getNorth())
-        registerInteractable(new Door(
-            Hitbox(centeredPos, Room::ROOMSIZE - doorInsetPos, doorWidth, doorDepth),
-            theRoomID - 10
-            ));
-    if (currentRoom->getEast())
-        registerInteractable(   new Door(
-            Hitbox(Room::ROOMSIZE - doorInsetPos, centeredPos, doorDepth, doorWidth),
-            theRoomID + 1));
-    if (currentRoom->getSouth())
-        registerInteractable(new Door(
-            Hitbox(centeredPos, -doorInsetPos, doorWidth, doorDepth),
-            theRoomID + 10));
-    if (currentRoom->getWest())
-        registerInteractable(new Door(
-            Hitbox(-doorInsetPos, centeredPos, doorDepth, doorWidth),
-            theRoomID - 1));
-
-    // position player
-    const int centeredPlayerX = (Room::ROOMSIZE - player->getHitbox().getWidth()) / 2;
-    const int centeredPlayerY = (Room::ROOMSIZE - player->getHitbox().getHeight()) / 2;
-    constexpr int doorOffset = 50;
-    switch (comingFrom) {
+    switch (theMoveDirection) {
         case util::NORTH:
-            player->setX(centeredPlayerX);
-            player->setY(Room::ROOMSIZE - doorInsetPos - doorOffset);
-            break;
-        case util::EAST:
-            player->setX(Room::ROOMSIZE - doorInsetPos - doorOffset);
-            player->setY(centeredPlayerY);
+            nextRoom = dungeonGenerator.getCurrentRoom()->getRoomID()
+                - Dungeon::ROOMVERTICALIDCHANGE;
             break;
         case util::SOUTH:
-            player->setX(centeredPlayerX);
-            player->setY(doorInsetPos + doorOffset);
+            nextRoom = dungeonGenerator.getCurrentRoom()->getRoomID()
+                + Dungeon::ROOMVERTICALIDCHANGE;
+            break;
+        case util::EAST:
+            nextRoom = dungeonGenerator.getCurrentRoom()->getRoomID()
+                + Dungeon::ROOMHORIZONTALIDCHANGE;
             break;
         case util::WEST:
-            player->setX(doorInsetPos + doorOffset);
-            player->setY(centeredPlayerY);
+            nextRoom = dungeonGenerator.getCurrentRoom()->getRoomID()
+                - Dungeon::ROOMHORIZONTALIDCHANGE;
             break;
-        default: throw std::logic_error("missing handle on direction " + comingFrom);
+        default:
+            nextRoom = dungeonGenerator.getCurrentRoom()->getRoomID();
     }
 
-    // position others
-    //for (const auto& character : currentRoom->getCharacters())
-    //    registerCharacter(character.get());
+    //Changes the room and makes sure the room change was valid.
+    if (!dungeonGenerator.setCharacterRoom(nextRoom)) {
+        std::cout << nextRoom << "room isn't within the dungeon!" << std::endl;
+        return;
+    }
+    currentRoom = dungeonGenerator.getCurrentRoom().get();
+
+
+    constexpr int doorOffset = 50;
+    switch (comingFrom) {
+        case util::SOUTH:
+            player->setY(Room::TILESIZE);
+            break;
+        case util::WEST:
+            player->setX(Room::TILESIZE * (Room::ROOMSIZE-1));
+            break;
+        case util::NORTH:
+            player->setY(Room::TILESIZE * (Room::ROOMSIZE-1));
+            break;
+        case util::EAST:
+            player->setX(Room::TILESIZE);
+            break;
+        default:
+            throw std::logic_error("missing handle on direction " + std::to_string(comingFrom));
+    }
+
 }
 
 const std::unordered_set<std::shared_ptr<AbstractCharacter>> & Bitz::getEntities() {
