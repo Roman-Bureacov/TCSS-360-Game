@@ -78,8 +78,10 @@ public:
 
 
 private:
-    static constexpr const char* DATABASE_PATH = "DungeonDatabase.db";
-    static sqlite3* DATABASE;
+    static constexpr const char* BUILD_PATH = "DungeonBuildDatabase.db";
+    static constexpr const char* INSTANCE_PATH = "DungeonInstanceDatabase.db";
+    static sqlite3* BUILD_DATABASE;
+    static sqlite3* INSTANCE_DATABASE;
     static const DatabaseManager INSTANCE;
 
     /**
@@ -117,6 +119,13 @@ private:
      * Saves the type table.
      */
     static void saveTypeTable();
+
+    /**
+     * Runs an SQL query. Intended for DDL statements.
+     * @param database the database to execute against
+     * @param sql the sql statement to execute
+     */
+    static void execute(sqlite3 *database, const char *sql);
 };
 
 #endif //DATABASEMANAGER_H
