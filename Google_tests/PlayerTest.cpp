@@ -248,3 +248,18 @@ TEST(PLAYERTEST, AttackNPCTEST) {
 
 }
 
+TEST(PLAYERTEST, changeClass) {
+    auto player = Player::playerInstance();
+
+    player->setClass(playerTypes::Rogue);
+    ASSERT_EQ(player->getName(),PlayerClasses::MYNAMEROGUE);
+    player->setClass(playerTypes::Knight);
+    ASSERT_EQ(player->getName(),PlayerClasses::MYNAMEKNIGHT);
+    player->setClass(playerTypes::Mage);
+    ASSERT_EQ(player->getName(),PlayerClasses::MYNAMEMAGE);
+    player->setClass(playerTypes::Archer);
+    ASSERT_EQ(player->getName(),PlayerClasses::MYNAMEARCHER);
+
+
+}
+

@@ -117,6 +117,11 @@ public:
     int getHitBoxSize();
 
 
+    /**
+     * This sets the players class.
+     * @param myType This is the class type.
+     */
+    void setClass(playerTypes myType);
 
 private:
     /**
@@ -162,8 +167,7 @@ private:
     static inline const int MYMOVEMENTSPEED = 35;
 
 
-    /**This changes the players class */
-    void setClass(playerTypes myType);
+
 
 };
 
