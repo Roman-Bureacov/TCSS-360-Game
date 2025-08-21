@@ -23,13 +23,13 @@ enum class NPCType {
  * This struct holds the stats of basic NPCS
  */
 struct NPCStats {
-    static const inline std::string goblinName = "Goblin";
-    static const inline int goblinMaxHealth = 50;
-    static const inline int goblinMovementSpeed = 100;
+    static const inline std::string GOBLINNAME = "Goblin";
+    static const inline int GOBLINMAXHEALTH = 50;
+    static const inline int GOBLINMOVEMENTSPEED = 100;
 
-    static const inline std::string skeletonName = "Skeleton";
-    static const inline int skeletonMaxHealth = 100;
-    static const inline int skeletonMovementSpeed = 10;
+    static const inline std::string SKELETONNAME = "Skeleton";
+    static const inline int SKELETONMAXHEALTH = 100;
+    static const inline int SKELETONMOVEMENTSPEED = 10;
 
 };
 
@@ -142,9 +142,9 @@ protected:
     bool active = false;
 
     /**Just a basic hitbox for the weapon.*/
-    Hitbox NPCWeaponHitbox = Hitbox(100, 100);
+    Hitbox myNPCWeaponHitbox = Hitbox(100, 100);
     /**Just a simple hitbox for the NPC*/
-    Hitbox NPCHitBox = Hitbox(100, 100);
+    Hitbox myNPCHitBox = Hitbox(100, 100);
 
 
 };
@@ -165,11 +165,11 @@ public:
 
 private:
     /** The name of the goblin. */
-    std::string name;
+    std::string myName;
     /** The maximum health of the goblin. */
-    int maxHealth;
+    int myMaxHealth;
     /** The movement speed of the goblin. */
-    int movementSpeed;
+    int myMovementSpeed;
 };
 
 /**
@@ -192,11 +192,11 @@ public:
 
 private:
     /** The name of the boss character. */
-    static const inline std::string name = "DarkLord Capual";
+    static const inline std::string MYNAME = "DarkLord Capual";
     /** The maximum health of Tim Capaul. */
-    static constexpr int maxHealth = 1000;
+    static constexpr int MYMAXHEALTH = 1000;
     /** The movement speed of Tim Capaul. */
-    static constexpr int movementSpeed = 10;
+    static constexpr int MYMOVEMENTSPEED = 10;
 
     /**
      * Moves Tim Capaul toward the player.
@@ -234,11 +234,11 @@ public:
 
 private:
     /** The name of the skeleton. */
-    std::string name;
+    std::string myName;
     /** The maximum health of the skeleton. */
-    int maxHealth;
+    int myMaxHealth;
     /** The movement speed of the skeleton. */
-    int movementSpeed;
+    int myMovementSpeed;
 };
 
 #endif // NPC_H

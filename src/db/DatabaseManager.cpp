@@ -7,8 +7,8 @@
 
 
 
-DatabaseManager::DatabaseManager(const std::string &dbFile) {
-    openDatabase(dbFile);
+DatabaseManager::DatabaseManager(const std::string &theDbFile) {
+    openDatabase(theDbFile);
 
     createRoomTableIfNotExists();
 }
@@ -27,7 +27,7 @@ std::shared_ptr<Weapon> DatabaseManager::fetchWeapon(int theWeaponID) const {
     return 0;
 }
 
-void DatabaseManager::insertRoom(Room &room) const {
+void DatabaseManager::insertRoom(Room &theRoom) const {
 
     const char *sql = R"(INSERT OR REPLACE INTO rooms
                         (id, north, south, east, west, serialMap, char1, char2, char3)
@@ -40,17 +40,17 @@ void DatabaseManager::insertRoom(Room &room) const {
         throw std::runtime_error(sqlite3_errmsg(db));
     }
     //First run through this will do nothing
-    room.serializeRoomMap();
+    theRoom.serializeRoomMap();
 
-    sqlite3_bind_int(stmt, 1, room.getRoomID());
-    sqlite3_bind_int(stmt, 2, room.getNorth());
-    sqlite3_bind_int(stmt, 3, room.getSouth());
-    sqlite3_bind_int(stmt, 4, room.getEast());
-    sqlite3_bind_int(stmt, 5, room.getWest());
-    sqlite3_bind_text(stmt, 6, room.getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
-    sqlite3_bind_int64(stmt, 7, room.getCharacters().at(0) );
-    sqlite3_bind_int64(stmt, 8, room.getCharacters().at(1) );
-    sqlite3_bind_int64(stmt, 9, room.getCharacters().at(2 ) );
+    sqlite3_bind_int(stmt, 1, theRoom.getRoomID());
+    sqlite3_bind_int(stmt, 2, theRoom.getNorth());
+    sqlite3_bind_int(stmt, 3, theRoom.getSouth());
+    sqlite3_bind_int(stmt, 4, theRoom.getEast());
+    sqlite3_bind_int(stmt, 5, theRoom.getWest());
+    sqlite3_bind_text(stmt, 6, theRoom.getSerialRoomMap().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int64(stmt, 7, theRoom.getCharacters().at(0) );
+    sqlite3_bind_int64(stmt, 8, theRoom.getCharacters().at(1) );
+    sqlite3_bind_int64(stmt, 9, theRoom.getCharacters().at(2 ) );
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         throw std::runtime_error(sqlite3_errmsg(db));
@@ -60,23 +60,23 @@ void DatabaseManager::insertRoom(Room &room) const {
 }
 
 
-void DatabaseManager::insertCharacter(AbstractCharacter &character) {
+void DatabaseManager::insertCharacter(AbstractCharacter &theCharacter) {
     //TODO
 
 }
 
-void DatabaseManager::insertCharacterType(AbstractCharacter &character) {
+void DatabaseManager::insertCharacterType(AbstractCharacter &theCharacter) {
     //TODO
 
 }
 
-std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int roomId) {
+std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int theRoomId) {
     //TODO
 
     return 0;
 }
 
-std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int charType) {
+std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int theCharType) {
     //TODO
 
     return 0;
@@ -108,7 +108,7 @@ void DatabaseManager::saveTypeTable() {
 }
 
 
-std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
+std::shared_ptr<Room> DatabaseManager::loadRoom(const int theId) {
     const char *sql = R"(SELECT north, south, east
                         , west, serialMap, char1
                         , char2, char3 FROM rooms WHERE id = ?;)";
@@ -119,7 +119,7 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
         throw std::runtime_error(sqlite3_errmsg(db));
     }
 
-    sqlite3_bind_int(stmt, 1, id);
+    sqlite3_bind_int(stmt, 1, theId);
 
     std::shared_ptr<Room> room = nullptr;
     if (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -136,7 +136,7 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
 
         room = std::make_shared<Room>();
         room->setAlreadyGenerated(true);
-        room->setRoomID(id);
+        room->setRoomID(theId);
         room->setNorth(north);
         room->setSouth(south);
         room->setEast(east);
@@ -152,16 +152,16 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
 
     if (!room) {
         throw std::runtime_error("Room with ID "
-            + std::to_string(id) + " not found.");
+            + std::to_string(theId) + " not found.");
 
     }
 
     return room;
 }
 
-void DatabaseManager::openDatabase(const std::string &dbFile) {
+void DatabaseManager::openDatabase(const std::string &theDbFile) {
 
-    int rc = sqlite3_open(dbFile.c_str(), &db);
+    int rc = sqlite3_open(theDbFile.c_str(), &db);
 
     if (rc != SQLITE_OK) {
 

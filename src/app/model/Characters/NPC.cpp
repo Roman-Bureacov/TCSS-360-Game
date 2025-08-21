@@ -115,12 +115,12 @@ Goblin::Goblin(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(10, 10, std::move(NPCWeaponHitbox));
+        new Weapon(10, 10, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
-    this->setHitbox(NPCHitBox);
-    name = theName;
-    movementSpeed = theMovementSpeed;
-    maxHealth = theMaxHealth;
+    this->setHitbox(myNPCHitBox);
+    myName = theName;
+    myMovementSpeed = theMovementSpeed;
+    myMaxHealth = theMaxHealth;
 }
 
 // =========================
@@ -131,12 +131,12 @@ Skeleton::Skeleton(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
-        new Weapon(10, 10, std::move(NPCWeaponHitbox));
+        new Weapon(10, 10, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
-    this->setHitbox(NPCHitBox);
-    name = theName;
-    movementSpeed = theMovementSpeed;
-    maxHealth = theMaxHealth;
+    this->setHitbox(myNPCHitBox);
+    myName = theName;
+    myMovementSpeed = theMovementSpeed;
+    myMaxHealth = theMaxHealth;
 }
 // =========================
 // TimCapaul
@@ -145,7 +145,7 @@ Skeleton::Skeleton(
 
 
 TimCapaul::TimCapaul()
-    : NPC(TimCapaul::name, TimCapaul::maxHealth, TimCapaul::movementSpeed) {}
+    : NPC(TimCapaul::MYNAME, TimCapaul::MYMAXHEALTH, TimCapaul::MYMOVEMENTSPEED) {}
 
 void TimCapaul::takeAction() {
 
@@ -174,9 +174,9 @@ bool TimCapaul::canAttack() {
 
 std::shared_ptr<Goblin> NPC::goblinFactory() {
     auto goblin = std::make_shared<Goblin>(
-        NPCStats::goblinName,
-        NPCStats::goblinMaxHealth,
-        NPCStats::goblinMovementSpeed
+        NPCStats::GOBLINNAME,
+        NPCStats::GOBLINMAXHEALTH,
+        NPCStats::GOBLINMOVEMENTSPEED
     );
 
     //Should randomize spawn position.
@@ -192,9 +192,9 @@ std::shared_ptr<TimCapaul> NPC::timCapaulFactory() {
 
 std::shared_ptr<Skeleton> NPC::skeletonFactory() {
     auto skeleton = std::make_shared<Skeleton>(
-        NPCStats::skeletonName,
-        NPCStats::skeletonMaxHealth,
-        NPCStats::skeletonMovementSpeed
+        NPCStats::SKELETONNAME,
+        NPCStats::SKELETONMAXHEALTH,
+        NPCStats::SKELETONMOVEMENTSPEED
     );
     setRandomPosition(skeleton);
     return skeleton;

@@ -30,8 +30,8 @@ TEST(NPCTEST, SpawnTest) {
         ASSERT_TRUE(yActual > NotExpected);
         ASSERT_TRUE(xActual > NotExpected);
 
-        ASSERT_TRUE(yActual < Room::roomSize * Room::tileSize);
-        ASSERT_TRUE(xActual < Room::roomSize * Room::tileSize);
+        ASSERT_TRUE(yActual < Room::ROOMSIZE * Room::TILESIZE);
+        ASSERT_TRUE(xActual < Room::ROOMSIZE * Room::TILESIZE);
 
 
     }

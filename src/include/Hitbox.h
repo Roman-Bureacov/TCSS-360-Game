@@ -21,12 +21,12 @@ class Hitbox {
 public:
     /**
      * Constructs a new hitbox at the point specified.
-     * @param theOrigin where the hitbox is constructed at
+     * @param THEORIGIN where the hitbox is constructed at
      * @param theWidth the width of this hitbox
      * @param theHeight the height of this hitbox
      */
     Hitbox(
-        const util::Point& theOrigin,
+        const util::Point& THEORIGIN,
         int theWidth,
         int theHeight
     );

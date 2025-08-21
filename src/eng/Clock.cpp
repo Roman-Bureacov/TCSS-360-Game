@@ -67,6 +67,6 @@ void Clock::toggleActive() {
     isEnabled = !isEnabled;
 }
 
-void Clock::StopClockForTesting( const long stopTick) {
-    testingStopTick = stopTick + getCurrentTick();
+void Clock::StopClockForTesting( const long theStopTick) {
+    testingStopTick = theStopTick + getCurrentTick();
 }

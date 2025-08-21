@@ -9,17 +9,17 @@
 
 
 
-std::shared_ptr<Player> Player::instance = nullptr;
+std::shared_ptr<Player> Player::myInstance = nullptr;
 
 std::shared_ptr<Player> Player::playerInstance() {
 
-    if (!instance) {
-        instance = std::shared_ptr<Player>(new Player(name,
-            startingHealth, movementSpeed));
+    if (!myInstance) {
+        myInstance = std::shared_ptr<Player>(new Player(MYNAME,
+            MYSTARTINGHEALTH, MYMOVEMENTSPEED));
     }
 
 
-    return instance;
+    return myInstance;
 }
 
 Player::Player(const std::string &theName
@@ -27,7 +27,7 @@ Player::Player(const std::string &theName
             : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {
 
 
-    setHitbox(hitBoxSize, hitBoxSize);
+    setHitbox(MYHITBOXSIZE, MYHITBOXSIZE);
     Weapon* PlayerWeapon =
         new Weapon(10, 10, std::move(PlayerWeaponHitbox));
     this->giveWeapon(PlayerWeapon);
@@ -36,28 +36,64 @@ Player::Player(const std::string &theName
 void Player::Update(Subject *theChangedSubject
         , const std::string &thePropertyName) {}
 
-void Player::userInput(int code) {
+void Player::setClass(playerTypes myType) {
+    switch (myType) {
+        case playerTypes::Knight:
+            this->setName(PlayerClasses::MYNAMEKNIGHT);
+            this->setHealth(PlayerClasses::MYSTARTINGHEALTHKNIGHT);
+            this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDKNIGHT);
+            break;
+
+        case playerTypes::Rogue:
+            this->setName(PlayerClasses::MYNAMEROGUE);
+            this->setHealth(PlayerClasses::MYSTARTINGHEALTHROGUE);
+            this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDROGUE);
+            break;
+
+        case playerTypes::Mage:
+            this->setName(PlayerClasses::MYNAMEMAGE);
+            this->setHealth(PlayerClasses::MYSTARTINGHEALTHMAGE);
+            this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDMAGE);
+            break;
+
+        case playerTypes::Archer:
+            this->setName(PlayerClasses::MYNAMEARCHER);
+            this->setHealth(PlayerClasses::MYSTARTINGHEALTHARCHER);
+            this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDARCHER);
+            break;
+
+        default:
+            // Fallback to Knight if type is unrecognized
+            this->setName(PlayerClasses::MYNAMEKNIGHT);
+            this->setHealth(PlayerClasses::MYSTARTINGHEALTHKNIGHT);
+            this->setMovementSpeed(PlayerClasses::MYMOVEMENTSPEEDKNIGHT);
+            break;
+    }
+
+}
+
+void Player::userInput(int theCode) {
     if (!isAlive()) return;
-    switch (code) {
+    switch (theCode) {
         case SDL_SCANCODE_W:
             setDirection(util::SOUTH);
             std::cout << "w";
-            Bitz::enqueueMovementEvent(this,movementSpeed);
+            Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_S:
             setDirection(util::NORTH);
             std::cout << "s";
-            Bitz::enqueueMovementEvent(this,movementSpeed);
+            Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_A:
             setDirection(util::WEST);
             std::cout << "a";
-            Bitz::enqueueMovementEvent(this,movementSpeed);
+            Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_D:
             setDirection(util::EAST);
             std::cout << "d";
-            Bitz::enqueueMovementEvent(this,movementSpeed);
+            Bitz::enqueueMovementEvent(this,MYMOVEMENTSPEED);
             break;
         case SDL_SCANCODE_SPACE:
             attack();
@@ -73,41 +109,43 @@ void Player::userInput(int code) {
 void Player::roll() {
     switch (getDirection()) {
         case util::NORTH:
-            Bitz::enqueueMovementEvent(this, rollDisplacement);
+            Bitz::enqueueMovementEvent(this, ROLLDISPLACEMENT);
         break;
         case util::EAST:
-            Bitz::enqueueMovementEvent(this, rollDisplacement);
+            Bitz::enqueueMovementEvent(this, ROLLDISPLACEMENT);
         break;
         case util::SOUTH:
-            Bitz::enqueueMovementEvent(this, rollDisplacement);
+            Bitz::enqueueMovementEvent(this, ROLLDISPLACEMENT);
         break;
         case util::WEST:
-            Bitz::enqueueMovementEvent(this, rollDisplacement);
+            Bitz::enqueueMovementEvent(this, ROLLDISPLACEMENT);
         break;
         default:
             throw new std::logic_error("Unknown direction enum");
     }
 
     //So where this needs to become false again.
-    rolling = true;
+    myRolling = true;
 
 }
 
 bool Player::isRolling() {
-    return rolling;
+    return myRolling;
 }
 
 void Player::endRoll() {
-    rolling = false;
+    myRolling = false;
 }
 
 void Player::attack() {
-    if (instance) {
-        Bitz::enqueueAttackEvent(instance.get());
+    if (myInstance) {
+        Bitz::enqueueAttackEvent(myInstance.get());
     }
 
 }
 
 int Player::getHitBoxSize() {
-    return hitBoxSize;
+    return MYHITBOXSIZE;
 }
+
+

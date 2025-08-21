@@ -24,49 +24,49 @@ public:
 
     /**
      * This constructs and opens the database.
-     * @param dbFile This is the database file.
+     * @param theDbFile This is the database file.
      */
-    explicit DatabaseManager(const std::string& dbFile);
+    explicit DatabaseManager(const std::string& theDbFile);
     ~DatabaseManager();
 
     /**
      * Inserts a room into the database.
-     * @param room Reference to the room to be inserted.
+     * @param theRoom Reference to the room to be inserted.
      */
-    void insertRoom(Room &room) const;
+    void insertRoom(Room &theRoom) const;
 
     /**
      * Inserts a character into the table.
-     * @param character A reference to the character to be inserted.
+     * @param theCharacter A reference to the character to be inserted.
      */
-    void insertCharacter(AbstractCharacter &character);
+    void insertCharacter(AbstractCharacter &theCharacter);
 
     /**
      * Inserts a character type into the tabel.
-     * @param character Reference to the character type to be inserted.
+     * @param theCharacter Reference to the character type to be inserted.
      */
-    void insertCharacterType(AbstractCharacter &character);
+    void insertCharacterType(AbstractCharacter &theCharacter);
 
     /**
     * This loads a room from the database.
-    * @param id this is the id of the room to be loaded.
+    * @param theId this is the id of the room to be loaded.
     * @return This is a smart pointer to the room.
     */
-    std::shared_ptr<Room> loadRoom(int id);
+    std::shared_ptr<Room> loadRoom(int theId);
 
     /**
      *
-     * @param roomId ID of the room the character is in.
+     * @param theRoomId ID of the room the character is in.
      * @return A shared pointer to the character.
      */
-    std::shared_ptr<AbstractCharacter> loadCharacter(int roomId);
+    std::shared_ptr<AbstractCharacter> loadCharacter(int theRoomId);
 
     /**
      *
-     * @param charType Integer representing character type.
+     * @param theCharType Integer representing character type.
      * @return  A shared pointer to the character.
      */
-    std::shared_ptr<AbstractCharacter> loadCharacterType(int charType);
+    std::shared_ptr<AbstractCharacter> loadCharacterType(int theCharType);
 
 
     /**
@@ -89,9 +89,9 @@ private:
 
     /**
      * This opens the database.
-     * @param dbFile This is the dataBase file.
+     * @param theDbFile This is the dataBase file.
      */
-    void openDatabase(const std::string& dbFile);
+    void openDatabase(const std::string& theDbFile);
 
     /**
      * This closes the database connection.

@@ -80,9 +80,9 @@ public:
     /**
      * This stops the clock at the inputted tick for testing,
      * if 0 clock will not stop.
-     * @param stopTick The tick you want the clock to end at
+     * @param theStopTick The tick you want the clock to end at
      */
-    static void StopClockForTesting(long stopTick);
+    static void StopClockForTesting(long theStopTick);
 };
 
 #endif //CLOCK_H

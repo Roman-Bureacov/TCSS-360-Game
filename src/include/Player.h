@@ -13,6 +13,56 @@
 #include "View.h"
 
 /**
+ * This is a struct that contains the basic stats for
+ * Different player classes.
+ *
+ * @author Riley Hopper
+ * @version August 2025
+ */
+struct PlayerClasses {
+
+    /** Name of the Knight player character. */
+    static inline const std::string MYNAMEKNIGHT = "John Programmer";
+    /** Starting health value for the Knight player character. */
+    static inline const int MYSTARTINGHEALTHKNIGHT = 100;
+    /** Movement speed value for the Knight player character. */
+    static inline const int MYMOVEMENTSPEEDKNIGHT = 35;
+
+    /** Name of the Rogue player character. */
+    static inline const std::string MYNAMEROGUE = "John Git Puller";
+    /** Starting health value for the Rogue player character. */
+    static inline const int MYSTARTINGHEALTHROGUE = 50;
+    /** Movement speed value for the Rogue player character. */
+    static inline const int MYMOVEMENTSPEEDROGUE = 50;
+
+    /** Name of the Mage player character. */
+    static inline const std::string MYNAMEMAGE = "John Stack Overflow";
+    /** Starting health value for the Mage player character. */
+    static inline const int MYSTARTINGHEALTHMAGE = 40;
+    /** Movement speed value for the Mage player character. */
+    static inline const int MYMOVEMENTSPEEDMAGE = 30;
+
+    /** Name of the Archer player character. */
+    static inline const std::string MYNAMEARCHER = "John Code Sniper";
+    /** Starting health value for the Archer player character. */
+    static inline const int MYSTARTINGHEALTHARCHER = 60;
+    /** Movement speed value for the Archer player character. */
+    static inline const int MYMOVEMENTSPEEDARCHER = 45;
+};
+
+/**
+ * Enumerates the available player class types.
+ * @author Riley Hopper.
+ * @version August 2025.
+ */
+enum class playerTypes {
+    Knight,  /**< Heavy melee fighter with high health and low speed. */
+    Rogue,   /**< Agile melee fighter with high speed and low health. */
+    Mage,    /**< Spellcaster with low health and moderate speed. */
+    Archer   /**< Ranged attacker with balanced health and speed. */
+};
+
+/**
  * Represents the player character in the game.
  * Handles user input, movement, rolling, and attacking behavior.
  * Implements observer pattern via Subject updates.
@@ -34,9 +84,9 @@ public:
     /**
      * Processes user input events.
      * Handles movement, rolling, and attacking based on key presses.
-     * @param code key code of the key pressed.
+     * @param theCode key code of the key pressed.
      */
-    void userInput(int code);
+    void userInput(int theCode);
 
     /**
      * Initiates a roll in the current movement direction.
@@ -66,6 +116,8 @@ public:
      */
     int getHitBoxSize();
 
+
+
 private:
     /**
      * Constructs the player character with specified attributes.
@@ -84,28 +136,35 @@ private:
     void Update(Subject *theChangedSubject, const std::string &thePropertyName) override;
 
     /** Singleton instance of the player. */
-    static std::shared_ptr<Player> instance;
-
-    /** Default name of the player character. */
-    static inline const std::string name = "John programmer";
-    /** Starting health value for the player. */
-    static inline const int startingHealth = 100;
-    /** Movement speed value for the player. */
-    static inline const int movementSpeed = 35;
+    static std::shared_ptr<Player> myInstance;
 
     /** Number of ticks the player remains invincible during a roll. */
-    const int invincibilityFrames = 3;
+    const int MYINCINCIBILITYFRAMES = 3;
     /** Distance the player moves during a roll. */
-    const int rollDisplacement = 3;
+    const int ROLLDISPLACEMENT = 3;
 
     /** Indicates whether the player is currently rolling. */
-    bool rolling = false;
+    bool myRolling = false;
 
     /** Size of the player's hitbox. */
-    const int hitBoxSize = 100;
+    const int MYHITBOXSIZE = 100;
 
     /** Hitbox used for the player's weapon during attacks. */
     Hitbox PlayerWeaponHitbox = Hitbox(100, 100);
+
+
+    /**These are the default for the player.*/
+    /**Name of the Knight player character. */
+    static inline const std::string MYNAME = "John programmer";
+    /** Starting health value for the Knight player character. */
+    static inline const int MYSTARTINGHEALTH = 100;
+    /** Movement speed value for the Knight player character. */
+    static inline const int MYMOVEMENTSPEED = 35;
+
+
+    /**This changes the players class */
+    void setClass(playerTypes myType);
+
 };
 
 #endif // PLAYER_H

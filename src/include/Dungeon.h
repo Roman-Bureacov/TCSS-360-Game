@@ -43,9 +43,9 @@ public:
     /**
      * Initializes the dungeon with a database manager.
      * Sets up internal state and prepares room generation.
-     * @param dbManager Shared pointer to the database manager.
+     * @param theDbManager Shared pointer to the database manager.
      */
-    void initialize(const std::shared_ptr<DatabaseManager>& dbManager);
+    void initialize(const std::shared_ptr<DatabaseManager>& theDbManager);
 
     /**
      * Generates the dungeon layout and rooms.
@@ -68,15 +68,15 @@ public:
     /**
      * Changes the current room based on room ID.
      * Triggers a "Room Changed" event.
-     * @param roomID ID of the room to switch to.
+     * @param theRoomID ID of the room to switch to.
      */
-    void setCharacterRoom(int roomID);
+    void setCharacterRoom(int theRoomID);
 
     /**
      * Updates persistent storage with the current room's entities.
-     * @param entities Set of characters present in the room.
+     * @param theEntities Set of characters present in the room.
      */
-    void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> entities);
+    void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> theEntities);
 
     /**
      * This prints the Spawn locations of the pilers for testing.
@@ -119,40 +119,40 @@ private:
     void generatePilers();
 
     /** Builder used to construct rooms. */
-    ConcreteRoomBuilder roomBuilder;
+    ConcreteRoomBuilder myRoomBuilder;
 
     /** Pointer to the current room the player occupies. */
-    std::shared_ptr<Room> currentRoom;
+    std::shared_ptr<Room> myCurrentRoom;
 
     /** 2D map of room IDs representing the dungeon layout. */
-    std::vector<std::vector<int>> idMap;
+    std::vector<std::vector<int>> myIdMap;
 
     /** Singleton instance of the dungeon. */
-    static std::unique_ptr<Dungeon> instance;
+    static std::unique_ptr<Dungeon> myInstance;
 
     /** Database manager used for persistence and loading. */
     std::shared_ptr<DatabaseManager> databaseManager;
 
     /** Size of the dungeon grid (10x10 rooms). */
-    const int dungeonSize = 10;
+    const int DUNGEONSIZE = 10;
 
     /** Starting ID value for room generation. */
-    const int dungeonIdRange = 100;
+    const int DUNGEONIDRANGE = 100;
 
     /** Multiplier used to calculate unique room IDs by row. */
-    const int rowIndexMult = 100;
+    const int ROWINDEXMULT = 100;
 
     /** ID of the room where the player spawns. */
-    const int startingRoomId = 100;
+    const int STARTINGROOMID = 100;
 
     /**This is the active character.*/
-    std::shared_ptr<AbstractCharacter> activeCharaceter;
+    std::shared_ptr<AbstractCharacter> myActiveCharaceter;
 
     /**This is a map of pilers locations*/
-    std::map<int, std::string> oopPillars;
+    std::map<int, std::string> myOopPillars;
 
     /**This is if the player has beat the dungeon.*/
-    bool won = false;
+    bool myWin = false;
 
 
 };

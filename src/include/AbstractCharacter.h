@@ -22,12 +22,13 @@
  */
 class AbstractCharacter : public Subject, public Observer {
 private:
-    const std::string myName;
-    const long long myID;
+
+    const long long MYID;
     int myHealth = 0;
     int myMaxHealth = 0;
     int myBaseMovement = 0;
     int myCurrentMovement = 0;
+    std::string myName;
     util::Point myOrigin;
     Hitbox myHitbox;
     mutable Hitbox myInteractionHitbox;
@@ -242,6 +243,12 @@ public:
      * @param character This is a pointer to the character.
      */
     static void setRandomPosition(const std::shared_ptr<AbstractCharacter> &character);
+
+    /**
+     * Sets a new name for the player
+     * @param theName The new name of the player
+     */
+    void setName(std::string theName);
 };
 
 

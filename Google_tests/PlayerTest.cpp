@@ -43,7 +43,7 @@ TEST(PLAYERTEST, EastWallColision) {
 
 
     //This will set the player exactly right outside the walls hitbox
-    player->setX((Room::roomSize * Room::tileSize) - player->getHitBoxSize());
+    player->setX((Room::ROOMSIZE * Room::TILESIZE) - player->getHitBoxSize());
 
 
     int testAmount = 10;
@@ -58,7 +58,7 @@ TEST(PLAYERTEST, EastWallColision) {
     Clock::runClock();
 
 
-    ASSERT_TRUE( player->getX() < Room::roomSize *Room::tileSize);
+    ASSERT_TRUE( player->getX() < Room::ROOMSIZE *Room::TILESIZE);
 
 
 }
@@ -136,7 +136,7 @@ TEST(PLAYERTEST,northWallColision) {
 
 
     //This will set the player exactly right outside the walls hitbox
-    player->setY((Room::roomSize * Room::tileSize) - player->getHitBoxSize());
+    player->setY((Room::ROOMSIZE * Room::TILESIZE) - player->getHitBoxSize());
 
 
 
@@ -152,7 +152,7 @@ TEST(PLAYERTEST,northWallColision) {
     Clock::runClock();
 
 
-    ASSERT_TRUE(player->getY() < Room::roomSize *Room::tileSize);
+    ASSERT_TRUE(player->getY() < Room::ROOMSIZE *Room::TILESIZE);
 
 }
 

@@ -75,34 +75,34 @@ public:
     bool getAlreadyGenerated() const;
 
     /** Sets the room's unique ID. */
-    void setRoomID(int roomID);
+    void setRoomID(int theRoomID);
 
     /** Sets whether there is a room to the north. */
-    void setNorth(bool north);
+    void setNorth(bool theNorth);
 
     /** Sets whether there is a room to the east. */
-    void setEast(bool east);
+    void setEast(bool theEast);
 
     /** Sets whether there is a room to the south. */
-    void setSouth(bool south);
+    void setSouth(bool theSouth);
 
     /** Sets whether there is a room to the west. */
-    void setWest(bool west);
+    void setWest(bool theWest);
 
     /** Marks the room as already generated. */
-    void setAlreadyGenerated(bool alreadyMade);
+    void setAlreadyGenerated(bool theAlreadyMade);
 
     /** Sets the serialized tile map string. */
-    void setSerialRoomMap(const std::string &map);
+    void setSerialRoomMap(const std::string &theMap);
 
     /** Sets the ID of the first character. */
-    void setChar1ID(long long ID);
+    void setChar1ID(long long theId);
 
     /** Sets the ID of the second character. */
-    void setChar2ID(long long ID);
+    void setChar2ID(long long theId);
 
     /** Sets the ID of the third character. */
-    void setChar3ID(long long ID);
+    void setChar3ID(long long theId);
 
     /**
      * Retrieves the dungeon tile map.
@@ -117,50 +117,50 @@ public:
     Room();
 
     /** Number of tiles per side in the room. */
-    static constexpr int roomSize = 15;
+    static constexpr int ROOMSIZE = 15;
 
     /** Center position used for door placement. */
-    static constexpr int doorLocation = (roomSize - 1) / 2;
+    static constexpr int DOORLOCATION = (ROOMSIZE - 1) / 2;
 
     /** Pixel size of each tile for rendering. */
-    static constexpr int tileSize = 100;
+    static constexpr int TILESIZE = 100;
 
 private:
     /** ID of the first character in the room. */
-    long long charID1;
+    long long myCharID1;
 
     /** ID of the second character in the room. */
-    long long charID2;
+    long long myCharID2;
 
     /** ID of the third character in the room. */
-    long long charID3;
+    long long mycharID3;
 
     /** 2D tile map representing the room layout. */
     std::vector<std::vector<DunText::DungeonTile>> roomMap;
 
     /** Serialized version of the tile map. */
-    std::string serialRoomMap = "";
+    std::string mySerialRoomMap = "";
 
     /** Flag indicating if the room has already been generated. */
-    bool alreadyGenerated = false;
+    bool myAlreadyGenerated = false;
 
     /** Flags for adjacent rooms. */
-    bool roomNorth;
-    bool roomEast;
-    bool roomWest;
-    bool roomSouth;
+    bool myRoomNorth;
+    bool myRoomEast;
+    bool myRoomWest;
+    bool myRoomSouth;
 
     /** Unique room identifier. */
-    int roomID;
+    int myRoomID;
 
     /** Prints the room map to console (for testing). */
     void printRoomMap() const;
 
     /** Converts a string to a DungeonTile enum. */
-    DunText::DungeonTile stringToDungeonTile(const std::string &tile) const;
+    DunText::DungeonTile stringToDungeonTile(const std::string &theTile) const;
 
     /** Converts a DungeonTile enum to string. */
-    std::string DungeonTileToString(const DunText::DungeonTile &tile) const;
+    std::string DungeonTileToString(const DunText::DungeonTile &theTile) const;
 };
 
 /**
@@ -171,20 +171,20 @@ class RoomBuilder {
 public:
     virtual ~RoomBuilder() = default;
 
-    virtual RoomBuilder& setRoomNorth(bool north) = 0;
-    virtual RoomBuilder& setRoomEast(bool east) = 0;
-    virtual RoomBuilder& setRoomWest(bool west) = 0;
-    virtual RoomBuilder& setRoomSouth(bool south) = 0;
-    virtual RoomBuilder& setRoomId(int id) = 0;
+    virtual RoomBuilder& setRoomNorth(bool theNorth) = 0;
+    virtual RoomBuilder& setRoomEast(bool theEast) = 0;
+    virtual RoomBuilder& setRoomWest(bool theWest) = 0;
+    virtual RoomBuilder& setRoomSouth(bool theSouth) = 0;
+    virtual RoomBuilder& setRoomId(int theId) = 0;
 
     /** Sets the ID of the first character. */
-    virtual RoomBuilder& setChar1ID(long long ID) = 0;
+    virtual RoomBuilder& setChar1ID(long long theID) = 0;
 
     /** Sets the ID of the second character. */
-    virtual RoomBuilder& setChar2ID(long long ID) = 0;
+    virtual RoomBuilder& setChar2ID(long long theID) = 0;
 
     /** Sets the ID of the third character. */
-    virtual RoomBuilder& setChar3ID(long long ID) = 0;
+    virtual RoomBuilder& setChar3ID(long long theID) = 0;
 
     /** Builds and returns the configured Room object. */
     virtual std::shared_ptr<Room> build() = 0;
@@ -199,33 +199,33 @@ public:
     /** Constructs a builder with default room flags. */
     ConcreteRoomBuilder();
 
-    ConcreteRoomBuilder& setRoomNorth(bool north) override;
-    ConcreteRoomBuilder& setRoomEast(bool east) override;
-    ConcreteRoomBuilder& setRoomWest(bool west) override;
-    ConcreteRoomBuilder& setRoomSouth(bool south) override;
-    ConcreteRoomBuilder& setRoomId(int id) override;
+    ConcreteRoomBuilder& setRoomNorth(bool theNorth) override;
+    ConcreteRoomBuilder& setRoomEast(bool theEast) override;
+    ConcreteRoomBuilder& setRoomWest(bool theWest) override;
+    ConcreteRoomBuilder& setRoomSouth(bool theSouth) override;
+    ConcreteRoomBuilder& setRoomId(int theId) override;
 
-    ConcreteRoomBuilder& setChar1ID(long long ID) override;
-    ConcreteRoomBuilder& setChar2ID(long long ID) override;
-    ConcreteRoomBuilder& setChar3ID(long long ID) override;
+    ConcreteRoomBuilder& setChar1ID(long long theID) override;
+    ConcreteRoomBuilder& setChar2ID(long long theID) override;
+    ConcreteRoomBuilder& setChar3ID(long long theID) override;
 
     /** Builds and returns the configured Room object. */
     std::shared_ptr<Room> build() override;
 
 private:
     /** Flags for adjacent rooms. */
-    bool roomNorth = true;
-    bool roomEast = true;
-    bool roomWest = true;
-    bool roomSouth = true;
+    bool theRoomNorth = true;
+    bool theRoomEast = true;
+    bool theRoomWest = true;
+    bool theRoomSouth = true;
 
     /** Character IDs for the room. */
-    long long charID1;
-    long long charID2;
-    long long charID3;
+    long long theCharID1;
+    long long theCharID2;
+    long long theCharID3;
 
     /** Unique room identifier. */
-    int roomID = 0;
+    int theRoomID = 0;
 };
 
 #endif // ROOM_H

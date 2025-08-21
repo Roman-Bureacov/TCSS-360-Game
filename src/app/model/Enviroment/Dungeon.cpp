@@ -8,27 +8,27 @@
 
 
 
-std::unique_ptr<Dungeon> Dungeon::instance = nullptr;
+std::unique_ptr<Dungeon> Dungeon::myInstance = nullptr;
 
 
 
 Dungeon* Dungeon::DungeonInstance() {
 
     //Breaks at this if
-    if (instance == nullptr) {
-        instance =  std::unique_ptr<Dungeon>(new Dungeon());
+    if (myInstance == nullptr) {
+        myInstance =  std::unique_ptr<Dungeon>(new Dungeon());
     }
 
 
-    return instance.get();
+    return myInstance.get();
 }
 
 
-void Dungeon::initialize(const std::shared_ptr<DatabaseManager> &dbManager) {
-    databaseManager = dbManager;
+void Dungeon::initialize(const std::shared_ptr<DatabaseManager> &theDbManager) {
+    databaseManager = theDbManager;
     //Makes sure there isn't any in there at the start.
     Bitz::clearEntities();
-    this->currentRoom = roomBuilder.build();
+    this->myCurrentRoom = myRoomBuilder.build();
     this->generateDungeon();
 }
 
@@ -43,30 +43,30 @@ void Dungeon::generateDungeon() {
     }
 
     Bitz::registerPlayer(Player::playerInstance());
-    Player::playerInstance()->setX((Room::roomSize * Room::tileSize)/2);
-    Player::playerInstance()->setY((Room::roomSize * Room::tileSize)/2);
+    Player::playerInstance()->setX((Room::ROOMSIZE * Room::TILESIZE)/2);
+    Player::playerInstance()->setY((Room::ROOMSIZE * Room::TILESIZE)/2);
 
-    idMap.clear();
+    myIdMap.clear();
 
 
     //(row, column) -> (i,j)
-    for (int i = 0; i < dungeonSize; i++) {
+    for (int i = 0; i < DUNGEONSIZE; i++) {
         std::vector<int> idRow;
-        for (int j = 0; j < dungeonSize; j++) {
+        for (int j = 0; j < DUNGEONSIZE; j++) {
 
             //Sets the row id somewhere in the thousands.
-            int id = dungeonIdRange + i * rowIndexMult + j;
-            roomBuilder.setRoomId(id);
-            if (i == 0) roomBuilder.setRoomNorth(false);
-            if (i == dungeonSize - 1) roomBuilder.setRoomSouth(false);
-            if (j == 0) roomBuilder.setRoomWest(false);
-            if (j == dungeonSize - 1) roomBuilder.setRoomEast(false);
+            int id = DUNGEONIDRANGE + i * ROWINDEXMULT + j;
+            myRoomBuilder.setRoomId(id);
+            if (i == 0) myRoomBuilder.setRoomNorth(false);
+            if (i == DUNGEONSIZE - 1) myRoomBuilder.setRoomSouth(false);
+            if (j == 0) myRoomBuilder.setRoomWest(false);
+            if (j == DUNGEONSIZE - 1) myRoomBuilder.setRoomEast(false);
 
             auto char1 = NPC::skeletonFactory();
             //auto char2 = NPC::skeletonFactory();
             //auto char3 = NPC::skeletonFactory();
 
-            roomBuilder.setChar1ID(char1->getID());
+            myRoomBuilder.setChar1ID(char1->getID());
             //roomBuilder.setChar2ID(char2->getID());
             //roomBuilder.setChar3ID(char3->getID());
 
@@ -77,7 +77,7 @@ void Dungeon::generateDungeon() {
             //Bitz::registerCharacter(char2);
             //Bitz::registerCharacter(char3);
 
-            auto room = roomBuilder.build();
+            auto room = myRoomBuilder.build();
 
             //This will build the room and throw it in the database.
             try {
@@ -90,33 +90,33 @@ void Dungeon::generateDungeon() {
             idRow.push_back(id);
 
         }
-        idMap.push_back(idRow);
+        myIdMap.push_back(idRow);
     }
 
     //This will set up the pillers in the dungeon
     generatePilers();
     //Its 100, just so you don't have to look.
-    setCharacterRoom(startingRoomId);
+    setCharacterRoom(STARTINGROOMID);
 
 
 }
 
 
 
-void Dungeon::setCharacterRoom(const int roomID) {
+void Dungeon::setCharacterRoom(const int theRoomID) {
 
-    currentRoom->setSerialRoomMap("");
-    currentRoom = databaseManager->loadRoom(roomID);
-    currentRoom->generateExistingRoom();
+    myCurrentRoom->setSerialRoomMap("");
+    myCurrentRoom = databaseManager->loadRoom(theRoomID);
+    myCurrentRoom->generateExistingRoom();
 
     // You win the game by finding all the pilers and destroying them.
-    if (oopPillars.contains(roomID)) {
-        std::cout << "You found: " << oopPillars[roomID] << std::endl;
-        oopPillars.erase(roomID);
+    if (myOopPillars.contains(theRoomID)) {
+        std::cout << "You found: " << myOopPillars[theRoomID] << std::endl;
+        myOopPillars.erase(theRoomID);
         this->notify(PROPERTY_PILLAR_DESTROYED);
-    } if (oopPillars.empty()) {
+    } if (myOopPillars.empty()) {
         std::cout << "All pillars have been destroyed!" << std::endl;
-        won = true;
+        myWin = true;
         // Trigger a property change for winning, if applicable
         this->notify(PROPERTY_WIN);
     }
@@ -131,8 +131,8 @@ void Dungeon::setCharacterRoom(const int roomID) {
 
 }
 
-void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> entities) {
-    long long char1 = currentRoom->getCharacters().at(0);
+void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> theEntities) {
+    long long char1 = myCurrentRoom->getCharacters().at(0);
     //long long char2 = currentRoom->getCharacters().at(1);
     //long long char3 = currentRoom->getCharacters().at(2);
 
@@ -140,11 +140,11 @@ void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractChar
 
     //This should, set all the npcs in the current room active
     //and deactivate all non-active NPCs.
-    for (auto c: entities) {
+    for (auto c: theEntities) {
         if (std::shared_ptr<NPC> npc = std::dynamic_pointer_cast<NPC>(c)) {
             if (npc->getID() == char1) {
                 npc->setIsActive(true);
-                activeCharaceter = npc;
+                myActiveCharaceter = npc;
             }
             //else if (npc->getID() == char2) npc->setIsActive(true);
             //else if (npc->getID() == char3) npc->setIsActive(true);
@@ -158,30 +158,30 @@ void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractChar
 
 
 std::vector<std::vector<int>> Dungeon::getMap() {
-    return idMap;
+    return myIdMap;
 
 }
 
 
 std::shared_ptr<Room> Dungeon::getCurrentRoom() {
-    return currentRoom;
+    return myCurrentRoom;
 }
 
 
 std::shared_ptr<AbstractCharacter> Dungeon::getActiveCharacter() {
-    return activeCharaceter;
+    return myActiveCharaceter;
 }
 
 Dungeon::Dungeon() {}
 
 void Dungeon::generatePilers() {
 
-    if (idMap.size() != 10) {
+    if (myIdMap.size() != 10) {
         std::cerr << "Error: idMap must have exactly 10 rows!" << std::endl;
         return;
     }
-    for (size_t i = 0; i < idMap.size(); ++i) {
-        if (idMap[i].size() != 10) {
+    for (size_t i = 0; i < myIdMap.size(); ++i) {
+        if (myIdMap[i].size() != 10) {
             std::cerr << "Error: Row " << i << " must have exactly 10 elements!" << std::endl;
             return ;
         }
@@ -197,46 +197,46 @@ void Dungeon::generatePilers() {
     std::uniform_int_distribution<> dis(0, 9);
 
     for (int i = 0; i < 4; ++i) {
-        int key = idMap[dis(gen)][dis(gen)];
-        oopPillars[key] = pillars[i];
+        int key = myIdMap[dis(gen)][dis(gen)];
+        myOopPillars[key] = pillars[i];
     }
 
 }
 
 void Dungeon::printPilerSpawns() {
-    if (oopPillars.empty()) {
+    if (myOopPillars.empty()) {
         std::cout << "No pillars have been spawned." << std::endl;
         return;
     }
 
     std::cout << "Current pillar spawns:" << std::endl;
-    for (const auto& [id, pillar] : oopPillars) {
+    for (const auto& [id, pillar] : myOopPillars) {
         std::cout << "Room ID: " << id << " -> Pillar: " << pillar << std::endl;
     }
 }
 
 void Dungeon::destroyPilers() {
-    if (oopPillars.empty()) {
+    if (myOopPillars.empty()) {
         std::cout << "No pillars to destroy." << std::endl;
         return;
     }
 
     std::cout << "Destroying pillars..." << std::endl;
-    for (const auto& [id, pillar] : oopPillars) {
+    for (const auto& [id, pillar] : myOopPillars) {
         std::cout << "Destroyed pillar " << pillar << " in room " << id << std::endl;
         this->notify(PROPERTY_PILLAR_DESTROYED);
     }
 
-    oopPillars.clear();
+    myOopPillars.clear();
 
-    if (oopPillars.empty()) {
+    if (myOopPillars.empty()) {
         std::cout << "All pillars destroyed! You win!" << std::endl;
-        won = true;
+        myWin = true;
         this->notify(PROPERTY_WIN);
     }
 }
 
 bool Dungeon::haveIWon() {
-    return won;
+    return myWin;
 }
 

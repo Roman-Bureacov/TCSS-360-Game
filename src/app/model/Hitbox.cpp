@@ -7,8 +7,8 @@
 #include <iostream>
 #include <stdexcept>
 
-Hitbox::Hitbox(const util::Point& theOrigin, const int theWidth, const int theHeight)
-    : myOrigin(theOrigin), myWidth(theWidth), myHeight(theHeight){
+Hitbox::Hitbox(const util::Point& THEORIGIN, const int theWidth, const int theHeight)
+    : myOrigin(THEORIGIN), myWidth(theWidth), myHeight(theHeight){
 
    if (theWidth < 0) throw std::logic_error("width must be zero or greater");
    if (theHeight < 0) throw std::logic_error("height must be zero or greater");

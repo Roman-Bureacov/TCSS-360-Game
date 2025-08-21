@@ -13,7 +13,7 @@ AbstractCharacter::AbstractCharacter(
     const int theMaxHealth,
     const int theMovementSpeed)
     : myName(theName),
-      myID(ID_GEN::makeID()),
+      MYID(ID_GEN::makeID()),
       myHealth(theMaxHealth),
       myMaxHealth(theMaxHealth),
       myBaseMovement(theMovementSpeed),
@@ -31,7 +31,7 @@ const std::string& AbstractCharacter::getName() const {
 }
 
 long long AbstractCharacter::getID() const {
-    return myID;
+    return MYID;
 }
 
 bool AbstractCharacter::isAlive() const {
@@ -185,14 +185,18 @@ void AbstractCharacter::setRandomPosition(const std::shared_ptr<AbstractCharacte
     static std::mt19937 gen(rd());
 
     //This should set a random position within in the dungeon.
-    std::uniform_int_distribution<> xDist(Room::tileSize * 3
-        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 3));
-    std::uniform_int_distribution<> yDist(Room::tileSize * 3
-        , (Room::roomSize * Room::tileSize)- (Room::tileSize * 3));
+    std::uniform_int_distribution<> xDist(Room::TILESIZE * 3
+        , (Room::ROOMSIZE * Room::TILESIZE)- (Room::TILESIZE * 3));
+    std::uniform_int_distribution<> yDist(Room::TILESIZE * 3
+        , (Room::ROOMSIZE * Room::TILESIZE)- (Room::TILESIZE * 3));
 
     character->setX(xDist(gen));
     character->setY(yDist(gen));
 
+}
+
+void AbstractCharacter::setName(std::string theName) {
+    this->myName = theName;
 }
 
 const Hitbox& AbstractCharacter::getInteractionHitbox() const {
