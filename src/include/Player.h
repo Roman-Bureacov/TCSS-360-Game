@@ -83,8 +83,10 @@ enum class playerTypes {
  */
 class Player : public AbstractCharacter {
 public:
-    /** Property name used to signal when the player starts rolling. */
+    /**Property name used to signal when the player starts rolling. */
     inline static const std::string PROPERTY_CHANGED_ROLL = "I might be rolling";
+    /**Property when the player changes classes. */
+    inline static const std::string PROPERTY_CHANGE_CLASS = "I have changed my class";
 
     /**This is how much health is healed by a potion.*/
     inline static const int MYPOTIONSTRENGTH = 20;

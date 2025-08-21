@@ -80,6 +80,7 @@ void Player::setClass(const playerTypes myType) {
             PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox)));
             break;
     }
+    this->notify(PROPERTY_CHANGE_CLASS);
 
 }
 
