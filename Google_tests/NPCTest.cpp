@@ -96,6 +96,9 @@ TEST(NPCTEST,GoToPLayer) {
     dungeon->initialize(dbManager);
 
     dungeon->setCharacterRoom(300);
+    if (dungeon->getActiveCharacter()->getName() == NPCStats::MYBOSSNAME) {
+        dungeon->setCharacterRoom(400);
+    }
 
     auto room = dungeon->getCurrentRoom();
 
@@ -104,6 +107,8 @@ TEST(NPCTEST,GoToPLayer) {
     for (auto character : Bitz::getEntities()) {
 
         auto npc = std::dynamic_pointer_cast<NPC>(character);
+
+
 
         if ( npc && npc->getIsActive()) {
             allNPCs.push_back(npc);
@@ -117,7 +122,8 @@ TEST(NPCTEST,GoToPLayer) {
     int initalY1 = allNPCs[0]->getY();
 
 
-    Clock::StopClockForTesting( 5);
+    player->heal(999);
+    Clock::StopClockForTesting( 10);
     Clock::runClock();
 
     int endX1 = allNPCs[0]->getX();

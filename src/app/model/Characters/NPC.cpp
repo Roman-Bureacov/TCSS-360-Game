@@ -143,32 +143,20 @@ Skeleton::Skeleton(
 // =========================
 // TimCapaul
 // =========================
-//TODO
 
+TimCapaul::TimCapaul( const std::string& theName, int theMaxHealth, int theMovementSpeed)
+            : NPC(theName, theMaxHealth, theMovementSpeed) {
+    Weapon* npcWeapon =
+       new Weapon(NPCStats::MYBOSSDAMAGE,
+           NPCStats::MYNPCATTACKTIME, std::move(myNPCWeaponHitbox));
+    this->giveWeapon(npcWeapon);
+    this->setHitbox(myNPCHitBox);
+    myName = theName;
+    myMovementSpeed = theMovementSpeed;
+    myMaxHealth = theMaxHealth;
 
-TimCapaul::TimCapaul()
-    : NPC(TimCapaul::MYNAME, TimCapaul::MYMAXHEALTH, TimCapaul::MYMOVEMENTSPEED) {}
-
-void TimCapaul::takeAction() {
-
-
-
-    if (canAttack()) {
-        attackPlayer();
-    } else {
-        moveNPCToPlayer();
-    }
 }
 
-void TimCapaul::moveNPCToPlayer() {
-}
-
-void TimCapaul::attackPlayer() {
-}
-
-bool TimCapaul::canAttack() {
-    return true;
-}
 
 // =========================
 // Factory Implementations
@@ -187,9 +175,14 @@ std::shared_ptr<Goblin> NPC::goblinFactory() {
 
 }
 
-//TODO: Change to be modern Implimentation.
 std::shared_ptr<TimCapaul> NPC::timCapaulFactory() {
-    return std::make_shared<TimCapaul>();
+    auto tim = std::make_shared<TimCapaul>(
+        NPCStats::MYBOSSNAME,
+        NPCStats::MYBOSSMAXHEALTH,
+        NPCStats::MYBOSSMOVEMENTSPEED
+    );
+    setRandomPosition(tim);
+    return tim;
 }
 
 std::shared_ptr<Skeleton> NPC::skeletonFactory() {

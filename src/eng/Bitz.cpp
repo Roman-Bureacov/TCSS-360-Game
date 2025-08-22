@@ -386,3 +386,14 @@ const std::unordered_set<std::shared_ptr<AbstractCharacter>> & Bitz::getEntities
 const std::unordered_set<Interactable *> & Bitz::getInteractables() {
     return interactables;
 }
+
+const std::shared_ptr<NPC> Bitz::getActiveNPC() {
+
+    for (std::shared_ptr<AbstractCharacter> c : entities) {
+        auto n = std::dynamic_pointer_cast<NPC>(c);
+        if (n && n->getIsActive()) {
+            return n;
+        }
+    }
+    return nullptr; //Not happy with this here.
+}

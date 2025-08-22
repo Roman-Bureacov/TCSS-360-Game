@@ -10,14 +10,7 @@
 #include "AbstractCharacter.h"
 #include "../include/Bitz.h"
 
-/**
- * Enumeration of all supported NPC types.
- */
-enum class NPCType {
-    Skeleton,
-    Goblin,
-    TimCapaul
-};
+
 
 /**
  * This struct holds the stats of basic NPCS
@@ -32,7 +25,7 @@ struct NPCStats {
     /**THis is the health of the goblin. */
     static const inline int MYGOBLINMAXHEALTH = 50;
     /**This is the movment speed of the goblin. */
-    static const inline int MYGOBLINMOVEMENTSPEED = 100;
+    static const inline int MYGOBLINMOVEMENTSPEED = 50;
     /**This is the damage the goblin. */
     static const inline int MYGOBLINDAMAGE = 1;
 
@@ -44,6 +37,15 @@ struct NPCStats {
     static const inline int MYSKELETONMOVEMENTSPEED = 10;
     /**The is the damage the skeleton does.  */
     static const inline int MYSKELETONDAMAGE = 2;
+
+    /** The name of the boss character. */
+    static const inline std::string MYBOSSNAME = "DarkLord Capual";
+    /** The maximum health of Tim Capaul. */
+    static const inline int MYBOSSMAXHEALTH = 1000;
+    /** The movement speed of Tim Capaul. */
+    static const inline int MYBOSSMOVEMENTSPEED = 10;
+    /**The is the damage the Tim Capual does.  */
+    static const inline int MYBOSSDAMAGE = 10;
 
 };
 
@@ -175,7 +177,8 @@ public:
      * @param theMaxHealth The maximum health value.
      * @param theMovementSpeed The movement speed value.
      */
-    Goblin(const std::string& theName, int theMaxHealth, int theMovementSpeed);
+    Goblin(const std::string& theName
+            , int theMaxHealth, int theMovementSpeed);
 
 private:
     /** The name of the goblin. */
@@ -196,40 +199,19 @@ public:
      * Constructs the Tim Capaul boss NPC.
      * Initializes with predefined stats and name.
      */
-    TimCapaul();
-
-    /**
-     * Executes Tim Capaul's custom behavior each tick.
-     * Overrides base NPC action logic.
-     */
-    void takeAction() override;
+    TimCapaul(const std::string& theName
+        , int theMaxHealth, int theMovementSpeed);
 
 private:
-    /** The name of the boss character. */
-    static const inline std::string MYNAME = "DarkLord Capual";
-    /** The maximum health of Tim Capaul. */
-    static constexpr int MYMAXHEALTH = 1000;
-    /** The movement speed of Tim Capaul. */
-    static constexpr int MYMOVEMENTSPEED = 10;
 
-    /**
-     * Moves Tim Capaul toward the player.
-     * Used as part of his AI behavior.
-     */
-    void moveNPCToPlayer();
+    /** The name of the Tim. */
+    std::string myName;
+    /** The maximum health of the Tim. */
+    int myMaxHealth;
+    /** The movement speed of the Tim. */
+    int myMovementSpeed;
 
-    /**
-     * Executes an attack on the player.
-     * Called when within range and conditions are met.
-     */
-    void attackPlayer();
 
-    /**
-     * Determines if Tim Capaul can attack.
-     * Based on proximity and cooldown logic.
-     * @return True if attack is possible, false otherwise.
-     */
-    bool canAttack();
 };
 
 /**
