@@ -213,6 +213,8 @@ private:
 
     /// Flag indicating if the game loop should continue running
     bool isRunning {false};
+    ///Check and see if you've "won"
+    bool canWin {false};
 
     /**
      * @brief Cleanup function for SDL resources

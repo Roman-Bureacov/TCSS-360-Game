@@ -57,6 +57,7 @@ int main(int argc, char* argv[]) {
     else
         std::cout << "Player has won!" << std::endl;
 
+    SDL_Delay(10000);
     gameView->endProcess();
 
     return 0;

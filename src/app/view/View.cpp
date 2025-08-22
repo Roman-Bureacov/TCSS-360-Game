@@ -291,6 +291,10 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
             // Room changed - reload active sprites for new room
             loadActiveSprites();
         }
+        else if (thePropertyName == Dungeon::PROPERTY_WIN) {
+            if (canWin)
+                isRunning = false;
+        }
     }
 }
 
