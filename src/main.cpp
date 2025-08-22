@@ -35,17 +35,15 @@ int main(int argc, char* argv[]) {
     Player* player = Player::playerInstance().get();
     player->attach(View::guiInstance());
 
-    auto dbManager = std::make_shared<DatabaseManager>("DungeonDatabase.db");//TODO change this to the actuall database file.
+    auto dbManager = std::make_shared<DatabaseManager>("DungeonDatabase.db");
     Dungeon* dungeon = Dungeon::DungeonInstance();
     dungeon->initialize(dbManager);
 
     std::vector<std::shared_ptr<NPC>> allNPCs;
 
-    for (auto character : Bitz::getEntities()) {
-
-        auto npc = std::dynamic_pointer_cast<NPC>(character);
-
-        if (npc && npc->getIsActive()) {
+    for (const auto& character : Bitz::getEntities()) {
+        if (auto npc = std::dynamic_pointer_cast<NPC>(character);
+                npc && npc->getIsActive()) {
             allNPCs.push_back(npc);
 
         }

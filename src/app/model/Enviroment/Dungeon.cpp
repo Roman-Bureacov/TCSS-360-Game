@@ -82,7 +82,6 @@ void Dungeon::generateDungeon() {
 
             //This makes the enemy encounter somewhat random
             if (i == randTimI && j == randTimJ) {
-                std::cout << "tim made";
                 char1 = NPC::timCapaulFactory();
             } else if (skeletonOrGoblin) {
                 char1 = NPC::skeletonFactory();
