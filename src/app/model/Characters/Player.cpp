@@ -129,6 +129,9 @@ void Player::userInput(const int theCode) {
             std::cout << "Your health is: "
                 << this->getHealth() << std::endl;
             break;
+        case SDL_SCANCODE_F:
+            Dungeon::DungeonInstance()->printPilersLeft();
+        break;
         default: break;
         }
     }

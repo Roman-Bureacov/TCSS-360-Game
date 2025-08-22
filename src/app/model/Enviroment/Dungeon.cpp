@@ -256,7 +256,7 @@ void Dungeon::spawnPotions() {
     std::uniform_int_distribution<> potionCountDist(1, 6); // random number of potions
 
     // Decide how many potions to spawn
-    int potionCount = potionCountDist(gen);
+    const int potionCount = potionCountDist(gen);
 
     // Clear any previous potion locations
     myPotionLocations.clear();
@@ -334,6 +334,15 @@ void Dungeon::setUpTrappedRooms() {
         std::cout << "trap placed at " << key << std::endl;
         placed++;
     }
+}
+
+void Dungeon::printPilersLeft() {
+    std::cout << "\n📚 Object-Oriented Programming Pillars Left:\n";
+    std::cout << "-------------------------------------------\n";
+    for (const auto& [id, name] : this->myOopPillars) {
+        std::cout << "  🔹 [" << id << "] " << name << '\n';
+    }
+    std::cout << "-------------------------------------------\n\n";
 }
 
 void Dungeon::checkInteractAbles(const int theRoomID) {

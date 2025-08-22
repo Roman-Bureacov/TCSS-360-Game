@@ -101,6 +101,11 @@ public:
     void setUpTrappedRooms();
 
     /**
+     * This will print the pilers
+     * the Player has left to get.
+     */
+    void printPilersLeft();
+    /**
      * This will check if the room has a piler, has a potion, has
      * a trap and such in it and apply the according affects of those
      * interactions.
