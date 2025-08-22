@@ -93,4 +93,9 @@ to pour through and still have the time to deliver.
 * Itch.IO download.
 * Custom sprite sheets.
 
-Link: https://riley-hopper.itch.io/incarus
+
+## Links
+
+Link Itch.IO: https://riley-hopper.itch.io/incarus
+
+Link UML Diagram: https://drive.google.com/file/d/1vGiMzBhqx4IfgBE-0kdBMI5dvOVSzxNV/view?usp=sharing
