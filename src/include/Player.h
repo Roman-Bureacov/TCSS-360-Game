@@ -66,6 +66,7 @@ struct PlayerClasses {
  * @author Riley Hopper.
  * @version August 2025.
  */
+//TODO: Move to Abstract?
 enum class playerTypes {
     Knight,  /**< Heavy melee fighter with high health and low speed. */
     Rogue,   /**< Agile melee fighter with high speed and low health. */

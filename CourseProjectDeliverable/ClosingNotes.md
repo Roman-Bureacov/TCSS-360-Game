@@ -62,6 +62,8 @@ Other things that I did were:
 
 ### Kyler McLees
 
+I developed the View, music, and helped to debug other files. I helped create the presentation slides, srs, and was at the group meetings.
+
 # Closing Notes
 
 ## Roman Bureacov
@@ -71,3 +73,13 @@ What made this project particularly difficult is the lack of abstraction that Ja
 ## Riley Hopper
 
 This project was hell, C++ is one of the most, obtuse difficult, languages to work with. Just getting the build system to work was awful, not to mention the esoteric bugs that would just popup, like how am I suppose to debug a SEGFUALT when all the program tells me is what the assembly registers are up to. Its all awful, I poured hours into this project just look at my time sheet, using this project to learn C++ was the worst idea I ever thought, it was a mistake. Laying that on choosing to do GUI was a mistake, it was way too much work just to get one version of SDL in here it took us hours, Cmake is rough. I just feel like crap about it all, everyone else's project looked great and this one was work, and it isn't that good. I worked till there was nothing left in me and did more, this project has felt like an on coming car, and you just can't get out of the way. I am glad I have a way better understanding of this language, I can say I can make project in it now, but this was horrible. I loved your class Tom you're a great professor, you work hard for your students, and it shows, thankyou for helping us out, but if any of your students in the future want to do C++ try to stop them, warn them do what you can, this is a cautionary tale.
+
+## Kyler McLees
+
+This was my first project that had GUI, and SDL was certainly a choice. Especially SDL3, which is newer and had less
+documentation. I think for the language we chose we absolutely needed to treat this as is if was a part-time job. By the time
+we realized just how little we had it was nearly presentation time. I spent more time refactoring the view than I should have 
+realistically put up with. Most of the project to me felt like a continuous loop of put in 3-5 hours into something just to find 
+a simpler solution that would've taken 10 minutes. A lot of our time was meetings without significant progress, and division of 
+labor was certainly unbalanced. By the time I realized that so much work had to be done, there was too much entangled classes
+to pour through and still have the time to deliver. 

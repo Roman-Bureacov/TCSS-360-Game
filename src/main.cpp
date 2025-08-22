@@ -27,7 +27,7 @@ void runGame();
 
 
 int main(int argc, char* argv[]) {
-
+    std::cout << "Hello World!" << std::endl;
     //Make instance.
     View* gameView = View::guiInstance().get();
 
@@ -52,8 +52,12 @@ int main(int argc, char* argv[]) {
     //allNPCs[0]->setIsActive(false);
     Clock::runClock();
 
+    if (!player->isAlive())
+        std::cout << "Player has died, game over!" << std::endl;
+    else
+        std::cout << "Player has won!" << std::endl;
 
-
+    gameView->endProcess();
 
     return 0;
 }
