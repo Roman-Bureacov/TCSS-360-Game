@@ -17,7 +17,7 @@ To win the game you must find every oop piler, they randomly spawn throughout th
 ## Contributors:
 * Riley Hopper.
 * Kyler McLees.
-* Roman Bureacov 
+* Roman Bureacov. 
 
 
 ## Special Thanks to:
