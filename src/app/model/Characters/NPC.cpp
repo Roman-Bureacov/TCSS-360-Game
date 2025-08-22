@@ -55,7 +55,7 @@ void NPC::attackPlayer() {
     Bitz::enqueueAttackEvent(this);
 }
 
-bool NPC::canAttack() {
+bool NPC::canAttack() const {
 
     const int xDiff = std::abs(this->getX() - player->getX());
     const int yDiff = std::abs(this->getY() - player->getY());
@@ -69,7 +69,7 @@ void NPC::setIsActive(const bool isActive) {
     notify(PROPERTY_ACTIVE_CHANGED);
 }
 
-bool NPC::getIsActive() {
+bool NPC::getIsActive() const {
     return active;
 }
 
@@ -112,7 +112,7 @@ void NPC::takeAction() {
 // =========================
 
 Goblin::Goblin(
-            const std::string& theName, int theMaxHealth, int theMovementSpeed)
+            const std::string& theName, const int theMaxHealth, const int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
     Weapon* npcWeapon =
         new Weapon(NPCStats::MYGOBLINDAMAGE,
@@ -131,7 +131,7 @@ Goblin::Goblin(
 Skeleton::Skeleton(
             const std::string& theName, int theMaxHealth, int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
-    Weapon* npcWeapon =
+    const auto npcWeapon =
         new Weapon(NPCStats::MYSKELETONDAMAGE,
             NPCStats::MYNPCATTACKTIME, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);
@@ -144,9 +144,9 @@ Skeleton::Skeleton(
 // TimCapaul
 // =========================
 
-TimCapaul::TimCapaul( const std::string& theName, int theMaxHealth, int theMovementSpeed)
+TimCapaul::TimCapaul( const std::string& theName, const int theMaxHealth, const int theMovementSpeed)
             : NPC(theName, theMaxHealth, theMovementSpeed) {
-    Weapon* npcWeapon =
+    const auto npcWeapon =
        new Weapon(NPCStats::MYBOSSDAMAGE,
            NPCStats::MYNPCATTACKTIME, std::move(myNPCWeaponHitbox));
     this->giveWeapon(npcWeapon);

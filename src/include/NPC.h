@@ -105,7 +105,7 @@ public:
      *
      * @return The truthy value on if the character is active.
      */
-    bool getIsActive();
+    bool getIsActive() const;
 
     /**
      * Protected constructor used by derived NPCs.
@@ -146,7 +146,7 @@ protected:
      * Checks if the player is in range to be attacked.
      * @return True if the NPC can attack the player this turn.
      */
-    bool canAttack();
+    bool canAttack() const;
 
     /**
      * This makes tells the NPC to changes its

@@ -57,7 +57,7 @@ public:
      * Retrieves the dungeon's room ID map.
      * @return 2D vector of room IDs.
      */
-    std::vector<std::vector<int>> getMap();
+    static std::vector<std::vector<int>> getMap();
 
     /**
      * Gets the current room the player is in.
@@ -77,7 +77,7 @@ public:
      * Updates persistent storage with the current room's entities.
      * @param theEntities Set of characters present in the room.
      */
-    void updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> theEntities);
+    void updateRoomEntities(const std::unordered_set<std::shared_ptr<AbstractCharacter>> &theEntities);
 
     /**
      * This prints the Spawn locations of the pilers for testing.
@@ -111,7 +111,7 @@ public:
      * This is the getter for the won boolean.
      * @return This is the truthy value of if you won.
      */
-    bool haveIWon();
+    bool haveIWon() const;
 
     /** Property name used to signal room change events. */
     inline static const std::string PROPERTY_ROOM_CHANGE = "Room Changed";

@@ -4,29 +4,24 @@
 
 #include "../../../include/AbstractCharacter.h"
 
-#include <iostream>
-
-#include "../../../include/ID_GEN.h"
-
 AbstractCharacter::AbstractCharacter(
     const std::string& theName,
     const int theMaxHealth,
     const int theMovementSpeed)
-    : myName(theName),
-      MYID(ID_GEN::makeID()),
+    : MYID(ID_GEN::makeID()),
       myHealth(theMaxHealth),
       myMaxHealth(theMaxHealth),
       myBaseMovement(theMovementSpeed),
       myCurrentMovement(theMovementSpeed),
+      myName(theName),
       myHitbox(Hitbox(util::Point(), 100, 100)),
-      myDirection(util::NORTH),
-      myInteractionHitbox(100, 100) {
+      myInteractionHitbox(100, 100),
+      myDirection(util::NORTH) {
 
     myWeapon = nullptr;
 }
 
 const std::string& AbstractCharacter::getName() const {
-    //std::cout << "retrieving name..." << std::endl;
     return myName;
 }
 
@@ -149,8 +144,6 @@ const Hitbox& AbstractCharacter::getAttackHitbox() const {
 
         Hitbox* hb;
 
-        // myDimension - (myDimension + weapDimension)/2
-        // simplified to (myDimension - weapDimension)/2
         switch (myDirection) {
             case util::NORTH:
                 hb = &myWeapon->hitboxNorth;
@@ -175,7 +168,7 @@ const Hitbox& AbstractCharacter::getAttackHitbox() const {
 
 }
 
-void AbstractCharacter::setInteractionHitbox(const int theWidth, const int theHeight) {
+void AbstractCharacter::setInteractionHitbox(const int theWidth, const int theHeight) const {
     myInteractionHitbox = Hitbox(theWidth, theHeight);
 }
 
@@ -195,7 +188,7 @@ void AbstractCharacter::setRandomPosition(const std::shared_ptr<AbstractCharacte
 
 }
 
-void AbstractCharacter::setName(std::string theName) {
+void AbstractCharacter::setName(const std::string &theName) {
     this->myName = theName;
 }
 

@@ -12,6 +12,7 @@
 #include "ObserverPattern.h"
 #include "Weapon.h"
 #include "Room.h"
+#include "ID_GEN.h"
 
 
 /**
@@ -236,7 +237,7 @@ public:
      * @param theWidth the new width for the interaction hitbox
      * @param theHeight the new height for the interaction hitbox
      */
-    void setInteractionHitbox(int theWidth, int theHeight);
+    void setInteractionHitbox(int theWidth, int theHeight) const;
 
     /**
      * This will randomize the characters position, should be used at spawn.
@@ -248,7 +249,7 @@ public:
      * Sets a new name for the player
      * @param theName The new name of the player
      */
-    void setName(std::string theName);
+    void setName(const std::string &theName);
 };
 
 

@@ -23,12 +23,12 @@ std::shared_ptr<Player> Player::playerInstance() {
 }
 
 Player::Player(const std::string &theName
-        , int theMaxHealth, int theMovementSpeed)
+        , const int theMaxHealth, const int theMovementSpeed)
             : AbstractCharacter(theName, theMaxHealth, theMovementSpeed) {
 
 
     setHitbox(MYHITBOXSIZE, MYHITBOXSIZE);
-    Weapon* PlayerWeapon =
+    const auto PlayerWeapon =
         new Weapon(PlayerClasses::MYDAMAGEKNIGHT,
             PlayerClasses::MYPLAYERATTACKTIME, std::move(PlayerWeaponHitbox));
     this->giveWeapon(PlayerWeapon);
@@ -153,7 +153,7 @@ void Player::roll() {
 
 }
 
-bool Player::isRolling() {
+bool Player::isRolling() const {
     return myRolling;
 }
 
@@ -173,7 +173,7 @@ void Player::givePotion() {
     myPotionAmount++;
 }
 
-int Player::getPotionAmount() {
+int Player::getPotionAmount() const {
     return myPotionAmount;
 }
 
@@ -192,7 +192,7 @@ void Player::attack() {
 
 }
 
-int Player::getHitBoxSize() {
+int Player::getHitBoxSize() const {
     return MYHITBOXSIZE;
 }
 

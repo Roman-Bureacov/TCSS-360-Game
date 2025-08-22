@@ -93,6 +93,7 @@ public:
     
     /** This is the amount of healing potions the player has.*/
     int myPotionAmount = 0;
+    int the_max_health_{};
 
     /**
      * Retrieves the singleton instance of the player.
@@ -117,7 +118,7 @@ public:
      * Checks if the player is currently rolling.
      * @return True if rolling, false otherwise.
      */
-    bool isRolling();
+    bool isRolling() const;
 
     /**
      * Ends the rolling state and removes invincibility.
@@ -138,7 +139,7 @@ public:
      * This gives you the mount of potions the player has.
      * @return The amount of potions the player has.
      */
-    int getPotionAmount();
+    int getPotionAmount() const;
 
     /**
      * This will set the amount of potions the player has.
@@ -150,12 +151,12 @@ public:
      * Executes an attack action.
      * Uses the player's weapon hitbox to detect collisions.
      */
-    void attack();
+    static void attack();
 
     /**
      * A getter for the players hitBoxSize for testing
      */
-    int getHitBoxSize();
+    int getHitBoxSize() const;
 
     /**
      * This sets the players class.

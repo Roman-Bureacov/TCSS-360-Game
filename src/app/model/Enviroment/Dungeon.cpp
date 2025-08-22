@@ -77,7 +77,7 @@ void Dungeon::generateDungeon() {
 
             std::uniform_int_distribution<> dist(0, 1);
 
-            int skeletonOrGoblin = dist(gen);
+            const int skeletonOrGoblin = dist(gen);
 
 
             //This makes the enemy encounter somewhat random
@@ -90,20 +90,11 @@ void Dungeon::generateDungeon() {
                 char1 = NPC::goblinFactory();
             }
 
-
-            //auto char2 = NPC::skeletonFactory();
-            //auto char3 = NPC::skeletonFactory();
-
             myRoomBuilder.setChar1ID(char1->getID());
-            //roomBuilder.setChar2ID(char2->getID());
-            //roomBuilder.setChar3ID(char3->getID());
-
 
             char1->attach(gui);
 
             Bitz::registerCharacter(char1);
-            //Bitz::registerCharacter(char2);
-            //Bitz::registerCharacter(char3);
 
             auto room = myRoomBuilder.build();
 
@@ -159,23 +150,20 @@ bool Dungeon::setCharacterRoom(const int theRoomID) {
 
 }
 
-void Dungeon::updateRoomEntities(std::unordered_set<std::shared_ptr<AbstractCharacter>> theEntities) {
-    long long char1 = myCurrentRoom->getCharacters().at(0);
-    //long long char2 = currentRoom->getCharacters().at(1);
-    //long long char3 = currentRoom->getCharacters().at(2);
+void Dungeon::updateRoomEntities(const std::unordered_set<std::shared_ptr<AbstractCharacter>> &theEntities) {
+    const long long char1 = myCurrentRoom->getCharacters().at(0);
+
 
 
 
     //This should, set all the npcs in the current room active
     //and deactivate all non-active NPCs.
-    for (auto c: theEntities) {
-        if (std::shared_ptr<NPC> npc = std::dynamic_pointer_cast<NPC>(c)) {
+    for (const auto& c: theEntities) {
+        if (const std::shared_ptr<NPC> npc = std::dynamic_pointer_cast<NPC>(c)) {
             if (npc->getID() == char1) {
                 npc->setIsActive(true);
                 myActiveCharaceter = npc;
             }
-            //else if (npc->getID() == char2) npc->setIsActive(true);
-            //else if (npc->getID() == char3) npc->setIsActive(true);
             else npc->setIsActive(false);
         }
     }
@@ -200,7 +188,7 @@ std::shared_ptr<AbstractCharacter> Dungeon::getActiveCharacter() {
     return myActiveCharaceter;
 }
 
-Dungeon::Dungeon() {}
+Dungeon::Dungeon() = default;
 
 bool Dungeon::roomIDIsInTheDungeon(int theId) {
     return std::any_of(myIdMap.begin(), myIdMap.end(), [&](const auto& row) {
@@ -230,9 +218,9 @@ void Dungeon::generatePilers() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 9);
 
-    for (int i = 0; i < 4; ++i) {
+    for (auto & pillar : pillars) {
         int key = myIdMap[dis(gen)][dis(gen)];
-        myOopPillars[key] = pillars[i];
+        myOopPillars[key] = pillar;
     }
 
 }
@@ -325,7 +313,7 @@ void Dungeon::setUpTrappedRooms() {
     //Lets have at least one trap, but not like a billion.
     std::uniform_int_distribution<> trapCountDist(1, 6);
 
-    int trapCount = trapCountDist(gen);
+    const int trapCount = trapCountDist(gen);
 
     myTrappedRooms.clear();
 
@@ -333,14 +321,14 @@ void Dungeon::setUpTrappedRooms() {
 
     //This will make sure traps aren't placed twice
     while (placed < trapCount) {
-        int row = coordDist(gen);
-        int col = coordDist(gen);
+        const int row = coordDist(gen);
+        const int col = coordDist(gen);
         int key = myIdMap[row][col];
 
         // Skip if this room already has a trap, potion, or pillar
-        if (myTrappedRooms.count(key) > 0) continue;
-        if (myPotionLocations.count(key) > 0) continue;
-        if (myOopPillars.count(key) > 0) continue;
+        if (myTrappedRooms.contains(key)) continue;
+        if (myPotionLocations.contains(key)) continue;
+        if (myOopPillars.contains(key)) continue;
 
         // Mark this location as trapped
         myTrappedRooms[key] = true;
@@ -349,7 +337,7 @@ void Dungeon::setUpTrappedRooms() {
     }
 }
 
-void Dungeon::checkInteractAbles(int theRoomID) {
+void Dungeon::checkInteractAbles(const int theRoomID) {
     // You win the game by finding all the pilers and destroying them.
     if (myOopPillars.contains(theRoomID)) {
         std::cout << "You found: " << myOopPillars[theRoomID] << std::endl;
@@ -372,7 +360,7 @@ void Dungeon::checkInteractAbles(int theRoomID) {
     }
 }
 
-bool Dungeon::haveIWon() {
+bool Dungeon::haveIWon() const {
     return myWin;
 }
 
