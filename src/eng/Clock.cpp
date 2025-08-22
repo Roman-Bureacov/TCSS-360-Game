@@ -34,10 +34,10 @@ void Clock::runClock() {
     while (isActive()) {
         //This will stop the clock for testing.
         if (testingStopTick != 0 && testingStopTick <= tickCount) break;
-        /*if (!View::guiInstance()->getRunning()) {
+        if (!View::guiInstance()->getRunning()) {
             std::cout << View::guiInstance()->getRunning() << std::endl;
             break;
-        }*/
+        }
 
         SDL_Event gameEvent = { 0 };
         View::guiInstance()->handleEvent(gameEvent);

@@ -187,6 +187,7 @@ void Player::setPotionAmount(const int theAmount) {
 
 void Player::attack() {
     if (myInstance) {
+        notify(PROPERTY_I_ATTACKED);
         Bitz::enqueueAttackEvent(myInstance.get());
     }
 
