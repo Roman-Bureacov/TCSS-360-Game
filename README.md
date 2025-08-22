@@ -4,7 +4,7 @@ Game created for TCSS 360, at the University Of Washington Tacoma.
 
 ## Controls:
 * Movement keys are: W, A, S, D.
-* Change Room Keys are: Up-Arrow, Down-Arrow, Left-Arrow, Right-Arrow
+* Change Room Keys are: Up-Arrow, Down-Arrow, Left-Arrow, Right-Arrow.
 * Attack button: Space.
 * Use potion button: Left shift.
 * Print Potion amount button: E.
