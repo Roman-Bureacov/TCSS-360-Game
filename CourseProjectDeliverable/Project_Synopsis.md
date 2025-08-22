@@ -91,5 +91,6 @@ to pour through and still have the time to deliver.
 * The Use Of C++.
 * Executable.
 * Itch.IO download.
+* Custom sprite sheets.
 
 Link: https://riley-hopper.itch.io/incarus
