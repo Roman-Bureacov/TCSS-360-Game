@@ -5,8 +5,10 @@
 #include <memory>
 
 #include "gtest/gtest.h"
+#include "../src/include/NPC.h"
 #include "../src/include/Dungeon.h"
 
+class npc;
 
 /**Helper method for dungeon room ids*/
 std::vector<std::vector<int>> expectedDungeonIds() {
@@ -126,6 +128,43 @@ TEST(DungeonRoom, testTrapSpawns) {
 
 
 }
+
+TEST(DungeonRoom, TestAllNPCTypesSpawn) {
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    auto dungeonIDs = expectedDungeonIds();
+
+    bool skelFound = false;
+    bool gobFound = false;
+    bool timFound = false;
+
+    for (const auto& row : dungeonIDs) {
+        for (int roomID : row) {
+            dungeon->setCharacterRoom(roomID);
+            std::cout << "Player moved to room: " << roomID << std::endl;
+
+            auto active = Bitz::getActiveNPC();
+            if (active) {
+
+
+                if (active->getName() == NPCStats::MYSKELETONNAME) {
+                    skelFound = true;
+                } else if (active->getName() == NPCStats::MYGOBLINNAME) {
+                    gobFound = true;
+                } else if (active->getName() == NPCStats::MYBOSSNAME) {
+                    timFound = true;
+                }
+            }
+        }
+    }
+
+    // Now assert after checking all rooms
+    ASSERT_TRUE(skelFound || gobFound) << "No skeleton or goblin found in any room";
+    ASSERT_TRUE(timFound) << "No Tim Capaul found in any room";
+}
+
 
 
 

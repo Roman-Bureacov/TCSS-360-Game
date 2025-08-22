@@ -49,6 +49,14 @@ void Dungeon::generateDungeon() {
 
     myIdMap.clear();
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> tom(0, 9);
+
+    //This will pick a random room to spawn the boss.
+    int randTimI = tom(gen);
+    int randTimJ = tom(gen);
+
 
     //(row, column) -> (i,j)
     for (int i = 0; i < DUNGEONSIZE; i++) {
@@ -63,7 +71,26 @@ void Dungeon::generateDungeon() {
             if (j == 0) myRoomBuilder.setRoomWest(false);
             if (j == DUNGEONSIZE - 1) myRoomBuilder.setRoomEast(false);
 
-            auto char1 = NPC::skeletonFactory();
+
+            std::shared_ptr<NPC> char1;
+
+
+            std::uniform_int_distribution<> dist(0, 1);
+
+            int skeletonOrGoblin = dist(gen);
+
+
+            //This makes the enemy encounter somewhat random
+            if (i == randTimI && j == randTimJ) {
+                std::cout << "tim made";
+                char1 = NPC::timCapaulFactory();
+            } else if (skeletonOrGoblin) {
+                char1 = NPC::skeletonFactory();
+            } else {
+                char1 = NPC::goblinFactory();
+            }
+
+
             //auto char2 = NPC::skeletonFactory();
             //auto char3 = NPC::skeletonFactory();
 

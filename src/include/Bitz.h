@@ -12,6 +12,7 @@
 #include "Event.h"
 #include "Interactable.h"
 #include "Player.h"
+#include "NPC.h"
 
 
 
@@ -20,6 +21,7 @@
  */
 class Dungeon;
 class Room;
+class NPC;
 
 /**
  * Bitz, the engine of the game. Static class that handles when real-time events should occur
@@ -151,6 +153,12 @@ public:
      * @return the set of interactables registered with the engine
      */
     static const std::unordered_set<Interactable*>& getInteractables();
+
+    /**
+     * This method retrieves the currently active NPC.
+     * @return A pointer to the currently active npc
+     */
+    static const std::shared_ptr<NPC> getActiveNPC();
 };
 
 #endif //ENG_H
