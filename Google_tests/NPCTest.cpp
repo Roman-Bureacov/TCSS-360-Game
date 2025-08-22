@@ -138,6 +138,8 @@ TEST(NPCTEST, AttackPLayer) {
     dungeon->initialize(dbManager);
 
     dungeon->setCharacterRoom(300);
+    //Reset players health
+    Player::playerInstance()->heal(999);
 
     auto room = dungeon->getCurrentRoom();
 
