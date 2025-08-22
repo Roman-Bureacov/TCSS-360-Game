@@ -24,7 +24,8 @@ Dungeon* Dungeon::DungeonInstance() {
 }
 
 
-void Dungeon::initialize() {
+void Dungeon::initialize(const std::shared_ptr<DatabaseManager> &dbManager) {
+    databaseManager = dbManager;
     this->currentRoom = roomBuilder.build();
     this->generateDungeon();
 }
@@ -34,6 +35,10 @@ void Dungeon::generateDungeon() {
 
     attach(gui);
 
+    if (!databaseManager) {
+        throw std::runtime_error
+            ("Database manager is not found");
+    }
     Bitz::registerPlayer(Player::playerInstance());
     Player::playerInstance()->setX((Room::roomSize * Room::tileSize)/2);
     Player::playerInstance()->setY((Room::roomSize * Room::tileSize)/2);
@@ -75,7 +80,7 @@ void Dungeon::generateDungeon() {
 
             //This will build the room and throw it in the database.
             try {
-                DatabaseManager::insertRoom(*room);
+                databaseManager->insertRoom(*room);
             }catch (std::runtime_error &e) {
                 std::cerr << "Failed to insert room: "
                     << e.what() << std::endl;
@@ -98,7 +103,7 @@ void Dungeon::generateDungeon() {
 void Dungeon::setCharacterRoom(const int roomID) {
 
     currentRoom->setSerialRoomMap("");
-    currentRoom = DatabaseManager::loadRoom(roomID);
+    currentRoom = databaseManager->loadRoom(roomID);
     currentRoom->generateExistingRoom();
     updateRoomEntities(Bitz::getEntities());
 

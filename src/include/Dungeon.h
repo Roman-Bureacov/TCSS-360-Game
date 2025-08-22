@@ -41,7 +41,7 @@ public:
      * Sets up internal state and prepares room generation.
      * @param dbManager Shared pointer to the database manager.
      */
-    void initialize();
+    void initialize(const std::shared_ptr<DatabaseManager>& dbManager);
 
     /**
      * Generates the dungeon layout and rooms.
@@ -99,6 +99,9 @@ private:
     /** Singleton instance of the dungeon. */
     static std::unique_ptr<Dungeon> instance;
 
+    /** Database manager used for persistence and loading. */
+    std::shared_ptr<DatabaseManager> databaseManager;
+
     /** Size of the dungeon grid (10x10 rooms). */
     const int dungeonSize = 10;
 
@@ -116,6 +119,8 @@ private:
 
     /**This is the active character.*/
     std::shared_ptr<AbstractCharacter> activeCharaceter;
+
+
 };
 
 
