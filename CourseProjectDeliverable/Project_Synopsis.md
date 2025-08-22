@@ -15,14 +15,14 @@
 
 Below is a compilation of hours worked on iterations and a total. Note that in here there are unrecorded hours for the time between iteration V and project submission.
 
-|Iteration  |Roman Bureacov |Riley Hopper   |Kyler McLees   |
-|:---------:|:-------------:|:-------------:|:-------------:|
-|I          | 7h 35m        | 16h           | 7h            |
-|II         | 14h 30m       | 6h 30m        | 9h            |
-|III        | 16h 50m       | 22h 41m       | 8h 30m        |
-|IV         | 8h 15m        | 13h           | 9h 20m        |
-|V          | 4h            | 33h           | 37h 10mm      |
-|TOTAL      | 51h 10m       | 91h 11m       | 71h           |
+|Iteration  |Roman Bureacov | Riley Hopper |Kyler McLees   |
+|:---------:|:-------------:|:------------:|:-------------:|
+|I          | 7h 35m        |     16h      | 7h            |
+|II         | 14h 30m       |    6h 30m    | 9h            |
+|III        | 16h 50m       |   22h 41m    | 8h 30m        |
+|IV         | 8h 15m        |     13h      | 9h 20m        |
+|V          | 4h            |     67h      | 37h 10mm      |
+|TOTAL      | 51h 10m       |   125h 11m   | 71h           |
 
 ### Roman Bureacov
 
@@ -58,6 +58,7 @@ Other things that I did were:
 * Create the presentation(Awful as it was).
 * Clean up the build system.
 * Create music(Sadly it didn't end up in the game).
+* I also made the exe statically linking everything and posted it to itch.io.
 
 
 ### Kyler McLees
@@ -83,3 +84,13 @@ realistically put up with. Most of the project to me felt like a continuous loop
 a simpler solution that would've taken 10 minutes. A lot of our time was meetings without significant progress, and division of 
 labor was certainly unbalanced. By the time I realized that so much work had to be done, there was too much entangled classes
 to pour through and still have the time to deliver. 
+
+## Extra Credit
+* Gui.
+* Real Time Movement.
+* The Use Of C++.
+* Executable.
+* Itch.IO download.
+* 
+
+Link: https://riley-hopper.itch.io/incarus
