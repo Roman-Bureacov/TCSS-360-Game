@@ -19,7 +19,8 @@ DatabaseManager::DatabaseManager() {
             SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE, nullptr);
         sqlite3_open_v2(INSTANCE_PATH, &BUILD_DATABASE,
             SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE, nullptr);
-        setupDatabase();
+        buildDatabase();
+        insertDatabase();
     }
 }
 
@@ -80,10 +81,31 @@ void DatabaseManager::insertCharacterType(AbstractCharacter &character) {
 
 }
 
-std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int roomId) {
-    //TODO
+std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacter(int characterID) {
 
-    return 0;
+    sqlite3_stmt* s = query(BUILD_DATABASE, R"(
+        SELECT char_type, name, base_movement_speed, weapon_id
+        FROM characters
+        WHERE id = ?
+    )");
+    sqlite3_bind_int(s, 1, characterID);
+
+    AbstractCharacter* character;
+    auto name = sqlite3_column_str(s, 1);
+    auto movement = sqlite3_column_int(s, 3);
+
+    if (sqlite3_column_str(s, 0) == "NPC") {
+        character = new NPC(
+            name,
+            100,
+            movement
+            );
+    } // TODO: else construct player?
+
+
+    sqlite3_finalize(s);
+
+    return std::shared_ptr<AbstractCharacter>(character);
 }
 
 std::shared_ptr<AbstractCharacter> DatabaseManager::loadCharacterType(int charType) {
@@ -122,12 +144,8 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
     const char *sql = R"(SELECT north, south, east
                         , west, serialMap, char1
                         , char2, char3 FROM rooms WHERE id = ?;)";
-    sqlite3_stmt *stmt;
 
-    if (sqlite3_prepare_v2(INSTANCE_DATABASE, sql, -1
-        , &stmt, nullptr) != SQLITE_OK) {
-        throw std::runtime_error(sqlite3_errmsg(INSTANCE_DATABASE));
-    }
+    sqlite3_stmt *stmt = query(INSTANCE_DATABASE, sql);
 
     sqlite3_bind_int(stmt, 1, id);
 
@@ -169,7 +187,7 @@ std::shared_ptr<Room> DatabaseManager::loadRoom(const int id) {
     return room;
 }
 
-void DatabaseManager::setupDatabase() {
+void DatabaseManager::buildDatabase() {
 
     const char* buildSql = R"(
         CREATE TABLE IF NOT EXISTS rooms(
@@ -196,12 +214,13 @@ void DatabaseManager::setupDatabase() {
             west_width INTEGER,
             west_height INTEGER
         );
-        CREATE TABLE IF NOT EXISTS character(
+        CREATE TABLE IF NOT EXISTS characters(
             id INTEGER PRIMARY KEY,
+            char_type TEXT,
             name TEXT,
             base_movement_speed INTEGER,
             weapon_id INTEGER
-        )
+        );
         )";
 
     const char* instanceSql = R"(
@@ -216,6 +235,10 @@ void DatabaseManager::setupDatabase() {
 
 }
 
+void DatabaseManager::insertDatabase() {
+
+}
+
 void DatabaseManager::execute(sqlite3 *database, const char *sql) {
     char* message = nullptr;
     if (sqlite3_exec(database, sql, nullptr, nullptr, &message) != SQLITE_OK) {
@@ -223,5 +246,19 @@ void DatabaseManager::execute(sqlite3 *database, const char *sql) {
         sqlite3_free(message);
         throw std::runtime_error(err);
     }
+}
+
+sqlite3_stmt *DatabaseManager::query(sqlite3* database, const char *sql) {
+    sqlite3_stmt* statement;
+
+    if (sqlite3_prepare_v2(database, sql, -1, &statement, nullptr) != SQLITE_OK) {
+        throw std::runtime_error(sqlite3_errmsg(database));
+    }
+
+    return statement;
+}
+
+const char *DatabaseManager::sqlite3_column_str(sqlite3_stmt *s, int col) {
+    return reinterpret_cast<const char*>(sqlite3_column_text(s, col));
 }
 

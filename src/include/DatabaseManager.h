@@ -91,9 +91,14 @@ private:
     ~DatabaseManager();
 
     /**
-     * Creates a room table if it doesn't already exist.
+     * Helper that constructs the database if it does not exist.
      */
-    static void setupDatabase();
+    static void buildDatabase();
+
+    /**
+     * Helper that inserts data into the database.
+     */
+    static void insertDatabase();
 
     /**
      * Creates a table for the active characters.
@@ -126,6 +131,24 @@ private:
      * @param sql the sql statement to execute
      */
     static void execute(sqlite3 *database, const char *sql);
+
+    /**
+     * A helper method to run an SQL query for you. Does not finalize
+     * the sqlite statement.
+     * @param database the database to run a query on
+     * @param sql the sql query to run
+     * @return the returned result query
+     */
+    static sqlite3_stmt* query(sqlite3* database, const char* sql);
+
+    /**
+     * reads the column text as a string rather than an unsigned character
+     * array.
+     * @param s the statement to query
+     * @param col the column index
+     * @return the column text reinterpreted as a string
+     */
+    static const char* sqlite3_column_str(sqlite3_stmt* s, int col);
 };
 
 #endif //DATABASEMANAGER_H
