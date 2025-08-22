@@ -121,6 +121,14 @@ void Player::userInput(const int theCode) {
         case SDL_SCANCODE_LSHIFT:
             usePotion();
             break;
+        case SDL_SCANCODE_Q:
+            std::cout << "you have " << this->getPotionAmount()
+                << " potions " << std::endl;
+            break;
+        case SDL_SCANCODE_E:
+            std::cout << "Your health is: "
+                << this->getHealth() << std::endl;
+            break;
         default: break;
         }
     }
