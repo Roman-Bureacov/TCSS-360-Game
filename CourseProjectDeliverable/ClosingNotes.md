@@ -7,6 +7,7 @@
 * Game balancing isn't very good.
 * Dungeon generation isn't as robust as it should be.
 * Extendability of the project is difficult, due to dependency structure.
+* Rolling was never implemented, it was supposed to be a core feature.
 
 ## Work Done
 
