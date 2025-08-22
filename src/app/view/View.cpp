@@ -23,102 +23,71 @@ void View::initialize() {
     std::cout << "Initialize View" << std::endl;
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
-        cleanup(myItems);
+        cleanup(myWindow);
     }
 
     //Make the Window
     const int initWidth{800};
     const int initHeight{600};
-    myItems.window = SDL_CreateWindow("Game", initWidth, initHeight, SDL_WINDOW_RESIZABLE);
-    if (!myItems.window) {
+    myWindow.window = SDL_CreateWindow("Game", initWidth, initHeight, SDL_WINDOW_RESIZABLE);
+    if (!myWindow.window) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
-        cleanup(myItems);
+        cleanup(myWindow);
     }
 
     //Create the renderer
-    myItems.renderer = SDL_CreateRenderer(myItems.window, nullptr);
-    if (!myItems.renderer) {
+    myWindow.renderer = SDL_CreateRenderer(myWindow.window, nullptr);
+    if (!myWindow.renderer) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL", nullptr);
-        cleanup(myItems);
+        cleanup(myWindow);
     }
-    //SDL_SetRenderVSync(myItems.renderer, 1); //Possible
 
-    SDL_SetRenderLogicalPresentation(myItems.renderer, myItems.logiWidth, myItems.logiHeight,
+    SDL_SetRenderLogicalPresentation(myWindow.renderer, myWindow.logiWidth, myWindow.logiHeight,
         SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
 
-    // initialize the SDL_mixer library
+    //Boot up SDL Audio for loading audio mixer
+    std::cout << "Initialize Audio Mixer" << std::endl;
+    if (!SDL_Init(SDL_INIT_AUDIO)) {
+        std::cout << "Could not Initialize Audio" << std::endl;
+        cleanup(myWindow);
+    }
+
     /*
-    if (!Mix_OpenAudio(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr))
-    {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating audio device", state.window);
-        cleanup(state);
-        initSuccess = false;
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, SDL_AUDIO_S16, MIX_DEFAULT_CHANNELS, 2048)) {
+        std::cout << "Could not initialize Mixer" << std::endl;
+        cleanup(myWindow);
     }
     */
 
+    myAssets.generateAssets(myWindow);
 
     isRunning = true;
+    //Mix_PlayMusic(myAssets.musicLoop, -1);
     std::cout << "The window is created" << std::endl;
 }
 
 
-void View::generateSprites() {
-    std::cout << "Generating sprites" << std::endl;
-
-    mySprites.charTexture = IMG_LoadTexture(myItems.renderer,
-        "assets/Kinght_Of_The_Pointer.png");
-    SDL_SetTextureScaleMode(mySprites.charTexture, SDL_SCALEMODE_NEAREST);
-    std::cout << "The Player are generated" << std::endl;
-
-
-    mySprites.timTexture = IMG_LoadTexture(myItems.renderer,
-        "assets/Dark_Lord_Tom.png");
-    SDL_SetTextureScaleMode(mySprites.timTexture, SDL_SCALEMODE_NEAREST);
-    std::cout << "The Tim are generated" << std::endl;
-
-
-    mySprites.skeleTexture = IMG_LoadTexture(myItems.renderer,
-        "assets/Skelleton_Of_Null.png");
-    SDL_SetTextureScaleMode(mySprites.skeleTexture, SDL_SCALEMODE_NEAREST);
-    std::cout << "The Skeleton are generated" << std::endl;
-
-
-    mySprites.goblinTexture = IMG_LoadTexture(myItems.renderer,
-        "assets/Goblin_Of_Null.png");
-    SDL_SetTextureScaleMode(mySprites.goblinTexture, SDL_SCALEMODE_NEAREST);
-    std::cout << "The Goblin are generated" << std::endl;
-
-
-    mySprites.roomTexture = IMG_LoadTexture(myItems.renderer,
-        "assets/TestDungeon.png");
-    SDL_SetTextureScaleMode(mySprites.roomTexture, SDL_SCALEMODE_NEAREST);
-
-    loadActiveSprites();
-    std::cout << "The sprites are generated" << std::endl;
-}
-
-
 void View::loadActiveSprites() {
-    mySprites.characters.clear();
+    myAssets.characters.clear();
 
     for (auto character : Bitz::getEntities()) {
         auto npc = std::dynamic_pointer_cast<NPC>(character);
 
         if (npc && npc->getIsActive()) {
-            mySprites.characters.push_back(npc);
+            myAssets.characters.push_back(npc);
         }
     }
 
     for (auto character : Bitz::getEntities()) {
 
         if (character->getName() == "John programmer") {
-            mySprites.characters.push_back(character);
+            myAssets.characters.push_back(character);
         }
     }
 }
 
-
+//TODO: Put this back into engine?
 bool View::handleEvent(SDL_Event theEvent) {
     while (SDL_PollEvent(&theEvent)) {
         switch (theEvent.type) {
@@ -129,8 +98,7 @@ bool View::handleEvent(SDL_Event theEvent) {
                 break;
             }
             case SDL_EVENT_WINDOW_RESIZED: {
-                myItems.initHeight = theEvent.window.data1;
-                myItems.initWidth = theEvent.window.data2;
+                setWindowPreFullScreen(theEvent.window.data2, theEvent.window.data1);
                 break;
             }
             case SDL_EVENT_KEY_DOWN: {
@@ -144,14 +112,19 @@ bool View::handleEvent(SDL_Event theEvent) {
     return true;
 }
 
-
+//TODO: Put this back into engine?
 void View::handleKeyDown(const SDL_Scancode theKey) {
     switch (theKey) {
         case SDL_SCANCODE_ESCAPE:
             isRunning = false;
             break;
         case SDL_SCANCODE_F11:
-            SDL_SetWindowFullscreen(myItems.window, true);
+            if (!myWindow.fullscreen) {
+                SDL_SetWindowFullscreen(myWindow.window, true);
+            } else {
+                SDL_SetWindowFullscreen(myWindow.window, false);
+            }
+            myWindow.fullscreen = !myWindow.fullscreen;
             break;
         default:
             Player::playerInstance()->userInput(theKey);
@@ -168,30 +141,30 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
             //Animation goes here
 
         } else if (thePropertyName == NPC::PROPERTY_KILLED) {
-            myItems.npcTilemapX = 5.0f * mySprites.spriteSize;
-            myItems.npcTilemapY = 3.0f * mySprites.spriteSize;
+            myAssets.npcTilemapX = 5.0f * myAssets.SPRITE_SIZE;
+            myAssets.npcTilemapY = 3.0f * myAssets.SPRITE_SIZE;
 
         } else if (thePropertyName == NPC::PROPERTY_DIRECTION_CHANGED) {
             util::Direction direction = npc->getDirection();
             switch (direction) {
                 case util::SOUTH: {
-                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.npcTilemapY = 3.0f * mySprites.spriteSize;
+                    myAssets.npcTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.npcTilemapY = 3.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
                 case util::EAST: {
-                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.npcTilemapY = 0.0f * mySprites.spriteSize;
+                    myAssets.npcTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.npcTilemapY = 0.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
                 case util::WEST: {
-                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.npcTilemapY = 1.0f * mySprites.spriteSize;
+                    myAssets.npcTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.npcTilemapY = 1.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
                 case util::NORTH: {
-                    myItems.npcTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.npcTilemapY = 2.0f * mySprites.spriteSize;
+                    myAssets.npcTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.npcTilemapY = 2.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
             }
@@ -200,48 +173,48 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 
         }
 
-        renderSprite(mySprites.skeleTexture, *npc);
+        renderSprite(myAssets.skeleTexture, *npc);
     }
     else if (Player* player = dynamic_cast<Player*>(theChangedSubject)) {
         if (thePropertyName == Player::PROPERTY_LOCATION_CHANGED) {
             //Animate Walking?????????
 
         } else if (thePropertyName == Player::PROPERTY_KILLED) {
-            myItems.charTilemapX = 0.0f * mySprites.spriteSize;
-            myItems.charTilemapY = 4.0f * mySprites.spriteSize;
+            myAssets.charTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+            myAssets.charTilemapY = 4.0f * myAssets.SPRITE_SIZE;
 
         } else if (thePropertyName == Player::PROPERTY_DIRECTION_CHANGED) {
             util::Direction direction = player->getDirection();
             switch (direction) {
                 case util::SOUTH: {
-                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.charTilemapY = 3.0f * mySprites.spriteSize;
+                    myAssets.charTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.charTilemapY = 3.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
                 case util::EAST: {
-                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.charTilemapY = 0.0f * mySprites.spriteSize;
+                    myAssets.charTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.charTilemapY = 0.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
                 case util::WEST: {
-                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.charTilemapY = 1.0f * mySprites.spriteSize;
+                    myAssets.charTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.charTilemapY = 1.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
                 case util::NORTH: {
-                    myItems.charTilemapX = 0.0f * mySprites.spriteSize;
-                    myItems.charTilemapY = 2.0f * mySprites.spriteSize;
+                    myAssets.charTilemapX = 0.0f * myAssets.SPRITE_SIZE;
+                    myAssets.charTilemapY = 2.0f * myAssets.SPRITE_SIZE;
                     break;
                 }
             }
 
         } else if (thePropertyName == Player::PROPERTY_I_ATTACKED) {
             //Animation from Walking?
-            myItems.charTilemapX = 5.0f * mySprites.spriteSize;
-            //myItems.charTilemapY = 2.0 * mySprites.spriteSize;
+            myAssets.charTilemapX = 5.0f * myAssets.SPRITE_SIZE;
+            //myAssets.charTilemapY = 2.0 * myAssets.spriteSize;
         }
 
-    renderSprite(mySprites.charTexture, *player);
+    renderSprite(myAssets.charTexture, *player);
 
     }
     else if (Dungeon* dungeon = dynamic_cast<Dungeon*>(theChangedSubject)) {
@@ -260,11 +233,11 @@ void View::Update(Subject* theChangedSubject, const std::string& thePropertyName
 void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter &theCharacter) {
 
     //Perform Draw Commands - Clear Screen
-    SDL_SetRenderDrawColor(myItems.renderer, 5, 255, 255, 255);
-    SDL_RenderClear(myItems.renderer);
+    SDL_SetRenderDrawColor(myWindow.renderer, 5, 255, 255, 255);
+    SDL_RenderClear(myWindow.renderer);
 
     // draw background images
-    SDL_RenderTexture(myItems.renderer, mySprites.roomTexture, nullptr, nullptr);
+    SDL_RenderTexture(myWindow.renderer, myAssets.roomTexture, nullptr, nullptr);
     /*
     drawParalaxBackground(state.renderer, res.texBg4, gs.player().velocity.x,
     gs.bg4Scroll, 0.075f, deltaTime);
@@ -276,49 +249,49 @@ void View::renderSprite(SDL_Texture* theCharTexture, AbstractCharacter &theChara
 
     float posX, posY, scaleX, scaleY;
 
-    for (auto sprite : mySprites.characters) {
-        SDL_Texture* spriteTex = mySprites.grabTexture(sprite);
+    for (auto sprite : myAssets.characters) {
+        SDL_Texture* spriteTex = myAssets.grabCharTexture(sprite);
         posX = sprite->getX();
         posY = sprite->getY();
         if (sprite->getName() != "John programmer") {
-            scaleX = myItems.npcTilemapX;
-            scaleY = myItems.npcTilemapY;
+            scaleX = myAssets.npcTilemapX;
+            scaleY = myAssets.npcTilemapY;
         } else {
-            scaleX = myItems.charTilemapX;
-            scaleY = myItems.charTilemapY;
+            scaleX = myAssets.charTilemapX;
+            scaleY = myAssets.charTilemapY;
         }
 
         SDL_FRect charSizeRect{
             .x = scaleX,
             .y = scaleY,
-            .w = mySprites.spriteSize,
-            .h = mySprites.spriteSize
+            .w = myAssets.SPRITE_SIZE,
+            .h = myAssets.SPRITE_SIZE
         };
 
         SDL_FRect charLocRect{
             .x = posX,
             .y = posY,
-            .w = mySprites.spriteSize*10,//160 px x 160px
-            .h = mySprites.spriteSize*10 //160 px x 160px
+            .w = myAssets.SPRITE_SIZE*10,//160 px x 160px
+            .h = myAssets.SPRITE_SIZE*10 //160 px x 160px
         };
 
-        SDL_RenderTexture(myItems.renderer, spriteTex, &charSizeRect,
+        SDL_RenderTexture(myWindow.renderer, spriteTex, &charSizeRect,
             &charLocRect);
     }
 
     //Swap buffers and present screen
-    SDL_RenderPresent(myItems.renderer);
+    SDL_RenderPresent(myWindow.renderer);
 }
 
-
-
+//This method is for other entities outside view to tell View to stop and close everything
 void View::endProcess() const {
-    cleanup(myItems);
+    cleanup(myWindow);
 }
 
-void View::cleanup(const SDLItems &theItems) {
+void View::cleanup(const windowState &theItems) {
     SDL_DestroyWindow(theItems.window);
     SDL_DestroyRenderer(theItems.renderer);
+    //Mix_CloseAudio();
 
     SDL_Quit();
 }

@@ -27,7 +27,7 @@ void runGame();
 
 
 int main(int argc, char* argv[]) {
-
+    std::cout << "Hello World!" << std::endl;
     //Make instance.
     View* gameView = View::guiInstance().get();
 
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     Player* player = Player::playerInstance().get();
     player->attach(View::guiInstance());
 
-    auto dbManager = std::make_shared<DatabaseManager>("DungeonDatabase.db");//TODO change this to the actuall database file.
+    auto dbManager = std::make_shared<DatabaseManager>("DungeonDatabase.db");
     Dungeon* dungeon = Dungeon::DungeonInstance();
     dungeon->initialize(dbManager);
 
