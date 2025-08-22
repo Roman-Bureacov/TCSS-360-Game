@@ -99,4 +99,6 @@ to pour through and still have the time to deliver.
 
 Link Itch.IO: https://riley-hopper.itch.io/incarus
 
+Link GITHUB: https://github.com/Roman-Bureacov/TCSS-360-Game
+
 Link UML Diagram: https://drive.google.com/file/d/1vGiMzBhqx4IfgBE-0kdBMI5dvOVSzxNV/view?usp=sharing
