@@ -8,6 +8,7 @@
 * Dungeon generation isn't as robust as it should be.
 * Extendability of the project is difficult, due to dependency structure.
 * Rolling was never implemented, it was supposed to be a core feature.
+* There is no saving and load sadly.
 
 ## Work Done
 
@@ -93,4 +94,9 @@ to pour through and still have the time to deliver.
 * Itch.IO download.
 * Custom sprite sheets.
 
-Link: https://riley-hopper.itch.io/incarus
+
+## Links
+
+Link Itch.IO: https://riley-hopper.itch.io/incarus
+
+Link UML Diagram: https://drive.google.com/file/d/1vGiMzBhqx4IfgBE-0kdBMI5dvOVSzxNV/view?usp=sharing
