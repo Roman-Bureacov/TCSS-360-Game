@@ -98,6 +98,8 @@ void Dungeon::generateDungeon() {
     generatePilers();
     //Will randomly spawn potions.
     spawnPotions();
+    //This will trap the dungeon.
+    setUpTrappedRooms();
     //Its 100, just so you don't have to look.
     setCharacterRoom(STARTINGROOMID);
 
@@ -117,21 +119,7 @@ bool Dungeon::setCharacterRoom(const int theRoomID) {
     myCurrentRoom = databaseManager->loadRoom(theRoomID);
     myCurrentRoom->generateExistingRoom();
 
-    // You win the game by finding all the pilers and destroying them.
-    if (myOopPillars.contains(theRoomID)) {
-        std::cout << "You found: " << myOopPillars[theRoomID] << std::endl;
-        myOopPillars.erase(theRoomID);
-        this->notify(PROPERTY_PILLAR_DESTROYED);
-    } if (myOopPillars.empty()) {
-        std::cout << "All pillars have been destroyed!" << std::endl;
-        myWin = true;
-        // Trigger a property change for winning, if applicable
-        this->notify(PROPERTY_WIN);
-    } if (myPotionLocations.contains(theRoomID)) {
-        Player::playerInstance()->givePotion();
-        myPotionLocations.erase(theRoomID);
-    }
-
+    checkInteractAbles(theRoomID);
 
     updateRoomEntities(Bitz::getEntities());
 
@@ -287,6 +275,73 @@ void Dungeon::destroyPilers() {
         std::cout << "All pillars destroyed! You win!" << std::endl;
         myWin = true;
         this->notify(PROPERTY_WIN);
+    }
+}
+
+void Dungeon::setUpTrappedRooms() {
+
+    if (myIdMap.size() != 10) {
+        std::cerr << "Error: idMap must have exactly 10 rows!\n";
+        return;
+    }
+    for (size_t i = 0; i < myIdMap.size(); ++i) {
+        if (myIdMap[i].size() != 10) {
+            std::cerr << "Error: Row " << i << " must have exactly 10 elements!\n";
+            return;
+        }
+    }
+
+    // Random number generator
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> coordDist(0, 9);
+    //Lets have at least one trap, but not like a billion.
+    std::uniform_int_distribution<> trapCountDist(1, 6);
+
+    int trapCount = trapCountDist(gen);
+
+    myTrappedRooms.clear();
+
+    int placed = 0;
+
+    //This will make sure traps aren't placed twice
+    while (placed < trapCount) {
+        int row = coordDist(gen);
+        int col = coordDist(gen);
+        int key = myIdMap[row][col];
+
+        // Skip if this room already has a trap, potion, or pillar
+        if (myTrappedRooms.count(key) > 0) continue;
+        if (myPotionLocations.count(key) > 0) continue;
+        if (myOopPillars.count(key) > 0) continue;
+
+        // Mark this location as trapped
+        myTrappedRooms[key] = true;
+        std::cout << "trap placed at " << key << std::endl;
+        placed++;
+    }
+}
+
+void Dungeon::checkInteractAbles(int theRoomID) {
+    // You win the game by finding all the pilers and destroying them.
+    if (myOopPillars.contains(theRoomID)) {
+        std::cout << "You found: " << myOopPillars[theRoomID] << std::endl;
+        myOopPillars.erase(theRoomID);
+        this->notify(PROPERTY_PILLAR_DESTROYED);
+    } if (myOopPillars.empty()) {
+        std::cout << "All pillars have been destroyed!" << std::endl;
+        myWin = true;
+        // Trigger a property change for winning, if applicable
+        this->notify(PROPERTY_WIN);
+    } if (myPotionLocations.contains(theRoomID)) {
+        Player::playerInstance()->givePotion();
+        myPotionLocations.erase(theRoomID);
+    } if (myTrappedRooms.contains(theRoomID)) {
+
+        Player::playerInstance()->damage(TRAPDAMAGE);
+        std::cout << "The room was trapped OH NO: " << std::endl;
+        std::cout << "Applying trap damage: " << TRAPDAMAGE << std::endl;
+        myTrappedRooms.erase(theRoomID);
     }
 }
 

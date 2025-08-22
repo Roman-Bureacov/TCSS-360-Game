@@ -95,6 +95,19 @@ public:
     void destroyPilers();
 
     /**
+     * This will set some traps in
+     * the dungeon rooms.
+     */
+    void setUpTrappedRooms();
+
+    /**
+     * This will check if the room has a piler, has a potion, has
+     * a trap and such in it and apply the according affects of those
+     * interactions.
+     * @param theRoomID The room to be checked for the interactable.
+     */
+    void checkInteractAbles(int theRoomID);
+    /**
      * This is the getter for the won boolean.
      * @return This is the truthy value of if you won.
      */
@@ -152,16 +165,16 @@ private:
     std::shared_ptr<DatabaseManager> databaseManager;
 
     /** Size of the dungeon grid (10x10 rooms). */
-    static const int DUNGEONSIZE = 10;
+    static constexpr int DUNGEONSIZE = 10;
 
     /** Starting ID value for room generation. */
-    static const int DUNGEONIDRANGE = 100;
+    static constexpr int DUNGEONIDRANGE = 100;
 
     /** Multiplier used to calculate unique room IDs by row. */
-    static const int ROWINDEXMULT = 100;
+    static constexpr int ROWINDEXMULT = 100;
 
     /** ID of the room where the player spawns. */
-    static const int STARTINGROOMID = 100;
+    static constexpr int STARTINGROOMID = 100;
 
     /**This is the active character.*/
     std::shared_ptr<AbstractCharacter> myActiveCharaceter;
@@ -171,6 +184,12 @@ private:
 
     /**This is a map of the potion spawn locations.*/
     std::map<int, bool> myPotionLocations;
+
+    /**This is a map of  what rooms are trapped.*/
+    std::map<int, bool> myTrappedRooms;
+
+    /**This is the damage the traps do.*/
+    static constexpr int TRAPDAMAGE = 10;
 
 
     /**This is if the player has beat the dungeon.*/

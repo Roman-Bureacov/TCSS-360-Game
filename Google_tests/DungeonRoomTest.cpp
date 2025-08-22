@@ -42,8 +42,6 @@ TEST(DungeonRoom, RoomIDsMatch) {
                 << "Mismatch at (" << i << "," << j << ")";
         }
     }
-
-
 }
 
 TEST(DungeonRoom, CanWin) {
@@ -98,6 +96,35 @@ TEST(DungeonRoom, testPotionSpawns) {
     }
     ASSERT_TRUE(Player::playerInstance()->getPotionAmount() > 0);
     Player::playerInstance()->setPotionAmount(0);
+}
+
+TEST(DungeonRoom, testTrapSpawns) {
+
+    auto dbManager = std::make_shared<DatabaseManager>(":memory:");
+    Dungeon* dungeon = Dungeon::DungeonInstance();
+    dungeon->initialize(dbManager);
+
+    auto dungeonIDs = expectedDungeonIds();
+
+    //Make sure their health is, max
+    Player::playerInstance()->heal(9999);
+    int playersHealth = Player::playerInstance()->getHealth();
+
+    for (const auto& row : dungeonIDs) {
+        for (int roomID : row) {
+            dungeon->setCharacterRoom(roomID);
+            std::cout << "Player moved to room: " << roomID << std::endl;
+
+
+            ASSERT_EQ(dungeon->getCurrentRoom()->getRoomID(), roomID);
+        }
+    }
+
+    ASSERT_TRUE(playersHealth > Player::playerInstance()->getHealth());
+
+    Player::playerInstance()->heal(9999);//Reseting players health
+
+
 }
 
 
