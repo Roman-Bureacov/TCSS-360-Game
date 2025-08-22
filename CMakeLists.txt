@@ -137,4 +137,12 @@ add_custom_command(TARGET TCSS-360-Game POST_BUILD
         $<TARGET_FILE_DIR:TCSS-360-Game>/assets
 )
 
+# Copy the database over into the corresponding working executable folder
+add_custom_command(TARGET TCSS-360-Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/src/db/DungeonDatabase.db"
+        $<TARGET_FILE_DIR:TCSS-360-Game>
+)
+
+
 add_subdirectory(Google_tests)
